@@ -1,3 +1,0 @@
-# requests
-grpcio
-chirpstack-api

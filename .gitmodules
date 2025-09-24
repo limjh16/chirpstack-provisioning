@@ -1,3 +1,0 @@
-[submodule "data/device-codecs"]
-        path = data/device-codecs
-        url = git@bitbucket.org:idtecnologiaintegral/device-codecs.git
