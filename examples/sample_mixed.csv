@@ -1,0 +1,4 @@
+type,dev_eui,gateway_id,device_name,gateway_name,app_key,tenant_name,application_name,device_profile_name,latitude,longitude,altitude,description
+device,0123456789ABCDEF,,Temperature Sensor 01,,0123456789ABCDEF0123456789ABCDEF,smart-city,environmental-monitoring,class-a-sensor,,,,"Outdoor temperature sensor"
+gateway,,0000000000001234,,Downtown Gateway,,smart-city,,,52.520008,13.404954,25.5,"Main gateway for downtown area"
+device,FEDCBA9876543210,,Motion Sensor 01,,FEDCBA9876543210FEDCBA9876543210,smart-city,security-monitoring,class-a-sensor,,,,"PIR motion sensor"
