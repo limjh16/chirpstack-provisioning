@@ -49,9 +49,11 @@
         - `--dry-run` for only viewing the potential changes but not committing anything
 - Python package should follow the `src` directory structure so that it can be easily exported.
 - Data format should accept `json`, `jsonl`, and `csv`.
-    - Definition and validation of data formats should be done through `jsonschema` format.
-    - The data should be in a flat format. Each `json` object or each line in the `csv` should correspond to either one device or one gateway, and the main identifier is the EUI of the device or gateway.
-        - If the tenant, device profile, or application does not exist for that particular object, this should be flagged out, and the user should be prompted to create it.
+    - Definition and validation of data formats should be done through a single `jsonschema` file (`schema.json`).
+    - The data should be in a flat format. Each `json` object or each line in the `csv` should correspond to either one device or one gateway, with a `type` field specifying which entity type it represents.
+    - The main identifier is the EUI of the device or gateway (dev_eui for devices, gateway_id for gateways).
+    - For simplified provisioning, assume there is only one tenant and one application in most scenarios.
+        - If the tenant, device profile, or application referenced in the data does not exist, this should be flagged out for the user to address.
 - Required connection details are the server address and API token.
     - Debug messages such as server not reachable, port not reachable, or API invalid, should be given.
     - These connection details should either be provided as a CLI flag or environment variable.
@@ -62,6 +64,8 @@
         - error: Stop the script from running
     - If the `-y` or `--yes` flag is specified, a `--duplicate=` flag should also be required, which should specify the intended action upon meeting duplicates.
 - Manage dependencies with Poetry (`pyproject.toml`); source lives under `src/chirpstack_provisioning`.
+- The JSON schema (`schema.json`) should be the single source of truth for data validation.
+- Documentation for data formats should be provided in `data.md` with examples of JSON, JSONL, and CSV formats.
 
 ### Coding Guidelines
 

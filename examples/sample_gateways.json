@@ -1,5 +1,6 @@
 [
   {
+    "type": "gateway",
     "gateway_id": "0000000000001234",
     "gateway_name": "Smart City Gateway 01",
     "description": "Main gateway for downtown area",
@@ -19,6 +20,7 @@
     }
   },
   {
+    "type": "gateway",
     "gateway_id": "0000000000005678",
     "gateway_name": "Industrial Gateway 01",
     "description": "Gateway for industrial zone monitoring",

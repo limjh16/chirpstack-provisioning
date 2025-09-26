@@ -1,5 +1,6 @@
 [
   {
+    "type": "device",
     "dev_eui": "0123456789ABCDEF",
     "device_name": "Temperature Sensor 01",
     "description": "Outdoor temperature sensor for parking lot",
@@ -20,6 +21,7 @@
     "skip_fcnt_check": false
   },
   {
+    "type": "device",
     "dev_eui": "FEDCBA9876543210",
     "device_name": "Motion Sensor 01", 
     "description": "PIR motion sensor for building entrance",
