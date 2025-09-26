@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chirpstack-provisioning.schemas/application.json",
+  "title": "ChirpStack Application",
+  "description": "Schema for provisioning a ChirpStack application",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "Application name"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 500,
+      "description": "Optional description of the application"
+    },
+    "tenant_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "UUID of the tenant this application belongs to"
+    },
+    "tenant_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "Name of the tenant (used for lookup if tenant_id not provided)"
+    },
+    "tags": {
+      "type": "object",
+      "description": "Application tags for organization and filtering",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+  "required": ["name"],
+  "anyOf": [
+    { "required": ["tenant_id"] },
+    { "required": ["tenant_name"] }
+  ]
+}

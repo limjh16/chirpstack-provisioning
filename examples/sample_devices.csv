@@ -1,0 +1,4 @@
+dev_eui,device_name,description,app_key,app_eui,tenant_name,application_name,device_profile_name,is_disabled,skip_fcnt_check
+0123456789ABCDEF,Temperature Sensor 01,Outdoor temperature sensor for parking lot,0123456789ABCDEF0123456789ABCDEF,FEDCBA9876543210,smart-city,environmental-monitoring,class-a-sensor,false,false
+FEDCBA9876543210,Motion Sensor 01,PIR motion sensor for building entrance,FEDCBA9876543210FEDCBA9876543210,ABCDEF0123456789,smart-city,security-monitoring,class-a-sensor,false,false
+1122334455667788,Humidity Sensor 01,Indoor humidity sensor for office,11223344556677881122334455667788,ABCDEF0123456789,smart-city,environmental-monitoring,class-a-sensor,false,false
