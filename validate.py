@@ -13,6 +13,29 @@ from pathlib import Path
 import jsonschema
 
 
+class ChirpStackValidator:
+    """Validator for ChirpStack provisioning data files."""
+    
+    def __init__(self, schema_path=None):
+        """Initialize the validator with a schema.
+        
+        Args:
+            schema_path: Path to the JSON schema file. If None, uses default schema.json
+        """
+        self.total_count = 0
+        self.error_count = 0
+        
+        if schema_path is None:
+            schema_path = Path(__file__).parent / "schema.json"
+        
+        self.schema = self._load_schema(schema_path)
+    
+    def _load_schema(self, schema_path):
+        """Load the JSON schema."""
+        with open(schema_path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+
+
 def load_schema():
     """Load the JSON schema."""
     schema_path = Path(__file__).parent / "schema.json"
