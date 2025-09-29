@@ -20,6 +20,24 @@ def load_schema():
         return json.load(f)
 
 
+def validate_entity(entity, schema, line_num):
+    """Validate a single entity against the schema.
+    
+    Args:
+        entity: The entity data to validate
+        schema: The JSON schema to validate against
+        line_num: Line number for error reporting
+        
+    Returns:
+        tuple: (line_num, is_valid, error_message)
+    """
+    try:
+        jsonschema.validate(entity, schema)
+        return (line_num, True, None)
+    except jsonschema.ValidationError as e:
+        return (line_num, False, str(e.message))
+
+
 def validate_json_file(file_path, schema):
     """Validate a JSON file."""
     with open(file_path, 'r', encoding='utf-8') as f:
@@ -33,11 +51,7 @@ def validate_json_file(file_path, schema):
     
     results = []
     for i, entity in enumerate(entities, 1):
-        try:
-            jsonschema.validate(entity, schema)
-            results.append((i, True, None))
-        except jsonschema.ValidationError as e:
-            results.append((i, False, str(e.message)))
+        results.append(validate_entity(entity, schema, i))
     
     return results
 
@@ -52,9 +66,8 @@ def validate_jsonl_file(file_path, schema):
                 continue
             try:
                 entity = json.loads(line)
-                jsonschema.validate(entity, schema)
-                results.append((i, True, None))
-            except (json.JSONDecodeError, jsonschema.ValidationError) as e:
+                results.append(validate_entity(entity, schema, i))
+            except json.JSONDecodeError as e:
                 results.append((i, False, str(e)))
     
     return results
@@ -85,11 +98,7 @@ def validate_csv_file(file_path, schema):
                 else:
                     entity[key] = value
             
-            try:
-                jsonschema.validate(entity, schema)
-                results.append((i, True, None))
-            except jsonschema.ValidationError as e:
-                results.append((i, False, str(e.message)))
+            results.append(validate_entity(entity, schema, i))
     
     return results
 
