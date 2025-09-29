@@ -208,23 +208,26 @@ def main():
         print(f"Error: File {file_path} does not exist")
         sys.exit(1)
 
-    # Load schema
+    # Create validator
     try:
-        schema = load_schema()
+        validator = ChirpStackValidator()
     except Exception as e:
         print(f"Error loading schema: {e}")
         sys.exit(1)
+
+    # Print validation header
+    print(f"Validating {file_path.name}...")
 
     # Determine file type and validate
     suffix = file_path.suffix.lower()
 
     try:
         if suffix == '.json':
-            results = validate_json_file(file_path, schema)
+            validator.validate_json_file(file_path)
         elif suffix == '.jsonl':
-            results = validate_jsonl_file(file_path, schema)
+            validator.validate_jsonl_file(file_path)
         elif suffix == '.csv':
-            results = validate_csv_file(file_path, schema)
+            validator.validate_csv_file(file_path)
         else:
             print(f"Error: Unsupported file type {suffix}. Supported: .json, .jsonl, .csv")
             sys.exit(1)
@@ -232,22 +235,12 @@ def main():
         print(f"Error validating file: {e}")
         sys.exit(1)
 
-    # Print results
-    print(f"Validating {file_path.name}...")
+    # Print summary only if there were any entries processed
+    if validator.total_count > 0:
+        valid_count = validator.total_count - validator.error_count
+        print(f"\nResult: {valid_count}/{validator.total_count} entries valid")
 
-    valid_count = 0
-    total_count = len(results)
-
-    for line_num, is_valid in results:
-        if is_valid is True:
-            print(f"  Line {line_num}: ✓ Valid")
-            valid_count = valid_count + 1
-        else:
-            print(f"  Line {line_num}: ✗ Invalid - {is_valid}")
-
-    print(f"\nResult: {valid_count}/{total_count} entries valid")
-
-    if valid_count != total_count:
+    if validator.error_count > 0:
         sys.exit(1)
 
 
