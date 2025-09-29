@@ -34,6 +34,24 @@ class ChirpStackValidator:
         """Load the JSON schema."""
         with open(schema_path, 'r', encoding='utf-8') as f:
             return json.load(f)
+    
+    def validate_entity(self, entity, line_num):
+        """Validate a single entity and print errors immediately.
+        
+        Args:
+            entity: The entity data to validate
+            line_num: Line number for error reporting
+        """
+        self.total_count += 1
+        
+        try:
+            jsonschema.validate(entity, self.schema)
+        except jsonschema.ValidationError as e:
+            self.error_count += 1
+            print(f"  Line {line_num}: ✗ Invalid - {str(e.message)}")
+            return False
+        
+        return True
 
 
 def load_schema():
