@@ -66,6 +66,21 @@ class ChirpStackValidator:
 
         for i, entity in enumerate(entities, 1):
             self.validate_entity(entity, i)
+    
+    def validate_jsonl_file(self, file_path):
+        """Validate a JSONL file."""
+        with open(file_path, 'r', encoding='utf-8') as f:
+            for i, line in enumerate(f, 1):
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    entity = json.loads(line)
+                    self.validate_entity(entity, i)
+                except json.JSONDecodeError as e:
+                    self.total_count += 1
+                    self.error_count += 1
+                    print(f"  Line {i}: ✗ Invalid - {str(e)}")
 
 
 def load_schema():
