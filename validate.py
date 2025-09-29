@@ -32,9 +32,9 @@ def validate_entity(entity, schema):
     """
     try:
         jsonschema.validate(entity, schema)
-        return (True, None)
+        return True
     except jsonschema.ValidationError as e:
-        return (False, str(e.message))
+        return str(e.message)
 
 
 def validate_json_file(file_path, schema):
@@ -50,7 +50,7 @@ def validate_json_file(file_path, schema):
 
     results = []
     for i, entity in enumerate(entities, 1):
-        results.append((i, *validate_entity(entity, schema)))
+        results.append((i, validate_entity(entity, schema)))
 
     return results
 
@@ -65,9 +65,9 @@ def validate_jsonl_file(file_path, schema):
                 continue
             try:
                 entity = json.loads(line)
-                results.append((i, *validate_entity(entity, schema)))
+                results.append((i, validate_entity(entity, schema)))
             except json.JSONDecodeError as e:
-                results.append((i, False, str(e)))
+                results.append((i, str(e)))
 
     return results
 
@@ -97,7 +97,7 @@ def validate_csv_file(file_path, schema):
                 else:
                     entity[key] = value
 
-            results.append((i, *validate_entity(entity, schema)))
+            results.append((i, validate_entity(entity, schema)))
 
     return results
 
@@ -139,14 +139,15 @@ def main():
     # Print results
     print(f"Validating {file_path.name}...")
 
-    valid_count = sum(1 for _, is_valid, _ in results if is_valid)
+    valid_count = 0
     total_count = len(results)
 
-    for line_num, is_valid, error in results:
-        if is_valid:
+    for line_num, is_valid in results:
+        if is_valid is True:
             print(f"  Line {line_num}: ✓ Valid")
+            valid_count = valid_count + 1
         else:
-            print(f"  Line {line_num}: ✗ Invalid - {error}")
+            print(f"  Line {line_num}: ✗ Invalid - {is_valid}")
 
     print(f"\nResult: {valid_count}/{total_count} entries valid")
 
