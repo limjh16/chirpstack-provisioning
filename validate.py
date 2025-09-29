@@ -52,6 +52,20 @@ class ChirpStackValidator:
             return False
         
         return True
+    
+    def validate_json_file(self, file_path):
+        """Validate a JSON file."""
+        with open(file_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+
+        # Handle both single objects and arrays
+        if isinstance(data, list):
+            entities = data
+        else:
+            entities = [data]
+
+        for i, entity in enumerate(entities, 1):
+            self.validate_entity(entity, i)
 
 
 def load_schema():
