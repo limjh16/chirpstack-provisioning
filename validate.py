@@ -81,6 +81,32 @@ class ChirpStackValidator:
                     self.total_count += 1
                     self.error_count += 1
                     print(f"  Line {i}: ✗ Invalid - {str(e)}")
+    
+    def validate_csv_file(self, file_path):
+        """Validate a CSV file."""
+        with open(file_path, 'r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            for i, row in enumerate(reader, 1):
+                # Convert string booleans to actual booleans, numbers, and clean empty values
+                entity = {}
+                for key, value in row.items():
+                    if value == '':
+                        continue
+                    elif value.lower() in ('true', 'false'):
+                        entity[key] = value.lower() == 'true'
+                    elif key in ['latitude', 'longitude', 'altitude', 'stats_interval']:
+                        # Convert numeric fields
+                        try:
+                            if '.' in value:
+                                entity[key] = float(value)
+                            else:
+                                entity[key] = int(value)
+                        except ValueError:
+                            entity[key] = value  # Keep as string if conversion fails
+                    else:
+                        entity[key] = value
+
+                self.validate_entity(entity, i)
 
 
 def load_schema():
