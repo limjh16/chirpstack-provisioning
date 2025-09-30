@@ -169,22 +169,22 @@ class ChirpStackValidator:
                 self.validate_entity(entity, i)
 
 
-def main():
-    if len(sys.argv) != 2:
-        print("Usage: python validate.py <file_path>")
-        sys.exit(1)
+app = typer.Typer()
 
-    file_path = Path(sys.argv[1])
+
+@app.command()
+def main(file_path: Path = typer.Argument(..., help="Path to the file to validate (JSON, JSONL, or CSV)")):
+    """Validate ChirpStack provisioning data files against the schema."""
     if not file_path.exists():
         print(f"Error: File {file_path} does not exist")
-        sys.exit(1)
+        raise typer.Exit(code=1)
 
     # Create validator
     try:
         validator = ChirpStackValidator()
     except Exception as e:
         print(f"Error loading schema: {e}")
-        sys.exit(1)
+        raise typer.Exit(code=1)
 
     # Print validation header
     print(f"Validating {file_path.name}...")
@@ -201,10 +201,10 @@ def main():
             validator.validate_csv_file(file_path)
         else:
             print(f"Error: Unsupported file type {suffix}. Supported: .json, .jsonl, .csv")
-            sys.exit(1)
+            raise typer.Exit(code=1)
     except Exception as e:
         print(f"Error validating file: {e}")
-        sys.exit(1)
+        raise typer.Exit(code=1)
 
     # Print summary only if there were any entries processed
     if validator.total_count > 0:
@@ -212,8 +212,8 @@ def main():
         print(f"\nResult: {valid_count}/{validator.total_count} entries valid")
 
     if validator.error_count > 0:
-        sys.exit(1)
+        raise typer.Exit(code=1)
 
 
 if __name__ == "__main__":
-    main()
+    app()
