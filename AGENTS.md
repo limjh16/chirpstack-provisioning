@@ -70,6 +70,11 @@
 ### Coding Guidelines
 
 - This project should follow a Test Driven Development methodology.
+- **Code Formatting & Linting**: Use `ruff` for both linting and formatting to ensure consistent code style.
+    - All code should be formatted with `ruff format` before committing.
+    - All code should pass `ruff check` with no violations.
+    - Ruff configuration should be defined in `pyproject.toml` under `[tool.ruff]` section.
+    - Pre-commit hooks should be configured to run ruff formatting automatically.
 - This project should be able to handle large files of over 50000 lines and devices.
     - For memory management, the data should be lazily loaded, and not loaded all at once.
 - Each change and commit should be atomic, limited to one feature, so that git blame will be useful.
