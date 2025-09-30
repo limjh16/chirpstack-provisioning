@@ -31,6 +31,28 @@ class ChirpStackValidator:
 
         self.schema = self._load_schema(schema_path)
 
+    @property
+    def total_count(self) -> int:
+        return self._total_count
+
+    @total_count.setter
+    def total_count(self, value: int) -> None:
+        if value < 0:
+            raise ValueError("Total count cannot be negative")
+        self._total_count = value
+
+    @property
+    def error_count(self) -> int:
+        return self._error_count
+
+    @error_count.setter
+    def error_count(self, value: int) -> None:
+        if value < 0:
+            raise ValueError("Error count cannot be negative")
+        if value > self._total_count:
+            raise ValueError("Error count cannot exceed total count")
+        self._error_count = value
+
     @staticmethod
     def _load_schema(schema_path: str | Path) -> object:
         """Load the JSON schema."""
