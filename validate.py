@@ -32,7 +32,7 @@ class ChirpStackValidator:
 
     def _load_schema(self, schema_path):
         """Load the JSON schema."""
-        with open(schema_path, 'r', encoding='utf-8') as f:
+        with open(schema_path, "r", encoding="utf-8") as f:
             return json.load(f)
 
     def _get_property_type(self, key):
@@ -45,11 +45,11 @@ class ChirpStackValidator:
             str: The type ('boolean', 'number', 'integer', 'string', or None)
         """
         # Check both device and gateway schemas since they're in oneOf
-        for schema_def in self.schema.get('oneOf', []):
-            properties = schema_def.get('properties', {})
+        for schema_def in self.schema.get("oneOf", []):
+            properties = schema_def.get("properties", {})
             if key in properties:
                 prop_schema = properties[key]
-                return prop_schema.get('type')
+                return prop_schema.get("type")
 
         return None
 
@@ -65,9 +65,9 @@ class ChirpStackValidator:
         Raises:
             ValueError: If value cannot be converted to boolean
         """
-        if value.lower() in ('true', '1', 'yes'):
+        if value.lower() in ("true", "1", "yes"):
             return True
-        elif value.lower() in ('false', '0', 'no'):
+        elif value.lower() in ("false", "0", "no"):
             return False
         else:
             raise ValueError(f"Cannot convert '{value}' to boolean")
@@ -85,9 +85,9 @@ class ChirpStackValidator:
         Raises:
             ValueError: If value cannot be converted to the target type
         """
-        if target_type == 'integer':
+        if target_type == "integer":
             return int(value)
-        elif target_type == 'number':
+        elif target_type == "number":
             return float(value)
         else:
             raise ValueError(f"Unknown numeric target type: {target_type}")
@@ -112,7 +112,7 @@ class ChirpStackValidator:
 
     def validate_json_file(self, file_path):
         """Validate a JSON file."""
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, "r", encoding="utf-8") as f:
             data = json.load(f)
 
         # Handle both single objects and arrays
@@ -126,7 +126,7 @@ class ChirpStackValidator:
 
     def validate_jsonl_file(self, file_path):
         """Validate a JSONL file."""
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, "r", encoding="utf-8") as f:
             for i, line in enumerate(f, 1):
                 line = line.strip()
                 if not line:
@@ -141,22 +141,22 @@ class ChirpStackValidator:
 
     def validate_csv_file(self, file_path):
         """Validate a CSV file."""
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, "r", encoding="utf-8") as f:
             reader = csv.DictReader(f)
             for i, row in enumerate(reader, 1):
                 # Convert CSV string values to appropriate types based on schema
                 entity = {}
                 for key, value in row.items():
-                    if value == '':
+                    if value == "":
                         continue
 
                     # Get the expected type from the schema
                     expected_type = self._get_property_type(key)
 
                     try:
-                        if expected_type == 'boolean':
+                        if expected_type == "boolean":
                             entity[key] = self._convert_to_boolean(value)
-                        elif expected_type in ('number', 'integer'):
+                        elif expected_type in ("number", "integer"):
                             entity[key] = self._convert_to_number(value, expected_type)
                         else:
                             # Default to string for unknown or string types
@@ -172,7 +172,11 @@ app = typer.Typer()
 
 
 @app.command()
-def main(file_path: Path = typer.Argument(..., help="Path to the file to validate (JSON, JSONL, or CSV)")):
+def main(
+    file_path: Path = typer.Argument(
+        ..., help="Path to the file to validate (JSON, JSONL, or CSV)"
+    ),
+):
     """Validate ChirpStack provisioning data files against the schema."""
     if not file_path.exists():
         print(f"Error: File {file_path} does not exist")
@@ -192,14 +196,16 @@ def main(file_path: Path = typer.Argument(..., help="Path to the file to validat
     suffix = file_path.suffix.lower()
 
     match suffix:
-        case '.json':
+        case ".json":
             validation_method = validator.validate_json_file
-        case '.jsonl':
+        case ".jsonl":
             validation_method = validator.validate_jsonl_file
-        case '.csv':
+        case ".csv":
             validation_method = validator.validate_csv_file
         case _:
-            print(f"Error: Unsupported file type {suffix}. Supported: .json, .jsonl, .csv")
+            print(
+                f"Error: Unsupported file type {suffix}. Supported: .json, .jsonl, .csv"
+            )
             raise typer.Abort()
 
     # Execute validation in try-except block
