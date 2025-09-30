@@ -189,19 +189,23 @@ def main(file_path: Path = typer.Argument(..., help="Path to the file to validat
     # Print validation header
     print(f"Validating {file_path.name}...")
 
-    # Determine file type and validate
+    # Determine file type and select appropriate validation method
     suffix = file_path.suffix.lower()
-
-    try:
-        if suffix == '.json':
-            validator.validate_json_file(file_path)
-        elif suffix == '.jsonl':
-            validator.validate_jsonl_file(file_path)
-        elif suffix == '.csv':
-            validator.validate_csv_file(file_path)
-        else:
+    
+    match suffix:
+        case '.json':
+            validation_method = validator.validate_json_file
+        case '.jsonl':
+            validation_method = validator.validate_jsonl_file
+        case '.csv':
+            validation_method = validator.validate_csv_file
+        case _:
             print(f"Error: Unsupported file type {suffix}. Supported: .json, .jsonl, .csv")
             raise typer.Exit(code=1)
+    
+    # Execute validation in try-except block
+    try:
+        validation_method(file_path)
     except Exception as e:
         print(f"Error validating file: {e}")
         raise typer.Exit(code=1)
