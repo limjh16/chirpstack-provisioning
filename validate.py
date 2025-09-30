@@ -16,32 +16,32 @@ import typer
 
 class ChirpStackValidator:
     """Validator for ChirpStack provisioning data files."""
-    
+
     def __init__(self, schema_path=None):
         """Initialize the validator with a schema.
-        
+
         Args:
             schema_path: Path to the JSON schema file. If None, uses default schema.json
         """
         self.total_count = 0
         self.error_count = 0
-        
+
         if schema_path is None:
             schema_path = Path(__file__).parent / "schema.json"
-        
+
         self.schema = self._load_schema(schema_path)
-    
+
     def _load_schema(self, schema_path):
         """Load the JSON schema."""
         with open(schema_path, 'r', encoding='utf-8') as f:
             return json.load(f)
-    
+
     def _get_property_type(self, key):
         """Get the expected type for a property from the schema.
-        
+
         Args:
             key: Property name to look up
-            
+
         Returns:
             str: The type ('boolean', 'number', 'integer', 'string', or None)
         """
@@ -51,18 +51,18 @@ class ChirpStackValidator:
             if key in properties:
                 prop_schema = properties[key]
                 return prop_schema.get('type')
-        
+
         return None
-    
+
     def _convert_to_boolean(self, value):
         """Convert a string value to boolean.
-        
+
         Args:
             value: String value to convert
-            
+
         Returns:
             bool: Converted boolean value
-            
+
         Raises:
             ValueError: If value cannot be converted to boolean
         """
@@ -72,17 +72,17 @@ class ChirpStackValidator:
             return False
         else:
             raise ValueError(f"Cannot convert '{value}' to boolean")
-    
+
     def _convert_to_number(self, value, target_type):
         """Convert a string value to a number (float or int).
-        
+
         Args:
             value: String value to convert
             target_type: Target type ('number' for float, 'integer' for int)
-            
+
         Returns:
             float or int: Converted numeric value
-            
+
         Raises:
             ValueError: If value cannot be converted to the target type
         """
@@ -92,25 +92,25 @@ class ChirpStackValidator:
             return float(value)
         else:
             raise ValueError(f"Unknown numeric target type: {target_type}")
-    
+
     def validate_entity(self, entity, line_num):
         """Validate a single entity and print errors immediately.
-        
+
         Args:
             entity: The entity data to validate
             line_num: Line number for error reporting
         """
         self.total_count += 1
-        
+
         try:
             jsonschema.validate(entity, self.schema)
         except jsonschema.ValidationError as e:
             self.error_count += 1
             print(f"  Line {line_num}: ✗ Invalid - {str(e.message)}")
             return False
-        
+
         return True
-    
+
     def validate_json_file(self, file_path):
         """Validate a JSON file."""
         with open(file_path, 'r', encoding='utf-8') as f:
@@ -124,7 +124,7 @@ class ChirpStackValidator:
 
         for i, entity in enumerate(entities, 1):
             self.validate_entity(entity, i)
-    
+
     def validate_jsonl_file(self, file_path):
         """Validate a JSONL file."""
         with open(file_path, 'r', encoding='utf-8') as f:
@@ -139,7 +139,7 @@ class ChirpStackValidator:
                     self.total_count += 1
                     self.error_count += 1
                     print(f"  Line {i}: ✗ Invalid - {str(e)}")
-    
+
     def validate_csv_file(self, file_path):
         """Validate a CSV file."""
         with open(file_path, 'r', encoding='utf-8') as f:
@@ -150,10 +150,10 @@ class ChirpStackValidator:
                 for key, value in row.items():
                     if value == '':
                         continue
-                    
+
                     # Get the expected type from the schema
                     expected_type = self._get_property_type(key)
-                    
+
                     try:
                         if expected_type == 'boolean':
                             entity[key] = self._convert_to_boolean(value)
@@ -177,21 +177,21 @@ def main(file_path: Path = typer.Argument(..., help="Path to the file to validat
     """Validate ChirpStack provisioning data files against the schema."""
     if not file_path.exists():
         print(f"Error: File {file_path} does not exist")
-        raise typer.Exit(code=1)
+        raise typer.Abort()
 
     # Create validator
     try:
         validator = ChirpStackValidator()
     except Exception as e:
         print(f"Error loading schema: {e}")
-        raise typer.Exit(code=1)
+        raise typer.Abort()
 
     # Print validation header
     print(f"Validating {file_path.name}...")
 
     # Determine file type and select appropriate validation method
     suffix = file_path.suffix.lower()
-    
+
     match suffix:
         case '.json':
             validation_method = validator.validate_json_file
@@ -201,14 +201,14 @@ def main(file_path: Path = typer.Argument(..., help="Path to the file to validat
             validation_method = validator.validate_csv_file
         case _:
             print(f"Error: Unsupported file type {suffix}. Supported: .json, .jsonl, .csv")
-            raise typer.Exit(code=1)
-    
+            raise typer.Abort()
+
     # Execute validation in try-except block
     try:
         validation_method(file_path)
     except Exception as e:
         print(f"Error validating file: {e}")
-        raise typer.Exit(code=1)
+        raise typer.Abort()
 
     # Print summary only if there were any entries processed
     if validator.total_count > 0:
