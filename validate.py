@@ -17,7 +17,7 @@ from rich import print
 class ChirpStackValidator:
     """Validator for ChirpStack provisioning data files."""
 
-    def __init__(self, schema_path=None):
+    def __init__(self, schema_path: str | Path | None = None):
         """Initialize the validator with a schema.
 
         Args:
@@ -27,16 +27,17 @@ class ChirpStackValidator:
         self.error_count = 0
 
         if schema_path is None:
-            schema_path = Path(__file__).parent / "schema.json"
+            schema_path: Path = Path(__file__).parent / "schema.json"
 
         self.schema = self._load_schema(schema_path)
 
-    def _load_schema(self, schema_path):
+    @staticmethod
+    def _load_schema(schema_path: str | Path) -> object:
         """Load the JSON schema."""
         with open(schema_path, "r", encoding="utf-8") as f:
             return json.load(f)
 
-    def _get_property_type(self, key):
+    def _get_property_type(self, key: str) -> str:
         """Get the expected type for a property from the schema.
 
         Args:
@@ -52,9 +53,10 @@ class ChirpStackValidator:
                 prop_schema = properties[key]
                 return prop_schema.get("type")
 
-        return None
+        raise KeyError(f"Property '{key}' not found in schema")
 
-    def _convert_to_boolean(self, value):
+    @staticmethod
+    def _convert_to_boolean(value: str) -> bool:
         """Convert a string value to boolean.
 
         Args:
@@ -73,7 +75,8 @@ class ChirpStackValidator:
         else:
             raise ValueError(f"Cannot convert '{value}' to boolean")
 
-    def _convert_to_number(self, value, target_type):
+    @staticmethod
+    def _convert_to_number(value: str, target_type: str) -> float | int:
         """Convert a string value to a number (float or int).
 
         Args:
@@ -93,7 +96,7 @@ class ChirpStackValidator:
         else:
             raise ValueError(f"Unknown numeric target type: {target_type}")
 
-    def validate_entity(self, entity, line_num):
+    def validate_entity(self, entity, line_num) -> bool:
         """Validate a single entity and print errors immediately.
 
         Args:
@@ -151,19 +154,16 @@ class ChirpStackValidator:
                     if value == "":
                         continue
 
-                    # Get the expected type from the schema
-                    expected_type = self._get_property_type(key)
-
                     try:
+                        # Get the expected type from the schema
+                        expected_type = self._get_property_type(key)
+
                         if expected_type == "boolean":
                             entity[key] = self._convert_to_boolean(value)
                         elif expected_type in ("number", "integer"):
                             entity[key] = self._convert_to_number(value, expected_type)
-                        else:
-                            # Default to string for unknown or string types
-                            entity[key] = value
-                    except ValueError:
-                        # If conversion fails, keep as string and let schema validation catch the error
+                    except (ValueError, KeyError):
+                        # If conversion fails or key is not found, keep as string and let schema validation catch the error
                         entity[key] = value
 
                 self.validate_entity(entity, i)
