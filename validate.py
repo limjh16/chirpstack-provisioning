@@ -184,6 +184,9 @@ class ChirpStackValidator:
                             entity[key] = self._convert_to_boolean(value)
                         elif expected_type in ("number", "integer"):
                             entity[key] = self._convert_to_number(value, expected_type)
+                        else:
+                            # For string types, keep the original value
+                            entity[key] = value
                     except (ValueError, KeyError):
                         # If conversion fails or key is not found, keep as string and let schema validation catch the error
                         entity[key] = value
