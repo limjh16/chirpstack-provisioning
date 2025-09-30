@@ -7,7 +7,6 @@ Validates JSON, JSONL, and CSV files against the schema.json schema.
 
 import json
 import csv
-import sys
 from pathlib import Path
 
 import jsonschema
