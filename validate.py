@@ -53,6 +53,25 @@ class ChirpStackValidator:
         
         return None
     
+    def _convert_to_boolean(self, value):
+        """Convert a string value to boolean.
+        
+        Args:
+            value: String value to convert
+            
+        Returns:
+            bool: Converted boolean value
+            
+        Raises:
+            ValueError: If value cannot be converted to boolean
+        """
+        if value.lower() in ('true', '1', 'yes'):
+            return True
+        elif value.lower() in ('false', '0', 'no'):
+            return False
+        else:
+            raise ValueError(f"Cannot convert '{value}' to boolean")
+    
     def validate_entity(self, entity, line_num):
         """Validate a single entity and print errors immediately.
         
