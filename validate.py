@@ -144,23 +144,25 @@ class ChirpStackValidator:
         with open(file_path, 'r', encoding='utf-8') as f:
             reader = csv.DictReader(f)
             for i, row in enumerate(reader, 1):
-                # Convert string booleans to actual booleans, numbers, and clean empty values
+                # Convert CSV string values to appropriate types based on schema
                 entity = {}
                 for key, value in row.items():
                     if value == '':
                         continue
-                    elif value.lower() in ('true', 'false'):
-                        entity[key] = value.lower() == 'true'
-                    elif key in ['latitude', 'longitude', 'altitude', 'stats_interval']:
-                        # Convert numeric fields
-                        try:
-                            if '.' in value:
-                                entity[key] = float(value)
-                            else:
-                                entity[key] = int(value)
-                        except ValueError:
-                            entity[key] = value  # Keep as string if conversion fails
-                    else:
+                    
+                    # Get the expected type from the schema
+                    expected_type = self._get_property_type(key)
+                    
+                    try:
+                        if expected_type == 'boolean':
+                            entity[key] = self._convert_to_boolean(value)
+                        elif expected_type in ('number', 'integer'):
+                            entity[key] = self._convert_to_number(value, expected_type)
+                        else:
+                            # Default to string for unknown or string types
+                            entity[key] = value
+                    except ValueError:
+                        # If conversion fails, keep as string and let schema validation catch the error
                         entity[key] = value
 
                 self.validate_entity(entity, i)
