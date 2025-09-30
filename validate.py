@@ -11,6 +11,7 @@ from pathlib import Path
 
 import jsonschema
 import typer
+from rich import print
 
 
 class ChirpStackValidator:
