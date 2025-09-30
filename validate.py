@@ -72,6 +72,26 @@ class ChirpStackValidator:
         else:
             raise ValueError(f"Cannot convert '{value}' to boolean")
     
+    def _convert_to_number(self, value, target_type):
+        """Convert a string value to a number (float or int).
+        
+        Args:
+            value: String value to convert
+            target_type: Target type ('number' for float, 'integer' for int)
+            
+        Returns:
+            float or int: Converted numeric value
+            
+        Raises:
+            ValueError: If value cannot be converted to the target type
+        """
+        if target_type == 'integer':
+            return int(value)
+        elif target_type == 'number':
+            return float(value)
+        else:
+            raise ValueError(f"Unknown numeric target type: {target_type}")
+    
     def validate_entity(self, entity, line_num):
         """Validate a single entity and print errors immediately.
         
