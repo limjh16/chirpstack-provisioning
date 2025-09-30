@@ -35,6 +35,24 @@ class ChirpStackValidator:
         with open(schema_path, 'r', encoding='utf-8') as f:
             return json.load(f)
     
+    def _get_property_type(self, key):
+        """Get the expected type for a property from the schema.
+        
+        Args:
+            key: Property name to look up
+            
+        Returns:
+            str: The type ('boolean', 'number', 'integer', 'string', or None)
+        """
+        # Check both device and gateway schemas since they're in oneOf
+        for schema_def in self.schema.get('oneOf', []):
+            properties = schema_def.get('properties', {})
+            if key in properties:
+                prop_schema = properties[key]
+                return prop_schema.get('type')
+        
+        return None
+    
     def validate_entity(self, entity, line_num):
         """Validate a single entity and print errors immediately.
         
