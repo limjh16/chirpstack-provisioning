@@ -10,6 +10,8 @@ ChirpStack Provisioning uses a **two-file approach** for provisioning:
    - Format: JSON only (YAML and TOML support planned for future)
    - Hierarchical structure with nested entities
    - Processed first to establish the infrastructure
+   - Based on ChirpStack API schemas in `schemas/` directory with additional provisioning fields
+   - Uses `$ref` extensively to avoid duplication of common field patterns
 
 2. **Device File** (`devices.schema.json`): Defines individual devices to be provisioned
    - Formats: JSON, JSONL, or CSV
@@ -393,3 +395,33 @@ The current implementation assumes:
 - **Name-Based Lookups**: Devices reference applications and device profiles by name, not UUID
 - **Single File per Type**: One setup file and one device file per provisioning operation
 - **Existing ChirpStack Server**: A running ChirpStack v4 server with API access is available
+
+## Schema Structure
+
+### Setup Schema Design
+
+The `setup.schema.json` file uses a modular design with the following benefits:
+
+1. **Reference-Based Common Fields**: Common field patterns (names, descriptions, EUIs, tags, etc.) are defined once in `$defs` and reused via `$ref`, reducing duplication.
+
+2. **Based on API Schemas**: Entity definitions are conceptually based on the ChirpStack API schemas found in `schemas/` directory (exported from `.proto` files), with extensions for:
+   - AUTO-GENERATED and AUTO-PARENT markers
+   - Additional validation (regex patterns, length limits)
+   - Hierarchical nesting (gateways, applications, device profiles under tenants)
+   - Environment variable support for integrations
+
+3. **Common Reusable Definitions**:
+   - `nameField`: Standard name validation (1-100 chars, no whitespace at edges)
+   - `descriptionField`: Description validation (max 500 chars)
+   - `euiField`: EUI64 validation (16 hex chars)
+   - `autoGenField` / `autoParentField`: Auto-fill markers
+   - `tagsField` / `metadataField`: Key-value object patterns
+   - `regionEnum` / `macVersionEnum` / `regParamsEnum`: LoRaWAN enumerations
+
+4. **Validation Enhancements**:
+   - `additionalProperties: false` ensures no unexpected fields
+   - Regex patterns for EUI fields and names
+   - Length constraints on strings
+   - Enum validation for LoRaWAN-specific values
+
+This approach keeps the schema maintainable while providing comprehensive validation based on the official ChirpStack API definitions.

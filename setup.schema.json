@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://chirpstack-provisioning.schemas/setup.json",
   "title": "ChirpStack Setup Configuration",
-  "description": "Schema for provisioning ChirpStack infrastructure including tenants, device profiles, applications, integrations, and gateways",
+  "description": "Schema for provisioning ChirpStack infrastructure including tenants, device profiles, applications, integrations, and gateways. See schemas/ directory for base ChirpStack API schemas.",
   "type": "object",
   "properties": {
     "tenants": {
@@ -16,75 +16,56 @@
   "$defs": {
     "Tenant": {
       "type": "object",
-      "description": "ChirpStack tenant configuration",
+      "description": "Tenant configuration. Based on schemas/Tenant.json with additional provisioning fields.",
       "properties": {
         "name": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 100,
-          "description": "Tenant name"
+          "$ref": "#/$defs/nameField"
         },
         "*id": {
-          "type": "string",
-          "const": "AUTO-GENERATED",
-          "description": "Tenant ID (UUID). This will be automatically generated on create"
+          "$ref": "#/$defs/autoGenField",
+          "description": "Tenant ID (UUID). AUTO-GENERATED on create"
         },
         "description": {
-          "type": "string",
-          "maxLength": 500,
-          "description": "Tenant description"
+          "$ref": "#/$defs/descriptionField"
         },
         "can_have_gateways": {
           "type": "boolean",
-          "description": "Can the tenant create and 'own' Gateways?",
           "default": true
         },
         "max_gateway_count": {
-          "type": "integer",
-          "minimum": 0,
-          "description": "Max gateway count for tenant. When set to 0, the tenant can have unlimited gateways",
-          "default": 0
+          "$ref": "#/$defs/countField",
+          "description": "Max gateway count (0 = unlimited)"
         },
         "max_device_count": {
-          "type": "integer",
-          "minimum": 0,
-          "description": "Max device count for tenant. When set to 0, the tenant can have unlimited devices",
-          "default": 0
+          "$ref": "#/$defs/countField",
+          "description": "Max device count (0 = unlimited)"
         },
         "private_gateways_up": {
           "type": "boolean",
-          "description": "Private gateways (uplink). If enabled, uplink messages will not be shared with other tenants",
           "default": false
         },
         "private_gateways_down": {
           "type": "boolean",
-          "description": "Private gateways (downlink). If enabled, other tenants will not be able to schedule downlink messages through the gateways of this tenant",
           "default": false
         },
         "tags": {
-          "type": "object",
-          "description": "Tags (user defined). These tags are NOT exposed in the integration events",
-          "additionalProperties": {
-            "type": "string"
-          }
+          "$ref": "#/$defs/tagsField"
         },
         "gateways": {
           "type": "array",
-          "description": "Gateways belonging to this tenant",
           "items": {
             "$ref": "#/$defs/Gateway"
           }
         },
         "applications": {
           "type": "array",
-          "description": "Applications belonging to this tenant",
           "items": {
             "$ref": "#/$defs/Application"
           }
         },
         "_deviceProfiles": {
           "type": "array",
-          "description": "Device profiles belonging to this tenant. Note: uses underscore prefix to indicate this is a referenced entity",
+          "description": "Device profiles (underscore prefix indicates nested entity)",
           "items": {
             "$ref": "#/$defs/DeviceProfile"
           }
@@ -95,48 +76,32 @@
     },
     "Gateway": {
       "type": "object",
-      "description": "ChirpStack LoRaWAN gateway configuration",
+      "description": "Gateway configuration. Based on schemas/Gateway.json with additional provisioning fields.",
       "properties": {
         "gateway_id": {
-          "type": "string",
-          "pattern": "^[0-9A-Fa-f]{16}$",
-          "description": "Gateway ID (EUI64) in hexadecimal format (16 characters)"
+          "$ref": "#/$defs/euiField",
+          "description": "Gateway ID (EUI64)"
         },
         "name": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 100,
-          "description": "Gateway name"
+          "$ref": "#/$defs/nameField"
         },
         "description": {
-          "type": "string",
-          "maxLength": 500,
-          "description": "Gateway description"
+          "$ref": "#/$defs/descriptionField"
         },
         "*tenant_id": {
-          "type": "string",
-          "const": "AUTO-PARENT",
-          "description": "Tenant ID (UUID). This will be automatically filled from the parent tenant"
+          "$ref": "#/$defs/autoParentField",
+          "description": "Tenant ID. AUTO-PARENT from parent tenant"
         },
         "tags": {
-          "type": "object",
-          "description": "Gateway tags for organization and filtering",
-          "additionalProperties": {
-            "type": "string"
-          }
+          "$ref": "#/$defs/tagsField"
         },
         "metadata": {
-          "type": "object",
-          "description": "Gateway metadata (provided by the gateway)",
-          "additionalProperties": {
-            "type": "string"
-          }
+          "$ref": "#/$defs/metadataField"
         },
         "stats_interval": {
           "type": "integer",
           "minimum": 1,
           "maximum": 86400,
-          "description": "Stats interval in seconds. This defines the expected interval in which the gateway sends its statistics",
           "default": 30
         },
         "location": {
@@ -148,71 +113,54 @@
     },
     "Location": {
       "type": "object",
-      "description": "Gateway location information",
       "properties": {
         "latitude": {
           "type": "number",
           "minimum": -90,
-          "maximum": 90,
-          "description": "Latitude coordinate"
+          "maximum": 90
         },
         "longitude": {
           "type": "number",
           "minimum": -180,
-          "maximum": 180,
-          "description": "Longitude coordinate"
+          "maximum": 180
         },
         "altitude": {
-          "type": "number",
-          "description": "Altitude in meters"
+          "type": "number"
         },
         "source": {
           "type": "string",
-          "enum": ["UNKNOWN", "GPS", "CONFIG", "GEO_RESOLVER_TDOA", "GEO_RESOLVER_RSSI", "GEO_RESOLVER_GNSS", "GEO_RESOLVER_WIFI"],
-          "description": "Location source"
+          "enum": ["UNKNOWN", "GPS", "CONFIG", "GEO_RESOLVER_TDOA", "GEO_RESOLVER_RSSI", "GEO_RESOLVER_GNSS", "GEO_RESOLVER_WIFI"]
         },
         "accuracy": {
-          "type": "number",
-          "description": "Location accuracy in meters"
+          "type": "number"
         }
       },
       "additionalProperties": false
     },
     "Application": {
       "type": "object",
-      "description": "ChirpStack application configuration",
+      "description": "Application configuration. Based on schemas/Application.json with additional provisioning fields.",
       "properties": {
         "name": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 100,
-          "description": "Application name"
+          "$ref": "#/$defs/nameField"
         },
         "*id": {
-          "type": "string",
-          "const": "AUTO-GENERATED",
-          "description": "Application ID (UUID). This will be automatically generated on create"
+          "$ref": "#/$defs/autoGenField",
+          "description": "Application ID (UUID). AUTO-GENERATED on create"
         },
         "*tenant_id": {
-          "type": "string",
-          "const": "AUTO-PARENT",
-          "description": "Tenant ID (UUID). This will be automatically filled from the parent tenant"
+          "$ref": "#/$defs/autoParentField",
+          "description": "Tenant ID. AUTO-PARENT from parent tenant"
         },
         "description": {
-          "type": "string",
-          "maxLength": 500,
-          "description": "Application description"
+          "$ref": "#/$defs/descriptionField"
         },
         "tags": {
-          "type": "object",
-          "description": "Tags (user defined). These tags are exposed in all integration events of devices under this application",
-          "additionalProperties": {
-            "type": "string"
-          }
+          "$ref": "#/$defs/tagsField"
         },
         "_InfluxDbIntegration": {
           "$ref": "#/$defs/InfluxDbIntegration",
-          "description": "InfluxDB integration configuration. Note: uses underscore prefix to indicate this is an integration"
+          "description": "InfluxDB integration (underscore prefix indicates integration)"
         }
       },
       "required": ["name"],
@@ -220,72 +168,57 @@
     },
     "InfluxDbIntegration": {
       "type": "object",
-      "description": "InfluxDB integration configuration",
+      "description": "InfluxDB integration. Based on schemas/InfluxDbIntegration.json with env var support.",
       "properties": {
         "*application_id": {
-          "type": "string",
-          "const": "AUTO-PARENT",
-          "description": "Application ID (UUID). This will be automatically filled from the parent application"
+          "$ref": "#/$defs/autoParentField",
+          "description": "Application ID. AUTO-PARENT from parent application"
         },
         "version": {
           "type": "integer",
           "enum": [0, 1],
-          "description": "InfluxDB version: 0 = InfluxDB v1, 1 = InfluxDB v2",
-          "default": 1
+          "description": "InfluxDB version: 0=v1, 1=v2"
         },
         "endpoint": {
-          "type": "string",
-          "description": "InfluxDB API write endpoint (e.g. http://localhost:8086/write)"
+          "type": "string"
         },
         "endpoint_env_var": {
-          "type": "string",
-          "description": "Environment variable containing the InfluxDB endpoint"
+          "type": "string"
+        },
+        "bucket": {
+          "type": "string"
+        },
+        "bucket_env_var": {
+          "type": "string"
+        },
+        "organization": {
+          "type": "string"
+        },
+        "organization_env_var": {
+          "type": "string"
+        },
+        "token": {
+          "type": "string"
+        },
+        "token_env_var": {
+          "type": "string"
         },
         "db": {
-          "type": "string",
-          "description": "InfluxDB database name (InfluxDB v1 only)"
+          "type": "string"
         },
         "username": {
-          "type": "string",
-          "description": "InfluxDB username (InfluxDB v1 only)"
+          "type": "string"
         },
         "password": {
-          "type": "string",
-          "description": "InfluxDB password (InfluxDB v1 only)"
+          "type": "string"
         },
         "retention_policy_name": {
-          "type": "string",
-          "description": "InfluxDB retention policy name (InfluxDB v1 only)"
+          "type": "string"
         },
         "precision": {
           "type": "string",
           "enum": ["NS", "U", "MS", "S", "M", "H"],
-          "description": "InfluxDB precision: NS=nanoseconds, U=microseconds, MS=milliseconds, S=seconds, M=minutes, H=hours",
           "default": "NS"
-        },
-        "token": {
-          "type": "string",
-          "description": "Token (InfluxDB v2 only)"
-        },
-        "token_env_var": {
-          "type": "string",
-          "description": "Environment variable containing the InfluxDB token (InfluxDB v2 only)"
-        },
-        "organization": {
-          "type": "string",
-          "description": "Organization (InfluxDB v2 only)"
-        },
-        "organization_env_var": {
-          "type": "string",
-          "description": "Environment variable containing the InfluxDB organization (InfluxDB v2 only)"
-        },
-        "bucket": {
-          "type": "string",
-          "description": "Bucket (InfluxDB v2 only)"
-        },
-        "bucket_env_var": {
-          "type": "string",
-          "description": "Environment variable containing the InfluxDB bucket (InfluxDB v2 only)"
         }
       },
       "required": ["version"],
@@ -293,110 +226,134 @@
     },
     "DeviceProfile": {
       "type": "object",
-      "description": "ChirpStack device profile configuration",
+      "description": "Device profile configuration. Based on schemas/DeviceProfile.json with simplified fields.",
       "properties": {
         "name": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 100,
-          "description": "Device profile name"
+          "$ref": "#/$defs/nameField"
         },
         "*id": {
-          "type": "string",
-          "const": "AUTO-GENERATED",
-          "description": "Device profile ID (UUID). This will be automatically generated on create"
+          "$ref": "#/$defs/autoGenField",
+          "description": "Device profile ID (UUID). AUTO-GENERATED on create"
         },
         "*tenant_id": {
-          "type": "string",
-          "const": "AUTO-PARENT",
-          "description": "Tenant ID (UUID). This will be automatically filled from the parent tenant"
+          "$ref": "#/$defs/autoParentField",
+          "description": "Tenant ID. AUTO-PARENT from parent tenant"
         },
         "description": {
-          "type": "string",
-          "maxLength": 500,
-          "description": "Device profile description"
+          "$ref": "#/$defs/descriptionField"
         },
         "region": {
-          "type": "string",
-          "enum": ["EU868", "US915", "CN779", "EU433", "AU915", "CN470", "AS923", "AS923_2", "AS923_3", "AS923_4", "KR920", "IN865", "RU864", "ISM2400"],
-          "description": "LoRaWAN region"
+          "$ref": "#/$defs/regionEnum"
         },
         "mac_version": {
-          "type": "string",
-          "enum": ["LORAWAN_1_0_0", "LORAWAN_1_0_1", "LORAWAN_1_0_2", "LORAWAN_1_0_3", "LORAWAN_1_0_4", "LORAWAN_1_1_0"],
-          "description": "LoRaWAN MAC version",
-          "default": "LORAWAN_1_0_4"
+          "$ref": "#/$defs/macVersionEnum"
         },
         "reg_params_revision": {
-          "type": "string",
-          "enum": ["A", "B", "RP002_1_0_0", "RP002_1_0_1", "RP002_1_0_2", "RP002_1_0_3", "RP002_1_0_4"],
-          "description": "Regional parameters revision",
-          "default": "RP002_1_0_1"
+          "$ref": "#/$defs/regParamsEnum"
         },
         "supports_otaa": {
           "type": "boolean",
-          "description": "Device supports OTAA (Over-The-Air Activation)",
           "default": true
         },
         "supports_class_b": {
           "type": "boolean",
-          "description": "Device supports Class B",
           "default": false
         },
         "supports_class_c": {
           "type": "boolean",
-          "description": "Device supports Class C",
           "default": false
         },
         "adr_algorithm_id": {
           "type": "string",
-          "description": "ADR algorithm ID",
           "default": "default"
         },
         "payload_codec_runtime": {
           "type": "string",
           "enum": ["NONE", "CAYENNE_LPP", "JS"],
-          "description": "Payload codec runtime: NONE, CAYENNE_LPP, or JS (JavaScript)",
           "default": "NONE"
         },
         "payload_codec_script": {
-          "type": "string",
-          "description": "Payload codec script (JavaScript code)"
+          "type": "string"
         },
         "payload_codec_script_path": {
-          "type": "string",
-          "description": "Path to payload codec script file"
+          "type": "string"
         },
         "flush_queue_on_activate": {
           "type": "boolean",
-          "description": "Flush queue on device activation",
           "default": false
         },
         "uplink_interval": {
           "type": "integer",
-          "minimum": 0,
-          "description": "Expected uplink interval in seconds. When set to 0, no uplink interval is expected"
+          "minimum": 0
         },
         "device_status_req_interval": {
           "type": "integer",
-          "minimum": 0,
-          "description": "Device status request interval (times per day)"
+          "minimum": 0
         },
         "tags": {
-          "type": "object",
-          "description": "Tags (user defined). These tags are exposed in all integration events of devices using this device profile",
-          "additionalProperties": {
-            "type": "string"
-          }
+          "$ref": "#/$defs/tagsField"
         },
         "auto_detect_measurements": {
           "type": "boolean",
-          "description": "Auto-detect measurements from decoded payload",
           "default": true
         }
       },
       "required": ["name", "region", "mac_version", "reg_params_revision", "supports_otaa"],
       "additionalProperties": false
+    },
+    "nameField": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "pattern": "^\\S.*\\S$|^\\S$",
+      "description": "Name (1-100 chars, no leading/trailing whitespace)"
+    },
+    "descriptionField": {
+      "type": "string",
+      "maxLength": 500,
+      "description": "Description (max 500 chars)"
+    },
+    "euiField": {
+      "type": "string",
+      "pattern": "^[0-9A-Fa-f]{16}$",
+      "description": "EUI64 in hexadecimal (16 chars)"
+    },
+    "autoGenField": {
+      "type": "string",
+      "const": "AUTO-GENERATED"
+    },
+    "autoParentField": {
+      "type": "string",
+      "const": "AUTO-PARENT"
+    },
+    "countField": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0
+    },
+    "tagsField": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "metadataField": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "regionEnum": {
+      "type": "string",
+      "enum": ["EU868", "US915", "CN779", "EU433", "AU915", "CN470", "AS923", "AS923_2", "AS923_3", "AS923_4", "KR920", "IN865", "RU864", "ISM2400"]
+    },
+    "macVersionEnum": {
+      "type": "string",
+      "enum": ["LORAWAN_1_0_0", "LORAWAN_1_0_1", "LORAWAN_1_0_2", "LORAWAN_1_0_3", "LORAWAN_1_0_4", "LORAWAN_1_1_0"]
+    },
+    "regParamsEnum": {
+      "type": "string",
+      "enum": ["A", "B", "RP002_1_0_0", "RP002_1_0_1", "RP002_1_0_2", "RP002_1_0_3", "RP002_1_0_4"]
     }
   }
 }
