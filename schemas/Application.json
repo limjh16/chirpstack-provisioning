@@ -1,0 +1,36 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/Application",
+    "definitions": {
+        "Application": {
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "Application ID (UUID). Note: on create this will be automatically generated."
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Application name."
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Application description."
+                },
+                "tenant_id": {
+                    "type": "string",
+                    "description": "Tenant ID (UUID)."
+                },
+                "tags": {
+                    "additionalProperties": {
+                        "type": "string"
+                    },
+                    "type": "object",
+                    "description": "Tags (user defined). These tags can be used to add additional information to the application. These tags are exposed in all the integration events of devices under this application."
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Application"
+        }
+    }
+}

@@ -1,0 +1,502 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/DeviceProfile",
+    "definitions": {
+        "DeviceProfile": {
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "Device-profile ID (UUID). Note: on create this will be automatically generated."
+                },
+                "tenant_id": {
+                    "type": "string",
+                    "description": "Tenant ID (UUID)."
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Name."
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Description."
+                },
+                "region": {
+                    "enum": [
+                        "EU868",
+                        0,
+                        "US915",
+                        2,
+                        "CN779",
+                        3,
+                        "EU433",
+                        4,
+                        "AU915",
+                        5,
+                        "CN470",
+                        6,
+                        "AS923",
+                        7,
+                        "AS923_2",
+                        12,
+                        "AS923_3",
+                        13,
+                        "AS923_4",
+                        14,
+                        "KR920",
+                        8,
+                        "IN865",
+                        9,
+                        "RU864",
+                        10,
+                        "ISM2400",
+                        11
+                    ],
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "integer"
+                        }
+                    ],
+                    "title": "Region"
+                },
+                "mac_version": {
+                    "enum": [
+                        "LORAWAN_1_0_0",
+                        0,
+                        "LORAWAN_1_0_1",
+                        1,
+                        "LORAWAN_1_0_2",
+                        2,
+                        "LORAWAN_1_0_3",
+                        3,
+                        "LORAWAN_1_0_4",
+                        4,
+                        "LORAWAN_1_1_0",
+                        5
+                    ],
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "integer"
+                        }
+                    ],
+                    "title": "Mac Version"
+                },
+                "reg_params_revision": {
+                    "enum": [
+                        "A",
+                        0,
+                        "B",
+                        1,
+                        "RP002_1_0_0",
+                        2,
+                        "RP002_1_0_1",
+                        3,
+                        "RP002_1_0_2",
+                        4,
+                        "RP002_1_0_3",
+                        5,
+                        "RP002_1_0_4",
+                        6
+                    ],
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "integer"
+                        }
+                    ],
+                    "title": "Reg Params Revision"
+                },
+                "adr_algorithm_id": {
+                    "type": "string",
+                    "description": "ADR algorithm ID."
+                },
+                "payload_codec_runtime": {
+                    "enum": [
+                        "NONE",
+                        0,
+                        "CAYENNE_LPP",
+                        1,
+                        "JS",
+                        2
+                    ],
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "integer"
+                        }
+                    ],
+                    "title": "Codec Runtime"
+                },
+                "payload_codec_script": {
+                    "type": "string",
+                    "description": "Payload codec script."
+                },
+                "flush_queue_on_activate": {
+                    "type": "boolean",
+                    "description": "Flush queue on device activation."
+                },
+                "uplink_interval": {
+                    "type": "integer",
+                    "description": "Uplink interval (seconds). This defines the expected uplink interval which the device uses for communication. If the uplink interval has expired and no uplink has been received, the device is considered inactive."
+                },
+                "device_status_req_interval": {
+                    "type": "integer",
+                    "description": "Device-status request interval (times / day). This defines the times per day that ChirpStack will request the device-status from the device."
+                },
+                "supports_otaa": {
+                    "type": "boolean",
+                    "description": "Supports OTAA."
+                },
+                "supports_class_b": {
+                    "type": "boolean",
+                    "description": "Supports Class B."
+                },
+                "supports_class_c": {
+                    "type": "boolean",
+                    "description": "Supports Class-C."
+                },
+                "class_b_timeout": {
+                    "type": "integer",
+                    "description": "Class-B timeout (seconds). This is the maximum time ChirpStack will wait to receive an acknowledgement from the device (if requested)."
+                },
+                "class_b_ping_slot_periodicity": {
+                    "type": "integer",
+                    "description": "Class-B ping-slot periodicity. Valid options are: 0 - 7. Number of ping-slots per beacon-period: pingNb = 2^(7-periodicity) Periodicity: 0 = 128 ping-slots per beacon period = ~ every 1 sec Periodicity: 7 = 1 ping-slot per beacon period = ~ every 128 sec"
+                },
+                "class_b_ping_slot_dr": {
+                    "type": "integer",
+                    "description": "Class-B ping-slot DR."
+                },
+                "class_b_ping_slot_freq": {
+                    "type": "integer",
+                    "description": "Class-B ping-slot freq (Hz)."
+                },
+                "class_c_timeout": {
+                    "type": "integer",
+                    "description": "Class-C timeout (seconds). This is the maximum time ChirpStack will wait to receive an acknowledgement from the device (if requested)."
+                },
+                "abp_rx1_delay": {
+                    "type": "integer",
+                    "description": "RX1 delay (for ABP)."
+                },
+                "abp_rx1_dr_offset": {
+                    "type": "integer",
+                    "description": "RX1 DR offset (for ABP)."
+                },
+                "abp_rx2_dr": {
+                    "type": "integer",
+                    "description": "RX2 DR (for ABP)."
+                },
+                "abp_rx2_freq": {
+                    "type": "integer",
+                    "description": "RX2 frequency (for ABP, Hz)."
+                },
+                "tags": {
+                    "additionalProperties": {
+                        "type": "string"
+                    },
+                    "type": "object",
+                    "description": "Tags (user defined). These tags can be used to add additional information the the device-profile. These tags are exposed in all the integration events of devices using this device-profile."
+                },
+                "measurements": {
+                    "additionalProperties": {
+                        "$ref": "#/definitions/api.Measurement",
+                        "additionalProperties": true
+                    },
+                    "type": "object",
+                    "description": "Measurements. If defined, ChirpStack will visualize these metrics in the web-interface."
+                },
+                "auto_detect_measurements": {
+                    "type": "boolean",
+                    "description": "Auto-detect measurements. If set to true, measurements will be automatically added based on the keys of the decoded payload. In cases where the decoded payload contains random keys in the data, you want to set this to false."
+                },
+                "region_config_id": {
+                    "type": "string",
+                    "description": "Region configuration ID. If set, devices will only use the associated region. If let blank, then devices will use all regions matching the selected common-name. Note that multiple region configurations can exist for the same common-name, e.g. to provide an 8 channel and 16 channel configuration for the US915 band."
+                },
+                "is_relay": {
+                    "type": "boolean",
+                    "description": "Device is a Relay device. Enable this in case the device is a Relay. A Relay device implements TS011 and is able to relay data from relay capable devices. See for more information the TS011 specification."
+                },
+                "is_relay_ed": {
+                    "type": "boolean",
+                    "description": "Device is a Relay end-device. Enable this in case the device is an end-device that can operate under a Relay. Please refer to the TS011 specification for more information."
+                },
+                "relay_ed_relay_only": {
+                    "type": "boolean",
+                    "description": "End-device only accept data through relay. Only accept data for this device through a relay. This setting is useful for testing as in case of a test-setup, the end-device is usually within range of the gateway."
+                },
+                "relay_enabled": {
+                    "type": "boolean",
+                    "description": "Relay must be enabled."
+                },
+                "relay_cad_periodicity": {
+                    "enum": [
+                        "SEC_1",
+                        0,
+                        "MS_500",
+                        1,
+                        "MS_250",
+                        2,
+                        "MS_100",
+                        3,
+                        "MS_50",
+                        4,
+                        "MS_20",
+                        5
+                    ],
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "integer"
+                        }
+                    ],
+                    "title": "Cad Periodicity"
+                },
+                "relay_default_channel_index": {
+                    "type": "integer",
+                    "description": "Relay default channel index. Valid values are 0 and 1, please refer to the RP002 specification for the meaning of these values."
+                },
+                "relay_second_channel_freq": {
+                    "type": "integer",
+                    "description": "Relay second channel frequency (Hz)."
+                },
+                "relay_second_channel_dr": {
+                    "type": "integer",
+                    "description": "Relay second channel DR."
+                },
+                "relay_second_channel_ack_offset": {
+                    "enum": [
+                        "KHZ_0",
+                        0,
+                        "KHZ_200",
+                        1,
+                        "KHZ_400",
+                        2,
+                        "KHZ_800",
+                        3,
+                        "KHZ_1600",
+                        4,
+                        "KHZ_3200",
+                        5
+                    ],
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "integer"
+                        }
+                    ],
+                    "title": "Second Ch Ack Offset"
+                },
+                "relay_ed_activation_mode": {
+                    "enum": [
+                        "DISABLE_RELAY_MODE",
+                        0,
+                        "ENABLE_RELAY_MODE",
+                        1,
+                        "DYNAMIC",
+                        2,
+                        "END_DEVICE_CONTROLLED",
+                        3
+                    ],
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "integer"
+                        }
+                    ],
+                    "title": "Relay Mode Activation"
+                },
+                "relay_ed_smart_enable_level": {
+                    "type": "integer",
+                    "description": "Relay end-device smart-enable level."
+                },
+                "relay_ed_back_off": {
+                    "type": "integer",
+                    "description": "Relay end-device back-off (in case it does not receive WOR ACK frame). 0 = Always send a LoRaWAN uplink 1..63 = Send a LoRaWAN uplink after X WOR frames without a WOR ACK"
+                },
+                "relay_ed_uplink_limit_bucket_size": {
+                    "type": "integer",
+                    "description": "Relay end-device uplink limit bucket size. This field indicates the multiplier to determine the bucket size according to the following formula: BucketSize TOKEN = _reload_rate x _bucket_size Valid values (0 - 3):   0 = 1   1 = 2   2 = 4   3 = 12"
+                },
+                "relay_ed_uplink_limit_reload_rate": {
+                    "type": "integer",
+                    "description": "Relay end-device uplink limit reload rate. Valid values:   * 0 - 62 = X tokens every hour   * 63     = no limitation"
+                },
+                "relay_join_req_limit_reload_rate": {
+                    "type": "integer",
+                    "description": "Relay join-request limit reload rate. Valid values:   * 0 - 126 = X tokens every hour   * 127     = no limitation"
+                },
+                "relay_notify_limit_reload_rate": {
+                    "type": "integer",
+                    "description": "Relay notify limit reload rate. Valid values:   * 0 - 126 = X tokens every hour   * 127     = no limitation"
+                },
+                "relay_global_uplink_limit_reload_rate": {
+                    "type": "integer",
+                    "description": "Relay global uplink limit reload rate. Valid values:   * 0 - 126 = X tokens every hour   * 127     = no limitation"
+                },
+                "relay_overall_limit_reload_rate": {
+                    "type": "integer",
+                    "description": "Relay overall limit reload rate. Valid values:   * 0 - 126 = X tokens every hour   * 127     = no limitation"
+                },
+                "relay_join_req_limit_bucket_size": {
+                    "type": "integer",
+                    "description": "Relay join-request limit bucket size. This field indicates the multiplier to determine the bucket size according to the following formula: BucketSize TOKEN = _reload_rate x _bucket_size Valid values (0 - 3):   0 = 1   1 = 2   2 = 4   3 = 12"
+                },
+                "relay_notify_limit_bucket_size": {
+                    "type": "integer",
+                    "description": "Relay notify limit bucket size. This field indicates the multiplier to determine the bucket size according to the following formula: BucketSize TOKEN = _reload_rate x _bucket_size Valid values (0 - 3):   0 = 1   1 = 2   2 = 4   3 = 12"
+                },
+                "relay_global_uplink_limit_bucket_size": {
+                    "type": "integer",
+                    "description": "Relay globak uplink limit bucket size. This field indicates the multiplier to determine the bucket size according to the following formula: BucketSize TOKEN = _reload_rate x _bucket_size Valid values (0 - 3):   0 = 1   1 = 2   2 = 4   3 = 12"
+                },
+                "relay_overall_limit_bucket_size": {
+                    "type": "integer",
+                    "description": "Relay overall limit bucket size. This field indicates the multiplier to determine the bucket size according to the following formula: BucketSize TOKEN = _reload_rate x _bucket_size Valid values (0 - 3):   0 = 1   1 = 2   2 = 4   3 = 12"
+                },
+                "allow_roaming": {
+                    "type": "boolean",
+                    "description": "Allow roaming. If set to true, it means that the device is allowed to use roaming."
+                },
+                "rx1_delay": {
+                    "type": "integer",
+                    "description": "RX1 Delay. This makes it possible to override the system RX1 Delay. Please note that this values only has effect in case it is higher than the system value. In other words, it can be used to increase the RX1 Delay but not to decrease it. Valid options are 1 - 15 (0 = always use system RX1 Delay)."
+                },
+                "app_layer_params": {
+                    "$ref": "#/definitions/api.AppLayerParams",
+                    "additionalProperties": true,
+                    "description": "Application Layer parameters."
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Device Profile"
+        },
+        "api.AppLayerParams": {
+            "properties": {
+                "ts003_version": {
+                    "enum": [
+                        "TS003_NOT_IMPLEMENTED",
+                        0,
+                        "TS003_V100",
+                        1,
+                        "TS003_v200",
+                        2
+                    ],
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "integer"
+                        }
+                    ],
+                    "title": "Ts 003 Version"
+                },
+                "ts003_f_port": {
+                    "type": "integer",
+                    "description": "TS003 fPort."
+                },
+                "ts004_version": {
+                    "enum": [
+                        "TS004_NOT_IMPLEMENTED",
+                        0,
+                        "TS004_V100",
+                        1,
+                        "TS004_V200",
+                        2
+                    ],
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "integer"
+                        }
+                    ],
+                    "title": "Ts 004 Version"
+                },
+                "ts004_f_port": {
+                    "type": "integer",
+                    "description": "TS004 fPort."
+                },
+                "ts005_version": {
+                    "enum": [
+                        "TS005_NOT_IMPLEMENTED",
+                        0,
+                        "TS005_V100",
+                        1,
+                        "TS005_V200",
+                        2
+                    ],
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "integer"
+                        }
+                    ],
+                    "title": "Ts 005 Version"
+                },
+                "ts005_f_port": {
+                    "type": "integer",
+                    "description": "TS005 fPort."
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "App Layer Params"
+        },
+        "api.Measurement": {
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Name (user defined)."
+                },
+                "kind": {
+                    "enum": [
+                        "UNKNOWN",
+                        0,
+                        "COUNTER",
+                        1,
+                        "ABSOLUTE",
+                        2,
+                        "GAUGE",
+                        3,
+                        "STRING",
+                        4
+                    ],
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "integer"
+                        }
+                    ],
+                    "title": "Measurement Kind"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Measurement"
+        }
+    }
+}
