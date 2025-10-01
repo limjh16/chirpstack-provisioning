@@ -41,8 +41,9 @@ class ChirpStackValidator:
             elif schema_type == "devices":
                 schema_path = base_path / "devices.schema.json"
             else:
-                # Backward compatibility: try old schema.json
-                schema_path = base_path / "schema.json"
+                raise ValueError(
+                    f"Invalid schema_type: {schema_type}. Must be 'setup' or 'devices'"
+                )
 
         self.schema = self._load_schema(schema_path)
 
@@ -83,15 +84,7 @@ class ChirpStackValidator:
         Returns:
             str: The type ('boolean', 'number', 'integer', 'string', or None)
         """
-        # Check if schema has oneOf (old schema format)
-        if "oneOf" in self.schema:
-            for schema_def in self.schema.get("oneOf", []):
-                properties = schema_def.get("properties", {})
-                if key in properties:
-                    prop_schema = properties[key]
-                    return prop_schema.get("type")
-
-        # Check if schema has direct properties (new schema format)
+        # Check if schema has direct properties
         if "properties" in self.schema:
             properties = self.schema.get("properties", {})
             if key in properties:
@@ -270,7 +263,7 @@ def main(
         elif "device" in filename_lower:
             schema_type = "devices"
         else:
-            # Default to devices for backward compatibility
+            # Default to devices if not detectable
             print(
                 "[yellow]Warning: Could not auto-detect schema type from filename. Using 'devices' schema.[/yellow]"
             )

@@ -56,7 +56,6 @@ poetry run python validate.py myfile.json --schema=devices
 ## Documentation
 
 - [data.md](data.md) - Complete data format documentation with examples
-- [SCHEMA_MIGRATION.md](SCHEMA_MIGRATION.md) - Migration guide from old single-file format
 - [examples/](examples/) - Example setup and device files
 - [AGENTS.md](AGENTS.md) - Development guidelines for AI agents
 
