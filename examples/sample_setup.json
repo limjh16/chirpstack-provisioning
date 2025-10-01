@@ -1,0 +1,127 @@
+{
+  "tenants": [
+    {
+      "name": "smart-city",
+      "*id": "AUTO-GENERATED",
+      "description": "Smart City IoT Infrastructure",
+      "can_have_gateways": true,
+      "max_gateway_count": 50,
+      "max_device_count": 1000,
+      "private_gateways_up": false,
+      "private_gateways_down": false,
+      "tags": {
+        "environment": "production",
+        "department": "infrastructure"
+      },
+      "gateways": [
+        {
+          "gateway_id": "0000000000001234",
+          "name": "Downtown Gateway 01",
+          "description": "Main gateway for downtown area",
+          "*tenant_id": "AUTO-PARENT",
+          "tags": {
+            "location": "downtown",
+            "coverage": "primary"
+          },
+          "stats_interval": 30,
+          "location": {
+            "latitude": 52.520008,
+            "longitude": 13.404954,
+            "altitude": 25.5,
+            "source": "CONFIG"
+          }
+        },
+        {
+          "gateway_id": "0000000000005678",
+          "name": "Industrial Zone Gateway 01",
+          "description": "Gateway for industrial zone coverage",
+          "*tenant_id": "AUTO-PARENT",
+          "tags": {
+            "location": "industrial",
+            "coverage": "secondary"
+          },
+          "stats_interval": 60,
+          "location": {
+            "latitude": 52.503399,
+            "longitude": 13.424008,
+            "altitude": 15.0,
+            "source": "CONFIG"
+          }
+        }
+      ],
+      "applications": [
+        {
+          "name": "environmental-monitoring",
+          "*id": "AUTO-GENERATED",
+          "*tenant_id": "AUTO-PARENT",
+          "description": "Environmental sensors for air quality and temperature monitoring",
+          "tags": {
+            "type": "monitoring",
+            "priority": "high"
+          },
+          "_InfluxDbIntegration": {
+            "*application_id": "AUTO-PARENT",
+            "version": 1,
+            "bucket_env_var": "IDB_BUCKET_ENV",
+            "organization_env_var": "IDB_ORG",
+            "token_env_var": "IDB_TOKEN",
+            "endpoint_env_var": "IDB_ENDPOINT"
+          }
+        },
+        {
+          "name": "security-monitoring",
+          "*id": "AUTO-GENERATED",
+          "*tenant_id": "AUTO-PARENT",
+          "description": "Security sensors for motion detection and access control",
+          "tags": {
+            "type": "security",
+            "priority": "critical"
+          }
+        }
+      ],
+      "_deviceProfiles": [
+        {
+          "name": "class-a-sensor",
+          "*id": "AUTO-GENERATED",
+          "*tenant_id": "AUTO-PARENT",
+          "description": "Standard Class A sensor profile for low-power devices",
+          "region": "AU915",
+          "mac_version": "LORAWAN_1_0_4",
+          "reg_params_revision": "RP002_1_0_1",
+          "supports_otaa": true,
+          "supports_class_b": false,
+          "supports_class_c": false,
+          "payload_codec_runtime": "JS",
+          "payload_codec_script_path": "codecs/class-a-sensor.js",
+          "adr_algorithm_id": "default",
+          "uplink_interval": 300,
+          "auto_detect_measurements": true,
+          "tags": {
+            "class": "A",
+            "type": "sensor"
+          }
+        },
+        {
+          "name": "class-c-actuator",
+          "*id": "AUTO-GENERATED",
+          "*tenant_id": "AUTO-PARENT",
+          "description": "Class C actuator profile for devices requiring immediate downlinks",
+          "region": "AU915",
+          "mac_version": "LORAWAN_1_0_4",
+          "reg_params_revision": "RP002_1_0_1",
+          "supports_otaa": true,
+          "supports_class_b": false,
+          "supports_class_c": true,
+          "payload_codec_runtime": "NONE",
+          "adr_algorithm_id": "default",
+          "uplink_interval": 600,
+          "auto_detect_measurements": false,
+          "tags": {
+            "class": "C",
+            "type": "actuator"
+          }
+        }
+      ]
+    }
+  ]
+}

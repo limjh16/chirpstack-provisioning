@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chirpstack-provisioning.schemas/devices.json",
+  "title": "ChirpStack Device Configuration",
+  "description": "Schema for provisioning ChirpStack LoRaWAN devices. This is a flat format where each object represents a single device.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "Device name"
+    },
+    "dev_eui": {
+      "type": "string",
+      "pattern": "^[0-9A-Fa-f]{16}$",
+      "description": "Device EUI (EUI64) in hexadecimal format (16 characters)"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 500,
+      "description": "Device description"
+    },
+    "**application_id": {
+      "type": "string",
+      "const": "AUTO-FILL",
+      "description": "Application ID (UUID). This will be automatically filled by looking up the application_name"
+    },
+    "**device_profile_id": {
+      "type": "string",
+      "const": "AUTO-FILL",
+      "description": "Device profile ID (UUID). This will be automatically filled by looking up the device_profile_name"
+    },
+    "application_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "Application name to link this device to (must exist in ChirpStack)"
+    },
+    "device_profile_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "Device profile name to use for this device (must exist in ChirpStack)"
+    },
+    "skipFCntCheck": {
+      "type": "boolean",
+      "description": "Skip frame-counter checks (insecure, but useful for debugging)",
+      "default": false
+    },
+    "is_disabled": {
+      "type": "boolean",
+      "description": "Device is disabled",
+      "default": false
+    },
+    "variables": {
+      "type": "object",
+      "description": "Variables (user defined). Not exposed in event payloads",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "tags": {
+      "type": "object",
+      "description": "Tags (user defined). Exposed in all integration events",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "join_eui": {
+      "type": "string",
+      "pattern": "^[0-9A-Fa-f]{16}$",
+      "description": "JoinEUI (optional, EUI64). Auto-set on OTAA, but can be pre-configured for Relay scenarios"
+    },
+    "_deviceKeys": {
+      "$ref": "#/$defs/DeviceKeys",
+      "description": "Device keys for OTAA. Note: uses underscore prefix to indicate this is a nested entity"
+    }
+  },
+  "required": ["name", "dev_eui", "application_name", "device_profile_name"],
+  "additionalProperties": false,
+  "$defs": {
+    "DeviceKeys": {
+      "type": "object",
+      "description": "Device keys for OTAA activation",
+      "properties": {
+        "**dev_eui": {
+          "type": "string",
+          "const": "AUTO-PARENT",
+          "description": "Device EUI. This will be automatically filled from the parent device"
+        },
+        "nwk_key": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{32}$",
+          "description": "Network key (LoRaWAN 1.0: app_key, LoRaWAN 1.1+: NwkKey) in hexadecimal format (32 characters)"
+        },
+        "app_key": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{32}$",
+          "description": "Application key (LoRaWAN 1.1+ only) in hexadecimal format (32 characters)"
+        }
+      },
+      "required": ["nwk_key"],
+      "additionalProperties": false
+    }
+  }
+}
