@@ -17,7 +17,7 @@ from rich import print
 class ChirpStackValidator:
     """Validator for ChirpStack provisioning data files."""
 
-    def __init__(self, schema_path: str | Path | None = None):
+    def __init__(self, schema_path: str | Path):
         """Initialize the validator with a schema.
 
         Args:
@@ -25,9 +25,6 @@ class ChirpStackValidator:
         """
         self.total_count = 0
         self.error_count = 0
-
-        if schema_path is None:
-            schema_path: Path = Path(__file__).parent / "schema.json"
 
         self.schema = self._load_schema(schema_path)
 
@@ -202,6 +199,9 @@ def main(
     file_path: Path = typer.Argument(
         ..., help="Path to the file to validate (JSON, JSONL, or CSV)"
     ),
+    schema_path: Path = typer.Argument(
+        ..., help="Path to schema.json file"
+    )
 ):
     """Validate ChirpStack provisioning data files against the schema."""
     if not file_path.exists():
@@ -210,7 +210,7 @@ def main(
 
     # Create validator
     try:
-        validator = ChirpStackValidator()
+        validator = ChirpStackValidator(schema_path)
     except Exception as e:
         print(f"Error loading schema: {e}")
         raise typer.Abort()

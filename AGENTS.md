@@ -41,6 +41,7 @@
 
 ## Specific implementation details
 
+- **IMPORTANT**: Each feature and change implemented should be a separate, atomic git commit.
 - CLI should be implemented with `typer` and `rich` libraries.
     - Necessary CLI flags:
         - `-y` or `--yes` for automatically committing changes
@@ -48,12 +49,50 @@
             - skip, override, or error
         - `--dry-run` for only viewing the potential changes but not committing anything
 - Python package should follow the `src` directory structure so that it can be easily exported.
-- Data format should accept `json`, `jsonl`, and `csv`.
-    - Definition and validation of data formats should be done through a single `jsonschema` file (`schema.json`).
-    - The data should be in a flat format. Each `json` object or each line in the `csv` should correspond to either one device or one gateway, with a `type` field specifying which entity type it represents.
-    - The main identifier is the EUI of the device or gateway (dev_eui for devices, gateway_id for gateways).
-    - For simplified provisioning, assume there is only one tenant and one application in most scenarios.
+- There should be two data files that this project accepts, one setup and one devices file.
+    - Definition and validation of data formats should be done through two `jsonschema` files (`setup.schema.json` and `devices.schema.json`).
+    - For the devices file, it defines all the devices that should be connected to the LoRa Network Server.
+        - Data format should accept `json`, `jsonl`, and `csv`.
+        - The data should be in a flat format. Each `json` object or each line in the `csv` should correspond to one device
+        - The main identifier is the EUI of the device (dev_eui for devices).
+    - For the setup file, it defines everything else, such as tenant, device profiles, gateways, etc.
+        - Data format should only accept `json`. We can potentially accept `toml` or `yaml` as well.
+        - Each `json` should be defined with the following hierarchical structure:
+
+        ```text
+        .
+        ├── device_profile_templates
+        ├── users
+        └── tenants
+            ├── applications
+            │   ├── integrations
+            │   └── multicast_groups
+            ├── device_profiles
+            └── gateways
+        ```
+
+        (or in `json` format:)
+
+        ```json
+        // prettier-ignore
+        {
+            "device_profile_templates": {},
+            "users": {},
+            "tenants": { "tenant1": {
+                "applications": { "app1": {
+                    "integrations": {},
+                    "multicast_groups": {}
+                }},
+                "device_profiles": {},
+                "gateways": {},
+                "users": {},
+            }}
+        }
+        ```
+
+    - For simplified provisioning, we should identify tenants, applications, and device_profiles by name instead of EUI.
         - If the tenant, device profile, or application referenced in the data does not exist, this should be flagged out for the user to address.
+
 - Required connection details are the server address and API token.
     - Debug messages such as server not reachable, port not reachable, or API invalid, should be given.
     - These connection details should either be provided as a CLI flag or environment variable.
@@ -64,12 +103,13 @@
         - error: Stop the script from running
     - If the `-y` or `--yes` flag is specified, a `--duplicate=` flag should also be required, which should specify the intended action upon meeting duplicates.
 - Manage dependencies with Poetry (`pyproject.toml`); source lives under `src/chirpstack_provisioning`.
-- The JSON schema (`schema.json`) should be the single source of truth for data validation.
+- The JSON schemas should be the single source of truth for data validation.
 - Documentation for data formats should be provided in `data.md` with examples of JSON, JSONL, and CSV formats.
 
 ### Coding Guidelines
 
 - This project should follow a Test Driven Development methodology.
+- **IMPORTANT!** Each change and git commit should be atomic, limited to one feature, so that git blame will be useful.
 - **Code Formatting & Linting**: Use `ruff` for both linting and formatting to ensure consistent code style.
     - All code should be formatted with `ruff format` before committing.
     - All code should pass `ruff check` with no violations.
@@ -77,16 +117,17 @@
     - Pre-commit hooks should be configured to run ruff formatting automatically.
 - This project should be able to handle large files of over 50000 lines and devices.
     - For memory management, the data should be lazily loaded, and not loaded all at once.
-- Each change and commit should be atomic, limited to one feature, so that git blame will be useful.
 - The priority should be code that is short and simple to understand.
     - If there are chunks of code and logic that cannot be shortened (e.g., input validation that has multiple factors to check against), it should be factored out in a separate function.
     - All code which is repeatable should be factored out into reusable functions.
     - OOP can and should be used wherever it is able to shorten code or make the code more intuitive to understand.
         - However, if there is no need for objects, do not unnecessarily lengthen the code by grouping functions into objects.
         - Instead, functions with similar objectives can be grouped in a separate subfolder.
+- Reference `validate.py` for the coding style.
 - Wherever possible, this project should be cleverly organised in separate files and folders so that the hierachy is easily understood.
 - All code that actually push changes to the ChirpStack network server (e.g., Create Update and Delete requests) should live in a separate file. IMPORTANT! This file should NOT be called if dry run is specified. User confirmation or a `-y` / `--yes` flag must be present for any of these requests to be run.
     - Since the ChirpStack server does not have granular API permissions and controls, it is important that we manage the permissions within this project. Changes to the server cannot be made without the user's confirmation.
+- **IMPORTANT!** As a reminder, each git commit must be atomic, limited to one small feature
 
 ### Development Tools
 
@@ -98,5 +139,4 @@
 - Tests should be ran against an actual ChirpStack server process, which are ran for the duration of the pytest session and shut down at the end of it.
     - These servers can be defined as a pytest fixture.
     - The server can make use of the ChirpStack docker containers.
-- Import and export all server data that cannot be defined in `chirpstack.toml` or `region_...toml` configuration files, such as InfluxDB integrations or users.
 - A simple web interface can be developed. However, priority should be given to clean and simple code over this functionality.
