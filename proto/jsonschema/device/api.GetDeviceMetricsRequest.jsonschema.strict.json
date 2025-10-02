@@ -1,0 +1,36 @@
+{
+  "$id": "api.GetDeviceMetricsRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "aggregation": {
+      "description": "Aggregation.",
+      "enum": [
+        "HOUR",
+        "DAY",
+        "MONTH",
+        "MINUTE"
+      ],
+      "title": "Aggregation",
+      "type": "string"
+    },
+    "devEui": {
+      "description": "DevEUI (EUI64).",
+      "type": "string"
+    },
+    "end": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Interval end timestamp."
+    },
+    "start": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Interval start timestamp."
+    }
+  },
+  "required": [
+    "devEui",
+    "aggregation"
+  ],
+  "title": "Get Device Metrics Request",
+  "type": "object"
+}

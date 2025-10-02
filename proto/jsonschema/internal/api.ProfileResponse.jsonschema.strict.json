@@ -1,0 +1,20 @@
+{
+  "$id": "api.ProfileResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "tenants": {
+      "description": "Tenants to which the user is associated.",
+      "items": {
+        "$ref": "api.UserTenantLink.jsonschema.strict.json"
+      },
+      "type": "array"
+    },
+    "user": {
+      "$ref": "api.User.jsonschema.strict.json",
+      "description": "User object."
+    }
+  },
+  "title": "Profile Response",
+  "type": "object"
+}

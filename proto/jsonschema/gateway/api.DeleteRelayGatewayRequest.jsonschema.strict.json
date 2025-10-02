@@ -1,0 +1,21 @@
+{
+  "$id": "api.DeleteRelayGatewayRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "relayId": {
+      "description": "Relay ID (4 byte HEX).",
+      "type": "string"
+    },
+    "tenantId": {
+      "description": "Tenant ID.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenantId",
+    "relayId"
+  ],
+  "title": "Delete Relay Gateway Request",
+  "type": "object"
+}

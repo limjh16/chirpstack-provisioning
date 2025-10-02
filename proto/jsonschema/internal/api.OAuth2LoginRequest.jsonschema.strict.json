@@ -1,0 +1,21 @@
+{
+  "$id": "api.OAuth2LoginRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "code": {
+      "description": "OAuth2 callback code.",
+      "type": "string"
+    },
+    "state": {
+      "description": "OAuth2 callback state.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "code",
+    "state"
+  ],
+  "title": "O Auth2 Login Request",
+  "type": "object"
+}

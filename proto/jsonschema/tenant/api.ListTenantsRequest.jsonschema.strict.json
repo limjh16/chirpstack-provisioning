@@ -1,0 +1,35 @@
+{
+  "$id": "api.ListTenantsRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "limit": {
+      "description": "Max number of tenants to return in the result-set.\n If not set, it will be treated as 0, and the response will only return the total_count.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "offset": {
+      "description": "Offset in the result-set (for pagination).",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "search": {
+      "description": "If set, the given string will be used to search on name.",
+      "type": "string"
+    },
+    "userId": {
+      "description": "If set, filters the result set to the tenants of the user.\n Only global API keys are able to filter by this field.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "limit",
+    "offset",
+    "search",
+    "userId"
+  ],
+  "title": "List Tenants Request",
+  "type": "object"
+}

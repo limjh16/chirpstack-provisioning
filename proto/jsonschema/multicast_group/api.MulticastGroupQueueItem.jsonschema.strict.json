@@ -1,0 +1,40 @@
+{
+  "$id": "api.MulticastGroupQueueItem.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "data": {
+      "description": "Payload.",
+      "pattern": "^[A-Za-z0-9+/]*={0,2}$",
+      "type": "string"
+    },
+    "expiresAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Expires at (optional).\n Expired queue-items will be automatically removed from the queue."
+    },
+    "fCnt": {
+      "description": "Downlink frame-counter.\n This will be automatically set on enqueue.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "fPort": {
+      "description": "FPort (must be \u003e 0).",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "multicastGroupId": {
+      "description": "Multicast group ID.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "multicastGroupId",
+    "fCnt",
+    "fPort",
+    "data"
+  ],
+  "title": "Multicast Group Queue Item",
+  "type": "object"
+}

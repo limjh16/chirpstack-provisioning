@@ -1,0 +1,36 @@
+{
+  "$id": "api.OAuth2.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "enabled": {
+      "description": "OAuth2 is enabled.",
+      "type": "boolean"
+    },
+    "loginLabel": {
+      "description": "Login label.",
+      "type": "string"
+    },
+    "loginRedirect": {
+      "description": "Login redirect.",
+      "type": "boolean"
+    },
+    "loginUrl": {
+      "description": "Login url.",
+      "type": "string"
+    },
+    "logoutUrl": {
+      "description": "Logout url.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "enabled",
+    "loginUrl",
+    "loginLabel",
+    "logoutUrl",
+    "loginRedirect"
+  ],
+  "title": "O Auth2",
+  "type": "object"
+}

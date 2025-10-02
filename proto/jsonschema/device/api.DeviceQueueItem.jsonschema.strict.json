@@ -1,0 +1,64 @@
+{
+  "$id": "api.DeviceQueueItem.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "confirmed": {
+      "description": "Confirmed.",
+      "type": "boolean"
+    },
+    "data": {
+      "description": "Data.\n Or use the json_object field when a codec has been configured.",
+      "pattern": "^[A-Za-z0-9+/]*={0,2}$",
+      "type": "string"
+    },
+    "devEui": {
+      "description": "Device EUI (EUI64).",
+      "type": "string"
+    },
+    "expiresAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Expires at (optional).\n Expired queue-items will be automatically removed from the queue."
+    },
+    "fCntDown": {
+      "description": "Downlink frame-counter.\n Do not set this for plain-text data payloads. It will be automatically set\n by ChirpStack when the payload has been sent as downlink.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "fPort": {
+      "description": "FPort (must be \u003e 0).\n On enqueue and if using a JavaScript codec, this value might be\n automatically set by the codec function.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "id": {
+      "description": "ID (UUID).\n This is automatically generated on enqueue.",
+      "type": "string"
+    },
+    "isEncrypted": {
+      "description": "Is encrypted.\n This must be set to true if the end-application has already encrypted\n the data payload. In this case, the f_cnt_down field must be set to\n the corresponding frame-counter which has been used during the encryption.",
+      "type": "boolean"
+    },
+    "isPending": {
+      "description": "Is pending.\n This is set by ChirpStack to true when the downlink is pending (e.g. it\n has been sent, but a confirmation is still pending).",
+      "type": "boolean"
+    },
+    "object": {
+      "$ref": "google.protobuf.Struct.jsonschema.strict.json",
+      "description": "Only use this when a codec has been configured that can encode this\n object to bytes."
+    }
+  },
+  "required": [
+    "id",
+    "devEui",
+    "confirmed",
+    "fPort",
+    "data",
+    "isPending",
+    "fCntDown",
+    "isEncrypted"
+  ],
+  "title": "Device Queue Item",
+  "type": "object"
+}

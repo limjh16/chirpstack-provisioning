@@ -1,0 +1,13 @@
+{
+  "$id": "api.UpdateAzureServiceBusIntegrationRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "integration": {
+      "$ref": "api.AzureServiceBusIntegration.jsonschema.strict.json",
+      "description": "Integration object to create."
+    }
+  },
+  "title": "Update Azure Service Bus Integration Request",
+  "type": "object"
+}

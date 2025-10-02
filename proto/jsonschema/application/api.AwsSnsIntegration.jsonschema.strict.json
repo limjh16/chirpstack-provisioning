@@ -1,0 +1,46 @@
+{
+  "$id": "api.AwsSnsIntegration.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "accessKeyId": {
+      "description": "AWS Access Key ID.",
+      "type": "string"
+    },
+    "applicationId": {
+      "description": "Application ID (UUID).",
+      "type": "string"
+    },
+    "encoding": {
+      "description": "Encoding.",
+      "enum": [
+        "JSON",
+        "PROTOBUF"
+      ],
+      "title": "Encoding",
+      "type": "string"
+    },
+    "region": {
+      "description": "AWS region.",
+      "type": "string"
+    },
+    "secretAccessKey": {
+      "description": "AWS Secret Access Key.",
+      "type": "string"
+    },
+    "topicArn": {
+      "description": "Topic ARN.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "applicationId",
+    "encoding",
+    "region",
+    "accessKeyId",
+    "secretAccessKey",
+    "topicArn"
+  ],
+  "title": "Aws Sns Integration",
+  "type": "object"
+}

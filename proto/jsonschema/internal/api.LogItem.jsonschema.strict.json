@@ -1,0 +1,40 @@
+{
+  "$id": "api.LogItem.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "body": {
+      "description": "Body.",
+      "type": "string"
+    },
+    "description": {
+      "description": "Message.",
+      "type": "string"
+    },
+    "id": {
+      "description": "ID.",
+      "type": "string"
+    },
+    "properties": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Properties.",
+      "propertyNames": {
+        "type": "string"
+      },
+      "type": "object"
+    },
+    "time": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Timestamp."
+    }
+  },
+  "required": [
+    "id",
+    "description",
+    "body"
+  ],
+  "title": "Log Item",
+  "type": "object"
+}

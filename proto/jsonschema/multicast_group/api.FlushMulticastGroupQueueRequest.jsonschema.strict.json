@@ -1,0 +1,16 @@
+{
+  "$id": "api.FlushMulticastGroupQueueRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "multicastGroupId": {
+      "description": "Multicast group ID.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "multicastGroupId"
+  ],
+  "title": "Flush Multicast Group Queue Request",
+  "type": "object"
+}

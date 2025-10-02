@@ -1,0 +1,62 @@
+{
+  "$id": "api.DeviceActivation.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "aFCntDown": {
+      "description": "Downlink application frame-counter.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "appSKey": {
+      "description": "Application session key (HEX encoded).",
+      "type": "string"
+    },
+    "devAddr": {
+      "description": "Device address (HEX encoded).",
+      "type": "string"
+    },
+    "devEui": {
+      "description": "Device EUI (EUI64).",
+      "type": "string"
+    },
+    "fCntUp": {
+      "description": "Uplink frame-counter.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "fNwkSIntKey": {
+      "description": "Forwarding network session integrity key (HEX encoded).\n Note: For LoRaWAN 1.0.x devices, set this to the NwkSKey.",
+      "type": "string"
+    },
+    "nFCntDown": {
+      "description": "Downlink network frame-counter.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "nwkSEncKey": {
+      "description": "Network session encryption key (HEX encoded).\n Note: For LoRaWAN 1.0.x devices, set this to the NwkSKey.",
+      "type": "string"
+    },
+    "sNwkSIntKey": {
+      "description": "Serving network session integrity key (HEX encoded).\n Note: For LoRaWAN 1.0.x devices, set this to the NwkSKey.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "devEui",
+    "devAddr",
+    "appSKey",
+    "nwkSEncKey",
+    "sNwkSIntKey",
+    "fNwkSIntKey",
+    "fCntUp",
+    "nFCntDown",
+    "aFCntDown"
+  ],
+  "title": "Device Activation",
+  "type": "object"
+}

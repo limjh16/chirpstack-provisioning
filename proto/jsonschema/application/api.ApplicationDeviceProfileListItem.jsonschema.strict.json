@@ -1,0 +1,21 @@
+{
+  "$id": "api.ApplicationDeviceProfileListItem.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "description": "Device-profile ID (UUID).",
+      "type": "string"
+    },
+    "name": {
+      "description": "Name.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "name"
+  ],
+  "title": "Application Device Profile List Item",
+  "type": "object"
+}

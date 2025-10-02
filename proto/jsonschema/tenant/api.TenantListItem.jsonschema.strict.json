@@ -1,0 +1,58 @@
+{
+  "$id": "api.TenantListItem.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "canHaveGateways": {
+      "description": "Can the tenant create and \"own\" Gateways?",
+      "type": "boolean"
+    },
+    "createdAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Created at timestamp."
+    },
+    "id": {
+      "description": "Tenant ID (UUID).",
+      "type": "string"
+    },
+    "maxDeviceCount": {
+      "description": "Max device count.\n 0 = unlimited.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "maxGatewayCount": {
+      "description": "Max gateway count.\n 0 = unlimited.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "name": {
+      "description": "Tenant name.",
+      "type": "string"
+    },
+    "privateGatewaysDown": {
+      "description": "Private gateways (downlink).",
+      "type": "boolean"
+    },
+    "privateGatewaysUp": {
+      "description": "Private gateways (uplink).",
+      "type": "boolean"
+    },
+    "updatedAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Last update timestamp."
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "canHaveGateways",
+    "privateGatewaysUp",
+    "privateGatewaysDown",
+    "maxGatewayCount",
+    "maxDeviceCount"
+  ],
+  "title": "Tenant List Item",
+  "type": "object"
+}

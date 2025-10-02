@@ -1,0 +1,26 @@
+{
+  "$id": "api.PilotThingsIntegration.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "applicationId": {
+      "description": "Application ID (UUID).",
+      "type": "string"
+    },
+    "server": {
+      "description": "Server URL.",
+      "type": "string"
+    },
+    "token": {
+      "description": "Authentication token.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "applicationId",
+    "server",
+    "token"
+  ],
+  "title": "Pilot Things Integration",
+  "type": "object"
+}

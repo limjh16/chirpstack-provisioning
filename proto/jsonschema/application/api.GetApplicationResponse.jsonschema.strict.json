@@ -1,0 +1,28 @@
+{
+  "$id": "api.GetApplicationResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "application": {
+      "$ref": "api.Application.jsonschema.strict.json",
+      "description": "Application object."
+    },
+    "createdAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Created at timestamp."
+    },
+    "measurementKeys": {
+      "description": "Measurement keys.\n This contains the measurement keys from all the device-profiles that\n are used by the devices under this application.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "updatedAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Last update timestamp."
+    }
+  },
+  "title": "Get Application Response",
+  "type": "object"
+}

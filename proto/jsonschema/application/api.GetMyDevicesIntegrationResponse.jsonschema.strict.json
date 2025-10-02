@@ -1,0 +1,13 @@
+{
+  "$id": "api.GetMyDevicesIntegrationResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "integration": {
+      "$ref": "api.MyDevicesIntegration.jsonschema.strict.json",
+      "description": "Integration object."
+    }
+  },
+  "title": "Get My Devices Integration Response",
+  "type": "object"
+}

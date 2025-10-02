@@ -1,0 +1,24 @@
+{
+  "$id": "api.ListApiKeysResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "result": {
+      "items": {
+        "$ref": "api.ApiKey.jsonschema.strict.json"
+      },
+      "type": "array"
+    },
+    "totalCount": {
+      "description": "Total number of API keys.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "totalCount"
+  ],
+  "title": "List Api Keys Response",
+  "type": "object"
+}

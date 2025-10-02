@@ -1,0 +1,25 @@
+{
+  "$id": "api.ListMulticastGroupsResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "result": {
+      "description": "Result-test.",
+      "items": {
+        "$ref": "api.MulticastGroupListItem.jsonschema.strict.json"
+      },
+      "type": "array"
+    },
+    "totalCount": {
+      "description": "Total number of multicast groups.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "totalCount"
+  ],
+  "title": "List Multicast Groups Response",
+  "type": "object"
+}

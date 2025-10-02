@@ -1,0 +1,21 @@
+{
+  "$id": "common.JoinServerContext.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Join-Server context.",
+  "properties": {
+    "appSKey": {
+      "$ref": "common.KeyEnvelope.jsonschema.strict.json",
+      "description": "AppSKey envelope."
+    },
+    "sessionKeyId": {
+      "description": "Session-key ID.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "sessionKeyId"
+  ],
+  "title": "Join Server Context",
+  "type": "object"
+}

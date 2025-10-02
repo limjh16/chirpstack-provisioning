@@ -1,0 +1,16 @@
+{
+  "$id": "api.CreateUserResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "description": "User ID.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id"
+  ],
+  "title": "Create User Response",
+  "type": "object"
+}

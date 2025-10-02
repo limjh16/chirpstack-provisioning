@@ -1,0 +1,30 @@
+{
+  "$id": "api.ListFuotaDeploymentsRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "applicationId": {
+      "description": "Application ID to list the FUOTA Deployments for.\n This filter is mandatory.",
+      "type": "string"
+    },
+    "limit": {
+      "description": "Max number of FUOTA deployments to return in the result-set.\n If not set, it will be treated as 0, and the response will only return the total_count.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "offset": {
+      "description": "Offset in the result-set (for pagination).",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "limit",
+    "offset",
+    "applicationId"
+  ],
+  "title": "List Fuota Deployments Request",
+  "type": "object"
+}

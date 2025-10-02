@@ -1,0 +1,16 @@
+{
+  "$id": "api.ListApplicationDeviceTagsResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "result": {
+      "description": "Device tags.",
+      "items": {
+        "$ref": "api.ApplicationDeviceTagListItem.jsonschema.strict.json"
+      },
+      "type": "array"
+    }
+  },
+  "title": "List Application Device Tags Response",
+  "type": "object"
+}

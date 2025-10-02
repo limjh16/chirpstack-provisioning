@@ -1,0 +1,61 @@
+{
+  "$id": "api.MulticastGroupListItem.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "createdAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Created at timestamp."
+    },
+    "groupType": {
+      "description": "Multicast group type.",
+      "enum": [
+        "CLASS_C",
+        "CLASS_B"
+      ],
+      "title": "Multicast Group Type",
+      "type": "string"
+    },
+    "id": {
+      "description": "ID.",
+      "type": "string"
+    },
+    "name": {
+      "description": "Name.",
+      "type": "string"
+    },
+    "region": {
+      "description": "Region.",
+      "enum": [
+        "EU868",
+        "US915",
+        "CN779",
+        "EU433",
+        "AU915",
+        "CN470",
+        "AS923",
+        "AS923_2",
+        "AS923_3",
+        "AS923_4",
+        "KR920",
+        "IN865",
+        "RU864",
+        "ISM2400"
+      ],
+      "title": "Region",
+      "type": "string"
+    },
+    "updatedAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Last update timestamp."
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "region",
+    "groupType"
+  ],
+  "title": "Multicast Group List Item",
+  "type": "object"
+}

@@ -1,0 +1,13 @@
+{
+  "$id": "api.GetGcpPubSubIntegrationResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "integration": {
+      "$ref": "api.GcpPubSubIntegration.jsonschema.strict.json",
+      "description": "Integration object."
+    }
+  },
+  "title": "Get Gcp Pub Sub Integration Response",
+  "type": "object"
+}

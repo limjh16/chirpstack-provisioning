@@ -1,0 +1,25 @@
+{
+  "$id": "api.ListDeviceProfileTemplatesResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "result": {
+      "description": "Result-set.",
+      "items": {
+        "$ref": "api.DeviceProfileTemplateListItem.jsonschema.strict.json"
+      },
+      "type": "array"
+    },
+    "totalCount": {
+      "description": "Total number of device-profile templates.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "totalCount"
+  ],
+  "title": "List Device Profile Templates Response",
+  "type": "object"
+}

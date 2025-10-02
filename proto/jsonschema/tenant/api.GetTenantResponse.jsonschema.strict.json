@@ -1,0 +1,21 @@
+{
+  "$id": "api.GetTenantResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "createdAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Created at timestamp."
+    },
+    "tenant": {
+      "$ref": "api.Tenant.jsonschema.strict.json",
+      "description": "Tenant object."
+    },
+    "updatedAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Last update timestamp."
+    }
+  },
+  "title": "Get Tenant Response",
+  "type": "object"
+}

@@ -1,0 +1,13 @@
+{
+  "$id": "api.GetIftttIntegrationResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "integration": {
+      "$ref": "api.IftttIntegration.jsonschema.strict.json",
+      "description": "Integration object."
+    }
+  },
+  "title": "Get Ifttt Integration Response",
+  "type": "object"
+}

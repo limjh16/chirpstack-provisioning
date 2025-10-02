@@ -1,0 +1,31 @@
+{
+  "$id": "api.UserTenant.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "isAdmin": {
+      "description": "User is admin within the context of the tenant.\n There is no need to set the is_device_admin and is_gateway_admin flags.",
+      "type": "boolean"
+    },
+    "isDeviceAdmin": {
+      "description": "User is able to modify device related resources (applications,\n device-profiles, devices, multicast-groups).",
+      "type": "boolean"
+    },
+    "isGatewayAdmin": {
+      "description": "User is able to modify gateways.",
+      "type": "boolean"
+    },
+    "tenantId": {
+      "description": "Tenant ID.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenantId",
+    "isAdmin",
+    "isDeviceAdmin",
+    "isGatewayAdmin"
+  ],
+  "title": "User Tenant",
+  "type": "object"
+}

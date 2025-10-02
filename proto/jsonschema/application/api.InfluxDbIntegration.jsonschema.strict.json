@@ -1,0 +1,80 @@
+{
+  "$id": "api.InfluxDbIntegration.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "applicationId": {
+      "description": "Application ID (UUID).",
+      "type": "string"
+    },
+    "bucket": {
+      "description": "Bucket. (InfluxDb v2)",
+      "type": "string"
+    },
+    "db": {
+      "description": "InfluxDb database name. (InfluxDb v1)",
+      "type": "string"
+    },
+    "endpoint": {
+      "description": "InfluxDb API write endpoint (e.g. http://localhost:8086/write).",
+      "type": "string"
+    },
+    "organization": {
+      "description": "Organization. (InfluxDb v2)",
+      "type": "string"
+    },
+    "password": {
+      "description": "InfluxDb password. (InfluxDb v1)",
+      "type": "string"
+    },
+    "precision": {
+      "description": "InfluxDb timestamp precision (InfluxDb v1).",
+      "enum": [
+        "NS",
+        "U",
+        "MS",
+        "S",
+        "M",
+        "H"
+      ],
+      "title": "Influx Db Precision",
+      "type": "string"
+    },
+    "retentionPolicyName": {
+      "description": "InfluxDb retention policy name. (InfluxDb v1)",
+      "type": "string"
+    },
+    "token": {
+      "description": "Token. (InfluxDb v2)",
+      "type": "string"
+    },
+    "username": {
+      "description": "InfluxDb username. (InfluxDb v1)",
+      "type": "string"
+    },
+    "version": {
+      "description": "InfluxDb version.",
+      "enum": [
+        "INFLUXDB_1",
+        "INFLUXDB_2"
+      ],
+      "title": "Influx Db Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "applicationId",
+    "endpoint",
+    "db",
+    "username",
+    "password",
+    "retentionPolicyName",
+    "precision",
+    "version",
+    "token",
+    "organization",
+    "bucket"
+  ],
+  "title": "Influx Db Integration",
+  "type": "object"
+}

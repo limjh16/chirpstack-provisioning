@@ -1,0 +1,16 @@
+{
+  "$id": "api.ListRegionsResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "regions": {
+      "description": "Configured regions.",
+      "items": {
+        "$ref": "api.RegionListItem.jsonschema.strict.json"
+      },
+      "type": "array"
+    }
+  },
+  "title": "List Regions Response",
+  "type": "object"
+}

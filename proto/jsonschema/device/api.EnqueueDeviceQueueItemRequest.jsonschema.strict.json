@@ -1,0 +1,20 @@
+{
+  "$id": "api.EnqueueDeviceQueueItemRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "flushQueue": {
+      "description": "Flush queue before enqueue.",
+      "type": "boolean"
+    },
+    "queueItem": {
+      "$ref": "api.DeviceQueueItem.jsonschema.strict.json",
+      "description": "Item to enqueue."
+    }
+  },
+  "required": [
+    "flushQueue"
+  ],
+  "title": "Enqueue Device Queue Item Request",
+  "type": "object"
+}

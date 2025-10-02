@@ -1,0 +1,62 @@
+{
+  "$id": "api.Gateway.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "description": {
+      "description": "Description.",
+      "type": "string"
+    },
+    "gatewayId": {
+      "description": "Gateway ID (EUI64).",
+      "type": "string"
+    },
+    "location": {
+      "$ref": "common.Location.jsonschema.strict.json",
+      "description": "Gateway location."
+    },
+    "metadata": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Metadata (provided by the gateway).",
+      "propertyNames": {
+        "type": "string"
+      },
+      "type": "object"
+    },
+    "name": {
+      "description": "Name.",
+      "type": "string"
+    },
+    "statsInterval": {
+      "description": "Stats interval (seconds).\n This defines the expected interval in which the gateway sends its\n statistics.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "tags": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Tags.",
+      "propertyNames": {
+        "type": "string"
+      },
+      "type": "object"
+    },
+    "tenantId": {
+      "description": "Tenant ID (UUID).",
+      "type": "string"
+    }
+  },
+  "required": [
+    "gatewayId",
+    "name",
+    "description",
+    "tenantId",
+    "statsInterval"
+  ],
+  "title": "Gateway",
+  "type": "object"
+}

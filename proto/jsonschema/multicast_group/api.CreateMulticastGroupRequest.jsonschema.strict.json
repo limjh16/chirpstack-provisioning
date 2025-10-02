@@ -1,0 +1,13 @@
+{
+  "$id": "api.CreateMulticastGroupRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "multicastGroup": {
+      "$ref": "api.MulticastGroup.jsonschema.strict.json",
+      "description": "Multicast group to create."
+    }
+  },
+  "title": "Create Multicast Group Request",
+  "type": "object"
+}

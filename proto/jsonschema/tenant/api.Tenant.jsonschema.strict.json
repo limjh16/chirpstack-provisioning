@@ -1,0 +1,65 @@
+{
+  "$id": "api.Tenant.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "canHaveGateways": {
+      "description": "Can the tenant create and \"own\" Gateways?",
+      "type": "boolean"
+    },
+    "description": {
+      "description": "Tenant description.",
+      "type": "string"
+    },
+    "id": {
+      "description": "Tenant ID (UUID).\n Note: this value will be automatically generated on create.",
+      "type": "string"
+    },
+    "maxDeviceCount": {
+      "description": "Max. device count for tenant.\n When set to 0, the tenant can have unlimited devices.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "maxGatewayCount": {
+      "description": "Max. gateway count for tenant.\n When set to 0, the tenant can have unlimited gateways.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "name": {
+      "description": "Tenant name,",
+      "type": "string"
+    },
+    "privateGatewaysDown": {
+      "description": "Private gateways (downlink).\n If enabled, then other tenants will not be able to schedule downlink\n messages through the gateways of this tenant. For example, in case you\n do want to share uplinks with other tenants (private_gateways_up=false),\n but you want to prevent other tenants from using gateway airtime.",
+      "type": "boolean"
+    },
+    "privateGatewaysUp": {
+      "description": "Private gateways (uplink).\n If enabled, then uplink messages will not be shared with other tenants.",
+      "type": "boolean"
+    },
+    "tags": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Tags (user defined).\n These tags can be used to add additional information to the tenant. These\n tags are NOT exposed in the integration events.",
+      "propertyNames": {
+        "type": "string"
+      },
+      "type": "object"
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "description",
+    "canHaveGateways",
+    "maxGatewayCount",
+    "maxDeviceCount",
+    "privateGatewaysUp",
+    "privateGatewaysDown"
+  ],
+  "title": "Tenant",
+  "type": "object"
+}

@@ -1,0 +1,13 @@
+{
+  "$id": "api.CreatePilotThingsIntegrationRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "integration": {
+      "$ref": "api.PilotThingsIntegration.jsonschema.strict.json",
+      "description": "Integration object to create."
+    }
+  },
+  "title": "Create Pilot Things Integration Request",
+  "type": "object"
+}

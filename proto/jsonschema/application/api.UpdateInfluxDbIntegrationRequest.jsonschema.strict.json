@@ -1,0 +1,13 @@
+{
+  "$id": "api.UpdateInfluxDbIntegrationRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "integration": {
+      "$ref": "api.InfluxDbIntegration.jsonschema.strict.json",
+      "description": "Integration object to update."
+    }
+  },
+  "title": "Update Influx Db Integration Request",
+  "type": "object"
+}

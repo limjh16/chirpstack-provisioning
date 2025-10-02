@@ -1,0 +1,13 @@
+{
+  "$id": "api.GetAwsSnsIntegrationResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "integration": {
+      "$ref": "api.AwsSnsIntegration.jsonschema.strict.json",
+      "description": "Integration object."
+    }
+  },
+  "title": "Get Aws Sns Integration Response",
+  "type": "object"
+}

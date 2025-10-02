@@ -1,0 +1,13 @@
+{
+  "$id": "api.UpdateMulticastGroupRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "multicastGroup": {
+      "$ref": "api.MulticastGroup.jsonschema.strict.json",
+      "description": "Multicast group object to update."
+    }
+  },
+  "title": "Update Multicast Group Request",
+  "type": "object"
+}

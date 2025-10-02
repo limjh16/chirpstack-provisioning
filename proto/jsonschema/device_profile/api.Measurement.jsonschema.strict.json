@@ -1,0 +1,29 @@
+{
+  "$id": "api.Measurement.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "kind": {
+      "description": "Kind.",
+      "enum": [
+        "UNKNOWN",
+        "COUNTER",
+        "ABSOLUTE",
+        "GAUGE",
+        "STRING"
+      ],
+      "title": "Measurement Kind",
+      "type": "string"
+    },
+    "name": {
+      "description": "Name (user defined).",
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "kind"
+  ],
+  "title": "Measurement",
+  "type": "object"
+}

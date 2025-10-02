@@ -1,0 +1,23 @@
+{
+  "$id": "api.RemoveDevicesFromFuotaDeploymentRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "devEuis": {
+      "description": "DevEUIs.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "fuotaDeploymentId": {
+      "description": "FUOTA Deployment ID.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "fuotaDeploymentId"
+  ],
+  "title": "Remove Devices From Fuota Deployment Request",
+  "type": "object"
+}

@@ -1,0 +1,41 @@
+{
+  "$id": "common.Metric.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "datasets": {
+      "description": "Datasets.",
+      "items": {
+        "$ref": "common.MetricDataset.jsonschema.strict.json"
+      },
+      "type": "array"
+    },
+    "kind": {
+      "description": "Kind.",
+      "enum": [
+        "COUNTER",
+        "ABSOLUTE",
+        "GAUGE"
+      ],
+      "title": "Metric Kind",
+      "type": "string"
+    },
+    "name": {
+      "description": "Name.",
+      "type": "string"
+    },
+    "timestamps": {
+      "description": "Timestamps.",
+      "items": {
+        "$ref": "google.protobuf.Timestamp.jsonschema.strict.json"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "name",
+    "kind"
+  ],
+  "title": "Metric",
+  "type": "object"
+}

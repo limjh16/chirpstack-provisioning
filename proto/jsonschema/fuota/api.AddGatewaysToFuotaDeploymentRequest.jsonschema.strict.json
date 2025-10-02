@@ -1,0 +1,23 @@
+{
+  "$id": "api.AddGatewaysToFuotaDeploymentRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "fuotaDeploymentId": {
+      "description": "FUOTA Deployment ID.",
+      "type": "string"
+    },
+    "gatewayIds": {
+      "description": "Gateway IDs.\n Note that the Gateways must be under the same tenant as the FUOTA Deployment.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "fuotaDeploymentId"
+  ],
+  "title": "Add Gateways To Fuota Deployment Request",
+  "type": "object"
+}

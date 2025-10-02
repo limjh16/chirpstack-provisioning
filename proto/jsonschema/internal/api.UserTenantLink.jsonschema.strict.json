@@ -1,0 +1,40 @@
+{
+  "$id": "api.UserTenantLink.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Defines a tenant to which the user is associated.",
+  "properties": {
+    "createdAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Created at timestamp."
+    },
+    "isAdmin": {
+      "description": "User is admin within the context of this tenant.\n There is no need to set the is_device_admin and is_gateway_admin flags.",
+      "type": "boolean"
+    },
+    "isDeviceAdmin": {
+      "description": "User is able to modify device related resources (applications,\n device-profiles, devices, multicast-groups).",
+      "type": "boolean"
+    },
+    "isGatewayAdmin": {
+      "description": "User is able to modify gateways.",
+      "type": "boolean"
+    },
+    "tenantId": {
+      "description": "Tenant ID.",
+      "type": "string"
+    },
+    "updatedAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Last update timestamp."
+    }
+  },
+  "required": [
+    "tenantId",
+    "isAdmin",
+    "isDeviceAdmin",
+    "isGatewayAdmin"
+  ],
+  "title": "User Tenant Link",
+  "type": "object"
+}

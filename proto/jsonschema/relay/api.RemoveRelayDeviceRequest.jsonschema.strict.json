@@ -1,0 +1,21 @@
+{
+  "$id": "api.RemoveRelayDeviceRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "deviceDevEui": {
+      "description": "Device DevEUI (EUI64).",
+      "type": "string"
+    },
+    "relayDevEui": {
+      "description": "Relay DevEUI (EUI64).",
+      "type": "string"
+    }
+  },
+  "required": [
+    "relayDevEui",
+    "deviceDevEui"
+  ],
+  "title": "Remove Relay Device Request",
+  "type": "object"
+}

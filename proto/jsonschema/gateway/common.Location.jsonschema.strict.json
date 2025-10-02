@@ -1,0 +1,96 @@
+{
+  "$id": "common.Location.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "accuracy": {
+      "anyOf": [
+        {
+          "maximum": 3.4028234663852886e+38,
+          "minimum": -3.4028234663852886e+38,
+          "type": "number"
+        },
+        {
+          "enum": [
+            "Infinity",
+            "-Infinity",
+            "NaN"
+          ],
+          "type": "string"
+        }
+      ],
+      "description": "Accuracy."
+    },
+    "altitude": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "enum": [
+            "Infinity",
+            "-Infinity",
+            "NaN"
+          ],
+          "type": "string"
+        }
+      ],
+      "description": "Altitude."
+    },
+    "latitude": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "enum": [
+            "Infinity",
+            "-Infinity",
+            "NaN"
+          ],
+          "type": "string"
+        }
+      ],
+      "description": "Latitude."
+    },
+    "longitude": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "enum": [
+            "Infinity",
+            "-Infinity",
+            "NaN"
+          ],
+          "type": "string"
+        }
+      ],
+      "description": "Longitude."
+    },
+    "source": {
+      "description": "Location source.",
+      "enum": [
+        "UNKNOWN",
+        "GPS",
+        "CONFIG",
+        "GEO_RESOLVER_TDOA",
+        "GEO_RESOLVER_RSSI",
+        "GEO_RESOLVER_GNSS",
+        "GEO_RESOLVER_WIFI"
+      ],
+      "title": "Location Source",
+      "type": "string"
+    }
+  },
+  "required": [
+    "latitude",
+    "longitude",
+    "altitude",
+    "source",
+    "accuracy"
+  ],
+  "title": "Location",
+  "type": "object"
+}

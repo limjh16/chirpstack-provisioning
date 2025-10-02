@@ -1,0 +1,16 @@
+{
+  "$id": "api.DeleteDeviceProfileRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "description": "ID (UUID).",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id"
+  ],
+  "title": "Delete Device Profile Request",
+  "type": "object"
+}

@@ -1,0 +1,13 @@
+{
+  "$id": "api.UpdateTenantRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "tenant": {
+      "$ref": "api.Tenant.jsonschema.strict.json",
+      "description": "Tenant object."
+    }
+  },
+  "title": "Update Tenant Request",
+  "type": "object"
+}

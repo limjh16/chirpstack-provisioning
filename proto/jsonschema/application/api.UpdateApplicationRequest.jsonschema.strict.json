@@ -1,0 +1,13 @@
+{
+  "$id": "api.UpdateApplicationRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "application": {
+      "$ref": "api.Application.jsonschema.strict.json",
+      "description": "Application object."
+    }
+  },
+  "title": "Update Application Request",
+  "type": "object"
+}

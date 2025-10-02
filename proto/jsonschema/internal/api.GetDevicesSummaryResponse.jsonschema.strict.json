@@ -1,0 +1,46 @@
+{
+  "$id": "api.GetDevicesSummaryResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "activeCount": {
+      "description": "Active count.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "drCount": {
+      "additionalProperties": {
+        "maximum": 4294967295,
+        "minimum": 0,
+        "type": "integer"
+      },
+      "description": "per data-rate count.\n Devices that have never been seen are excluded.",
+      "propertyNames": {
+        "maximum": 4294967295,
+        "minimum": 0,
+        "type": "integer"
+      },
+      "type": "object"
+    },
+    "inactiveCount": {
+      "description": "Inactive count.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "neverSeenCount": {
+      "description": "Never seen count.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "activeCount",
+    "inactiveCount",
+    "neverSeenCount"
+  ],
+  "title": "Get Devices Summary Response",
+  "type": "object"
+}

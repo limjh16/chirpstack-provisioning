@@ -1,0 +1,43 @@
+{
+  "$id": "api.RegionListItem.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "description": {
+      "description": "Description.",
+      "type": "string"
+    },
+    "id": {
+      "description": "ID.",
+      "type": "string"
+    },
+    "region": {
+      "description": "Region.",
+      "enum": [
+        "EU868",
+        "US915",
+        "CN779",
+        "EU433",
+        "AU915",
+        "CN470",
+        "AS923",
+        "AS923_2",
+        "AS923_3",
+        "AS923_4",
+        "KR920",
+        "IN865",
+        "RU864",
+        "ISM2400"
+      ],
+      "title": "Region",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "region",
+    "description"
+  ],
+  "title": "Region List Item",
+  "type": "object"
+}

@@ -1,0 +1,42 @@
+{
+  "$id": "api.DeviceStatus.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "batteryLevel": {
+      "anyOf": [
+        {
+          "maximum": 3.4028234663852886e+38,
+          "minimum": -3.4028234663852886e+38,
+          "type": "number"
+        },
+        {
+          "enum": [
+            "Infinity",
+            "-Infinity",
+            "NaN"
+          ],
+          "type": "string"
+        }
+      ],
+      "description": "Device battery level as a percentage.\n -1 when the battery level is not available."
+    },
+    "externalPowerSource": {
+      "description": "Device is connected to an external power source.",
+      "type": "boolean"
+    },
+    "margin": {
+      "description": "The device margin status\n -32..32: The demodulation SNR ration in dB",
+      "maximum": 2147483647,
+      "minimum": -2147483648,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "margin",
+    "externalPowerSource",
+    "batteryLevel"
+  ],
+  "title": "Device Status",
+  "type": "object"
+}

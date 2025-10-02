@@ -1,0 +1,23 @@
+{
+  "$id": "api.RemoveGatewaysFromFuotaDeploymentRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "fuotaDeploymentId": {
+      "description": "FUOTA Deployment ID.",
+      "type": "string"
+    },
+    "gatewayIds": {
+      "description": "Gateway IDs.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "fuotaDeploymentId"
+  ],
+  "title": "Remove Gateways From Fuota Deployment Request",
+  "type": "object"
+}

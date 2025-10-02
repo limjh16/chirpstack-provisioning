@@ -1,0 +1,16 @@
+{
+  "$id": "api.GetGatewaysSummaryRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "tenantId": {
+      "description": "Tenant ID (UUID).",
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenantId"
+  ],
+  "title": "Get Gateways Summary Request",
+  "type": "object"
+}

@@ -1,0 +1,39 @@
+{
+  "$id": "api.UserListItem.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "createdAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Created at timestamp."
+    },
+    "email": {
+      "description": "Email of the user.",
+      "type": "string"
+    },
+    "id": {
+      "description": "User ID (UUID).",
+      "type": "string"
+    },
+    "isActive": {
+      "description": "Set to false to disable the user.",
+      "type": "boolean"
+    },
+    "isAdmin": {
+      "description": "Set to true to make the user a global administrator.",
+      "type": "boolean"
+    },
+    "updatedAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Last update timestamp."
+    }
+  },
+  "required": [
+    "id",
+    "email",
+    "isAdmin",
+    "isActive"
+  ],
+  "title": "User List Item",
+  "type": "object"
+}

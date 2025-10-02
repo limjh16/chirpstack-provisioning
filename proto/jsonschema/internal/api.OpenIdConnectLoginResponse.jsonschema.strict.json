@@ -1,0 +1,16 @@
+{
+  "$id": "api.OpenIdConnectLoginResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "token": {
+      "description": "Token to use for authentication.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "token"
+  ],
+  "title": "Open Id Connect Login Response",
+  "type": "object"
+}

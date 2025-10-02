@@ -1,0 +1,21 @@
+{
+  "$id": "api.DeviceState.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "description": "Name.",
+      "type": "string"
+    },
+    "value": {
+      "description": "Value.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "value"
+  ],
+  "title": "Device State",
+  "type": "object"
+}

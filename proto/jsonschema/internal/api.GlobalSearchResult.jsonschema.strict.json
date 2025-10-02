@@ -1,0 +1,75 @@
+{
+  "$id": "api.GlobalSearchResult.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "applicationId": {
+      "description": "Application id.",
+      "type": "string"
+    },
+    "applicationName": {
+      "description": "Application name.",
+      "type": "string"
+    },
+    "deviceDevEui": {
+      "description": "Device DevEUI (hex encoded).",
+      "type": "string"
+    },
+    "deviceName": {
+      "description": "Device name.",
+      "type": "string"
+    },
+    "gatewayId": {
+      "description": "Gateway MAC (hex encoded).",
+      "type": "string"
+    },
+    "gatewayName": {
+      "description": "Gateway name.",
+      "type": "string"
+    },
+    "kind": {
+      "description": "Record kind.",
+      "type": "string"
+    },
+    "score": {
+      "anyOf": [
+        {
+          "maximum": 3.4028234663852886e+38,
+          "minimum": -3.4028234663852886e+38,
+          "type": "number"
+        },
+        {
+          "enum": [
+            "Infinity",
+            "-Infinity",
+            "NaN"
+          ],
+          "type": "string"
+        }
+      ],
+      "description": "Search score."
+    },
+    "tenantId": {
+      "description": "Organization id.",
+      "type": "string"
+    },
+    "tenantName": {
+      "description": "Organization name.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "score",
+    "tenantId",
+    "tenantName",
+    "applicationId",
+    "applicationName",
+    "deviceDevEui",
+    "deviceName",
+    "gatewayId",
+    "gatewayName"
+  ],
+  "title": "Global Search Result",
+  "type": "object"
+}

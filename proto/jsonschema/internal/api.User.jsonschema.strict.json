@@ -1,0 +1,36 @@
+{
+  "$id": "api.User.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "email": {
+      "description": "E-mail of the user.",
+      "type": "string"
+    },
+    "id": {
+      "description": "User ID (UUID).\n Will be set automatically on create.",
+      "type": "string"
+    },
+    "isActive": {
+      "description": "Set to false to disable the user.",
+      "type": "boolean"
+    },
+    "isAdmin": {
+      "description": "Set to true to make the user a global administrator.",
+      "type": "boolean"
+    },
+    "note": {
+      "description": "Optional note to store with the user.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "isAdmin",
+    "isActive",
+    "email",
+    "note"
+  ],
+  "title": "User",
+  "type": "object"
+}

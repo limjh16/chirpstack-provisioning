@@ -1,0 +1,23 @@
+{
+  "$id": "api.ApplicationDeviceTagListItem.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "key": {
+      "description": "Tag key.",
+      "type": "string"
+    },
+    "values": {
+      "description": "Used values.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "key"
+  ],
+  "title": "Application Device Tag List Item",
+  "type": "object"
+}

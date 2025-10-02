@@ -1,0 +1,16 @@
+{
+  "$id": "api.DeleteFuotaDeploymentRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "description": "FUOTA deployment ID.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id"
+  ],
+  "title": "Delete Fuota Deployment Request",
+  "type": "object"
+}

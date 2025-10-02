@@ -1,0 +1,21 @@
+{
+  "$id": "api.AddGatewayToMulticastGroupRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "gatewayId": {
+      "description": "Gateway ID (HEX encoded).",
+      "type": "string"
+    },
+    "multicastGroupId": {
+      "description": "Multicast group ID.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "multicastGroupId",
+    "gatewayId"
+  ],
+  "title": "Add Gateway To Multicast Group Request",
+  "type": "object"
+}

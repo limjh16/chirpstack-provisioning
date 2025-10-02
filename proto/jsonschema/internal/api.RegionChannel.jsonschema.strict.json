@@ -1,0 +1,32 @@
+{
+  "$id": "api.RegionChannel.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "drMax": {
+      "description": "Max DR.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "drMin": {
+      "description": "Min DR.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "frequency": {
+      "description": "Frequency (Hz).",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "frequency",
+    "drMin",
+    "drMax"
+  ],
+  "title": "Region Channel",
+  "type": "object"
+}

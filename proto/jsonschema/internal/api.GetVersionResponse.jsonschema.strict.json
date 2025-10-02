@@ -1,0 +1,16 @@
+{
+  "$id": "api.GetVersionResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "description": "version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "version"
+  ],
+  "title": "Get Version Response",
+  "type": "object"
+}

@@ -1,0 +1,16 @@
+{
+  "$id": "api.GetDeviceNextFCntDownRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "devEui": {
+      "description": "Device EUI (EUI64).",
+      "type": "string"
+    }
+  },
+  "required": [
+    "devEui"
+  ],
+  "title": "Get Device NextF Cnt Down Request",
+  "type": "object"
+}

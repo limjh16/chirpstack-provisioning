@@ -1,0 +1,13 @@
+{
+  "$id": "api.UpdateFuotaDeploymentRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "deployment": {
+      "$ref": "api.FuotaDeployment.jsonschema.strict.json",
+      "description": "Deployment."
+    }
+  },
+  "title": "Update Fuota Deployment Request",
+  "type": "object"
+}

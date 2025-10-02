@@ -1,0 +1,25 @@
+{
+  "$id": "api.GetRelayGatewayResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "createdAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Created at timestamp."
+    },
+    "lastSeenAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Last seen at timestamp."
+    },
+    "relayGateway": {
+      "$ref": "api.RelayGateway.jsonschema.strict.json",
+      "description": "Relay Gateway object."
+    },
+    "updatedAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Last update timestamp."
+    }
+  },
+  "title": "Get Relay Gateway Response",
+  "type": "object"
+}

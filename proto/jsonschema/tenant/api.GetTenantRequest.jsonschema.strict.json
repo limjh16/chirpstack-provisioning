@@ -1,0 +1,16 @@
+{
+  "$id": "api.GetTenantRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "description": "Tenant ID.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id"
+  ],
+  "title": "Get Tenant Request",
+  "type": "object"
+}

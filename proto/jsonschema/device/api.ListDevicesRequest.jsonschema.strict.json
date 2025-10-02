@@ -1,0 +1,72 @@
+{
+  "$id": "api.ListDevicesRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "applicationId": {
+      "description": "Application ID (UUID) to filter devices on.",
+      "type": "string"
+    },
+    "deviceProfileId": {
+      "description": "Device-profile ID (UUID) to filter devices on.",
+      "type": "string"
+    },
+    "limit": {
+      "description": "Max number of devices to return in the result-set.\n If not set, it will be treated as 0, and the response will only return the total_count.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "multicastGroupId": {
+      "description": "Multicst-group ID (UUID) to filter devices on.",
+      "type": "string"
+    },
+    "offset": {
+      "description": "Offset in the result-set (for pagination).",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "orderBy": {
+      "description": "If set, the given value will be used to sort by (optional).",
+      "enum": [
+        "NAME",
+        "DEV_EUI",
+        "LAST_SEEN_AT",
+        "DEVICE_PROFILE_NAME"
+      ],
+      "title": "Order By",
+      "type": "string"
+    },
+    "orderByDesc": {
+      "description": "If set, the sorting direction will be decending (default = ascending) (optional).",
+      "type": "boolean"
+    },
+    "search": {
+      "description": "If set, the given string will be used to search on name (optional).",
+      "type": "string"
+    },
+    "tags": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Tags to filter devices on.",
+      "propertyNames": {
+        "type": "string"
+      },
+      "type": "object"
+    }
+  },
+  "required": [
+    "limit",
+    "offset",
+    "search",
+    "applicationId",
+    "multicastGroupId",
+    "orderBy",
+    "orderByDesc",
+    "deviceProfileId"
+  ],
+  "title": "List Devices Request",
+  "type": "object"
+}

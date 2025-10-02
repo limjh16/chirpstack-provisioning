@@ -1,0 +1,31 @@
+{
+  "$id": "api.DeviceKeys.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "appKey": {
+      "description": "Application root key (128 bit).\n Note: This field only needs to be set for LoRaWAN 1.1.x devices!",
+      "type": "string"
+    },
+    "devEui": {
+      "description": "DevEUI (EUI64).",
+      "type": "string"
+    },
+    "genAppKey": {
+      "description": "Gen App Key (128 bit).\n Note: This field only needs to be set for LoRaWAN 1.0.x devices that\n implement TS005 (remote multicast setup).",
+      "type": "string"
+    },
+    "nwkKey": {
+      "description": "Network root key (128 bit).\n Note: For LoRaWAN 1.0.x, use this field for the LoRaWAN 1.0.x 'AppKey`!",
+      "type": "string"
+    }
+  },
+  "required": [
+    "devEui",
+    "nwkKey",
+    "appKey",
+    "genAppKey"
+  ],
+  "title": "Device Keys",
+  "type": "object"
+}

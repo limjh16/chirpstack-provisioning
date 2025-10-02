@@ -1,0 +1,29 @@
+{
+  "$id": "api.GetFuotaDeploymentResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "completedAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Completed at timestamp."
+    },
+    "createdAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Created at timestamp."
+    },
+    "deployment": {
+      "$ref": "api.FuotaDeployment.jsonschema.strict.json",
+      "description": "FUOTA Deployment."
+    },
+    "startedAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Started at timestamp."
+    },
+    "updatedAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Updated at timestamp."
+    }
+  },
+  "title": "Get Fuota Deployment Response",
+  "type": "object"
+}

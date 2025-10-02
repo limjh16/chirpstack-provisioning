@@ -1,0 +1,21 @@
+{
+  "$id": "api.RemoveDeviceFromMulticastGroupRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "devEui": {
+      "description": "Device EUI (HEX encoded).",
+      "type": "string"
+    },
+    "multicastGroupId": {
+      "description": "Multicast group ID.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "multicastGroupId",
+    "devEui"
+  ],
+  "title": "Remove Device From Multicast Group Request",
+  "type": "object"
+}

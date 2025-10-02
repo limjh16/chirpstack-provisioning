@@ -1,0 +1,21 @@
+{
+  "$id": "api.AdrAlgorithmListItem.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "description": "Algorithm ID.",
+      "type": "string"
+    },
+    "name": {
+      "description": "Algorithm name.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "name"
+  ],
+  "title": "Adr Algorithm List Item",
+  "type": "object"
+}

@@ -1,0 +1,30 @@
+{
+  "$id": "api.GenerateGatewayClientCertificateResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "caCert": {
+      "description": "CA certificate.",
+      "type": "string"
+    },
+    "expiresAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Expires at defines the expiration date of the certificate."
+    },
+    "tlsCert": {
+      "description": "TLS certificate.",
+      "type": "string"
+    },
+    "tlsKey": {
+      "description": "TLS key.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "tlsCert",
+    "tlsKey",
+    "caCert"
+  ],
+  "title": "Generate Gateway Client Certificate Response",
+  "type": "object"
+}

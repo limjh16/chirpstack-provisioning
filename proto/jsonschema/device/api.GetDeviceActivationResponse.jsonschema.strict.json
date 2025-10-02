@@ -1,0 +1,17 @@
+{
+  "$id": "api.GetDeviceActivationResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "deviceActivation": {
+      "$ref": "api.DeviceActivation.jsonschema.strict.json",
+      "description": "Device activation object."
+    },
+    "joinServerContext": {
+      "$ref": "common.JoinServerContext.jsonschema.strict.json",
+      "description": "Join-Server context.\n A non-empty value indicatest that ChirpStack does not have access to\n the AppSKey and that the encryption / decryption of the payloads is\n the responsibility of the end-application."
+    }
+  },
+  "title": "Get Device Activation Response",
+  "type": "object"
+}

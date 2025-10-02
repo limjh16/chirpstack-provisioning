@@ -1,0 +1,29 @@
+{
+  "$id": "api.SettingsResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "mapAttribution": {
+      "description": "Map attribution.",
+      "type": "string"
+    },
+    "oauth2": {
+      "$ref": "api.OAuth2.jsonschema.strict.json",
+      "description": "OAuth2 settings."
+    },
+    "openidConnect": {
+      "$ref": "api.OpenIdConnect.jsonschema.strict.json",
+      "description": "OpenId Connect settings."
+    },
+    "tileserverUrl": {
+      "description": "Tileserver URL.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "tileserverUrl",
+    "mapAttribution"
+  ],
+  "title": "Settings Response",
+  "type": "object"
+}

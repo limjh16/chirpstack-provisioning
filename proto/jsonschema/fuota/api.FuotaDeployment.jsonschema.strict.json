@@ -1,0 +1,165 @@
+{
+  "$id": "api.FuotaDeployment.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "applicationId": {
+      "description": "Application ID.",
+      "type": "string"
+    },
+    "calculateFragmentationFragmentSize": {
+      "description": "Calculate fragmentation size.\n If set to true, ChirpStack will calculate the fragmentation size.",
+      "type": "boolean"
+    },
+    "calculateMulticastTimeout": {
+      "description": "Calculate multicast timeout.\n If set to true, ChirpStack will calculate the multicast-timeout.",
+      "type": "boolean"
+    },
+    "deviceProfileId": {
+      "description": "Device-profile ID.",
+      "type": "string"
+    },
+    "fragmentationBlockAckDelay": {
+      "description": "Block ack delay.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "fragmentationDescriptor": {
+      "description": "Descriptor (4 bytes).",
+      "pattern": "^[A-Za-z0-9+/]*={0,2}$",
+      "type": "string"
+    },
+    "fragmentationFragmentSize": {
+      "description": "Fragmentation size.\n This defines the size of each payload fragment. Please refer to the\n Regional Parameters specification for the maximum payload sizes\n per data-rate and region.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "fragmentationMatrix": {
+      "description": "Fragmentation matrix.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "fragmentationRedundancyPercentage": {
+      "description": "Fragmentation redundancy percentage.\n The number represents the percentage (0 - 100) of redundant messages\n to send.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "fragmentationSessionIndex": {
+      "description": "Fragmentation session index.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "id": {
+      "description": "Deployment ID.\n This value is automatically set on create.",
+      "type": "string"
+    },
+    "multicastClassBPingSlotPeriodicity": {
+      "description": "Number of ping-slots per beacon-period:\n pingNb = 2^(7-periodicity)\n\n Periodicity: 0 = 128 ping-slots per beacon period = ~ every 1 sec\n Periodicity: 7 = 1 ping-slot per beacon period = ~ every 128 sec",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "title": "Multicast ping-slot period (Class-B only).\n Valid options are: 0 - 7.",
+      "type": "integer"
+    },
+    "multicastClassCSchedulingType": {
+      "description": "Multicast-group scheduling type (Class-C only).",
+      "enum": [
+        "DELAY",
+        "GPS_TIME"
+      ],
+      "title": "Multicast Group Scheduling Type",
+      "type": "string"
+    },
+    "multicastDr": {
+      "description": "Multicast data-rate.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "multicastFrequency": {
+      "description": "Multicast frequency (Hz).",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "multicastGroupType": {
+      "description": "Multicast-group type.",
+      "enum": [
+        "CLASS_C",
+        "CLASS_B"
+      ],
+      "title": "Multicast Group Type",
+      "type": "string"
+    },
+    "multicastTimeout": {
+      "description": "Multicast timeout.\n This defines the timeout of the multicast-session.\n Please refer to the Remote Multicast Setup specification as this field\n has a different meaning for Class-B and Class-C groups.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "name": {
+      "description": "Deployment name.",
+      "type": "string"
+    },
+    "onCompleteSetDeviceTags": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Set device tags on complete.",
+      "propertyNames": {
+        "type": "string"
+      },
+      "type": "object"
+    },
+    "payload": {
+      "description": "Payload.\n The FUOTA payload to send.",
+      "pattern": "^[A-Za-z0-9+/]*={0,2}$",
+      "type": "string"
+    },
+    "requestFragmentationSessionStatus": {
+      "description": "Request fragmentation session status.",
+      "enum": [
+        "NO_REQUEST",
+        "AFTER_FRAGMENT_ENQUEUE",
+        "AFTER_SESSION_TIMEOUT"
+      ],
+      "title": "Request Fragmentation Session Status",
+      "type": "string"
+    },
+    "unicastMaxRetryCount": {
+      "description": "The number of times ChirpStack will retry an unicast command\n before it considers it to be failed.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "id",
+    "applicationId",
+    "deviceProfileId",
+    "name",
+    "multicastGroupType",
+    "multicastClassCSchedulingType",
+    "multicastDr",
+    "multicastClassBPingSlotPeriodicity",
+    "multicastFrequency",
+    "multicastTimeout",
+    "calculateMulticastTimeout",
+    "unicastMaxRetryCount",
+    "fragmentationFragmentSize",
+    "calculateFragmentationFragmentSize",
+    "fragmentationRedundancyPercentage",
+    "fragmentationSessionIndex",
+    "fragmentationMatrix",
+    "fragmentationBlockAckDelay",
+    "fragmentationDescriptor",
+    "requestFragmentationSessionStatus",
+    "payload"
+  ],
+  "title": "Fuota Deployment",
+  "type": "object"
+}

@@ -1,0 +1,424 @@
+{
+  "$id": "api.DeviceProfile.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "abpRx1Delay": {
+      "description": "RX1 delay (for ABP).",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "abpRx1DrOffset": {
+      "description": "RX1 DR offset (for ABP).",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "abpRx2Dr": {
+      "description": "RX2 DR (for ABP).",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "abpRx2Freq": {
+      "description": "RX2 frequency (for ABP, Hz).",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "adrAlgorithmId": {
+      "description": "ADR algorithm ID.",
+      "type": "string"
+    },
+    "allowRoaming": {
+      "description": "If set to true, it means that the device is allowed to use roaming.",
+      "title": "Allow roaming.",
+      "type": "boolean"
+    },
+    "appLayerParams": {
+      "$ref": "api.AppLayerParams.jsonschema.strict.json",
+      "description": "Application Layer parameters."
+    },
+    "autoDetectMeasurements": {
+      "description": "Auto-detect measurements.\n If set to true, measurements will be automatically added based on the\n keys of the decoded payload. In cases where the decoded payload contains\n random keys in the data, you want to set this to false.",
+      "type": "boolean"
+    },
+    "classBPingSlotDr": {
+      "description": "Class-B ping-slot DR.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "classBPingSlotFreq": {
+      "description": "Class-B ping-slot freq (Hz).",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "classBPingSlotPeriodicity": {
+      "description": "Number of ping-slots per beacon-period:\n pingNb = 2^(7-periodicity)\n\n Periodicity: 0 = 128 ping-slots per beacon period = ~ every 1 sec\n Periodicity: 7 = 1 ping-slot per beacon period = ~ every 128 sec",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "title": "Class-B ping-slot periodicity.\n Valid options are: 0 - 7.",
+      "type": "integer"
+    },
+    "classBTimeout": {
+      "description": "Class-B timeout (seconds).\n This is the maximum time ChirpStack will wait to receive an acknowledgement\n from the device (if requested).",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "classCTimeout": {
+      "description": "Class-C timeout (seconds).\n This is the maximum time ChirpStack will wait to receive an acknowledgement\n from the device (if requested).",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "description": {
+      "description": "Description.",
+      "type": "string"
+    },
+    "deviceStatusReqInterval": {
+      "description": "Device-status request interval (times / day).\n This defines the times per day that ChirpStack will request the\n device-status from the device.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "flushQueueOnActivate": {
+      "description": "Flush queue on device activation.",
+      "type": "boolean"
+    },
+    "id": {
+      "description": "Device-profile ID (UUID).\n Note: on create this will be automatically generated.",
+      "type": "string"
+    },
+    "isRelay": {
+      "description": "Device is a Relay device.\n Enable this in case the device is a Relay. A Relay device implements TS011\n and is able to relay data from relay capable devices.\n See for more information the TS011 specification.",
+      "type": "boolean"
+    },
+    "isRelayEd": {
+      "description": "Device is a Relay end-device.\n Enable this in case the device is an end-device that can operate under a\n Relay. Please refer to the TS011 specification for more information.",
+      "type": "boolean"
+    },
+    "macVersion": {
+      "description": "LoRaWAN mac-version.",
+      "enum": [
+        "LORAWAN_1_0_0",
+        "LORAWAN_1_0_1",
+        "LORAWAN_1_0_2",
+        "LORAWAN_1_0_3",
+        "LORAWAN_1_0_4",
+        "LORAWAN_1_1_0"
+      ],
+      "title": "Mac Version",
+      "type": "string"
+    },
+    "measurements": {
+      "additionalProperties": {
+        "$ref": "api.Measurement.jsonschema.strict.json"
+      },
+      "description": "Measurements.\n If defined, ChirpStack will visualize these metrics in the web-interface.",
+      "propertyNames": {
+        "type": "string"
+      },
+      "type": "object"
+    },
+    "name": {
+      "description": "Name.",
+      "type": "string"
+    },
+    "payloadCodecRuntime": {
+      "description": "Payload codec runtime.",
+      "enum": [
+        "NONE",
+        "CAYENNE_LPP",
+        "JS"
+      ],
+      "title": "Codec Runtime",
+      "type": "string"
+    },
+    "payloadCodecScript": {
+      "description": "Payload codec script.",
+      "type": "string"
+    },
+    "regParamsRevision": {
+      "description": "Regional parameters revision.",
+      "enum": [
+        "A",
+        "B",
+        "RP002_1_0_0",
+        "RP002_1_0_1",
+        "RP002_1_0_2",
+        "RP002_1_0_3",
+        "RP002_1_0_4"
+      ],
+      "title": "Reg Params Revision",
+      "type": "string"
+    },
+    "region": {
+      "description": "Region.",
+      "enum": [
+        "EU868",
+        "US915",
+        "CN779",
+        "EU433",
+        "AU915",
+        "CN470",
+        "AS923",
+        "AS923_2",
+        "AS923_3",
+        "AS923_4",
+        "KR920",
+        "IN865",
+        "RU864",
+        "ISM2400"
+      ],
+      "title": "Region",
+      "type": "string"
+    },
+    "regionConfigId": {
+      "description": "Region configuration ID.\n If set, devices will only use the associated region. If let blank, then\n devices will use all regions matching the selected common-name. Note\n that multiple region configurations can exist for the same common-name,\n e.g. to provide an 8 channel and 16 channel configuration for the US915\n band.",
+      "type": "string"
+    },
+    "relayCadPeriodicity": {
+      "description": "Relay CAD periodicity.",
+      "enum": [
+        "SEC_1",
+        "MS_500",
+        "MS_250",
+        "MS_100",
+        "MS_50",
+        "MS_20"
+      ],
+      "title": "Cad Periodicity",
+      "type": "string"
+    },
+    "relayDefaultChannelIndex": {
+      "description": "Relay default channel index.\n Valid values are 0 and 1, please refer to the RP002 specification for\n the meaning of these values.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "relayEdActivationMode": {
+      "description": "Relay end-device activation mode.",
+      "enum": [
+        "DISABLE_RELAY_MODE",
+        "ENABLE_RELAY_MODE",
+        "DYNAMIC",
+        "END_DEVICE_CONTROLLED"
+      ],
+      "title": "Relay Mode Activation",
+      "type": "string"
+    },
+    "relayEdBackOff": {
+      "description": "Relay end-device back-off (in case it does not receive WOR ACK frame).\n 0 = Always send a LoRaWAN uplink\n 1..63 = Send a LoRaWAN uplink after X WOR frames without a WOR ACK",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "relayEdRelayOnly": {
+      "description": "End-device only accept data through relay.\n Only accept data for this device through a relay. This setting is useful\n for testing as in case of a test-setup, the end-device is usually within\n range of the gateway.",
+      "type": "boolean"
+    },
+    "relayEdSmartEnableLevel": {
+      "description": "Relay end-device smart-enable level.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "relayEdUplinkLimitBucketSize": {
+      "description": "This field indicates the multiplier to determine the bucket size\n according to the following formula:\n BucketSize TOKEN = _reload_rate x _bucket_size\n\n Valid values (0 - 3):\n   0 = 1\n   1 = 2\n   2 = 4\n   3 = 12",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "title": "Relay end-device uplink limit bucket size.",
+      "type": "integer"
+    },
+    "relayEdUplinkLimitReloadRate": {
+      "description": "Valid values:\n   * 0 - 62 = X tokens every hour\n   * 63     = no limitation",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "title": "Relay end-device uplink limit reload rate.",
+      "type": "integer"
+    },
+    "relayEnabled": {
+      "description": "Relay must be enabled.",
+      "type": "boolean"
+    },
+    "relayGlobalUplinkLimitBucketSize": {
+      "description": "This field indicates the multiplier to determine the bucket size\n according to the following formula:\n BucketSize TOKEN = _reload_rate x _bucket_size\n\n Valid values (0 - 3):\n   0 = 1\n   1 = 2\n   2 = 4\n   3 = 12",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "title": "Relay globak uplink limit bucket size.",
+      "type": "integer"
+    },
+    "relayGlobalUplinkLimitReloadRate": {
+      "description": "Valid values:\n   * 0 - 126 = X tokens every hour\n   * 127     = no limitation",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "title": "Relay global uplink limit reload rate.",
+      "type": "integer"
+    },
+    "relayJoinReqLimitBucketSize": {
+      "description": "This field indicates the multiplier to determine the bucket size\n according to the following formula:\n BucketSize TOKEN = _reload_rate x _bucket_size\n\n Valid values (0 - 3):\n   0 = 1\n   1 = 2\n   2 = 4\n   3 = 12",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "title": "Relay join-request limit bucket size.",
+      "type": "integer"
+    },
+    "relayJoinReqLimitReloadRate": {
+      "description": "Valid values:\n   * 0 - 126 = X tokens every hour\n   * 127     = no limitation",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "title": "Relay join-request limit reload rate.",
+      "type": "integer"
+    },
+    "relayNotifyLimitBucketSize": {
+      "description": "This field indicates the multiplier to determine the bucket size\n according to the following formula:\n BucketSize TOKEN = _reload_rate x _bucket_size\n\n Valid values (0 - 3):\n   0 = 1\n   1 = 2\n   2 = 4\n   3 = 12",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "title": "Relay notify limit bucket size.",
+      "type": "integer"
+    },
+    "relayNotifyLimitReloadRate": {
+      "description": "Valid values:\n   * 0 - 126 = X tokens every hour\n   * 127     = no limitation",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "title": "Relay notify limit reload rate.",
+      "type": "integer"
+    },
+    "relayOverallLimitBucketSize": {
+      "description": "This field indicates the multiplier to determine the bucket size\n according to the following formula:\n BucketSize TOKEN = _reload_rate x _bucket_size\n\n Valid values (0 - 3):\n   0 = 1\n   1 = 2\n   2 = 4\n   3 = 12",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "title": "Relay overall limit bucket size.",
+      "type": "integer"
+    },
+    "relayOverallLimitReloadRate": {
+      "description": "Valid values:\n   * 0 - 126 = X tokens every hour\n   * 127     = no limitation",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "title": "Relay overall limit reload rate.",
+      "type": "integer"
+    },
+    "relaySecondChannelAckOffset": {
+      "description": "Relay second channel ACK offset.",
+      "enum": [
+        "KHZ_0",
+        "KHZ_200",
+        "KHZ_400",
+        "KHZ_800",
+        "KHZ_1600",
+        "KHZ_3200"
+      ],
+      "title": "Second Ch Ack Offset",
+      "type": "string"
+    },
+    "relaySecondChannelDr": {
+      "description": "Relay second channel DR.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "relaySecondChannelFreq": {
+      "description": "Relay second channel frequency (Hz).",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "rx1Delay": {
+      "description": "This makes it possible to override the system RX1 Delay. Please note that\n this values only has effect in case it is higher than the system value.\n In other words, it can be used to increase the RX1 Delay but not to decrease\n it.\n Valid options are 1 - 15 (0 = always use system RX1 Delay).",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "title": "RX1 Delay.",
+      "type": "integer"
+    },
+    "supportsClassB": {
+      "description": "Supports Class B.",
+      "type": "boolean"
+    },
+    "supportsClassC": {
+      "description": "Supports Class-C.",
+      "type": "boolean"
+    },
+    "supportsOtaa": {
+      "description": "Supports OTAA.",
+      "type": "boolean"
+    },
+    "tags": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Tags (user defined).\n These tags can be used to add additional information the the\n device-profile. These tags are exposed in all the integration events of\n devices using this device-profile.",
+      "propertyNames": {
+        "type": "string"
+      },
+      "type": "object"
+    },
+    "tenantId": {
+      "description": "Tenant ID (UUID).",
+      "type": "string"
+    },
+    "uplinkInterval": {
+      "description": "Uplink interval (seconds).\n This defines the expected uplink interval which the device uses for\n communication. If the uplink interval has expired and no uplink has\n been received, the device is considered inactive.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "id",
+    "tenantId",
+    "name",
+    "description",
+    "region",
+    "macVersion",
+    "regParamsRevision",
+    "adrAlgorithmId",
+    "payloadCodecRuntime",
+    "payloadCodecScript",
+    "flushQueueOnActivate",
+    "uplinkInterval",
+    "deviceStatusReqInterval",
+    "supportsOtaa",
+    "supportsClassB",
+    "supportsClassC",
+    "classBTimeout",
+    "classBPingSlotPeriodicity",
+    "classBPingSlotDr",
+    "classBPingSlotFreq",
+    "classCTimeout",
+    "abpRx1Delay",
+    "abpRx1DrOffset",
+    "abpRx2Dr",
+    "abpRx2Freq",
+    "autoDetectMeasurements",
+    "regionConfigId",
+    "isRelay",
+    "isRelayEd",
+    "relayEdRelayOnly",
+    "relayEnabled",
+    "relayCadPeriodicity",
+    "relayDefaultChannelIndex",
+    "relaySecondChannelFreq",
+    "relaySecondChannelDr",
+    "relaySecondChannelAckOffset",
+    "relayEdActivationMode",
+    "relayEdSmartEnableLevel",
+    "relayEdBackOff",
+    "relayEdUplinkLimitBucketSize",
+    "relayEdUplinkLimitReloadRate",
+    "relayJoinReqLimitReloadRate",
+    "relayNotifyLimitReloadRate",
+    "relayGlobalUplinkLimitReloadRate",
+    "relayOverallLimitReloadRate",
+    "relayJoinReqLimitBucketSize",
+    "relayNotifyLimitBucketSize",
+    "relayGlobalUplinkLimitBucketSize",
+    "relayOverallLimitBucketSize",
+    "allowRoaming",
+    "rx1Delay"
+  ],
+  "title": "Device Profile",
+  "type": "object"
+}

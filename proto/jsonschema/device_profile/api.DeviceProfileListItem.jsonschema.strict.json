@@ -1,0 +1,95 @@
+{
+  "$id": "api.DeviceProfileListItem.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "createdAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Created at timestamp."
+    },
+    "id": {
+      "description": "Device-profile ID (UUID).",
+      "type": "string"
+    },
+    "macVersion": {
+      "description": "LoRaWAN mac-version.",
+      "enum": [
+        "LORAWAN_1_0_0",
+        "LORAWAN_1_0_1",
+        "LORAWAN_1_0_2",
+        "LORAWAN_1_0_3",
+        "LORAWAN_1_0_4",
+        "LORAWAN_1_1_0"
+      ],
+      "title": "Mac Version",
+      "type": "string"
+    },
+    "name": {
+      "description": "Name.",
+      "type": "string"
+    },
+    "regParamsRevision": {
+      "description": "Regional parameters revision.",
+      "enum": [
+        "A",
+        "B",
+        "RP002_1_0_0",
+        "RP002_1_0_1",
+        "RP002_1_0_2",
+        "RP002_1_0_3",
+        "RP002_1_0_4"
+      ],
+      "title": "Reg Params Revision",
+      "type": "string"
+    },
+    "region": {
+      "description": "Region.",
+      "enum": [
+        "EU868",
+        "US915",
+        "CN779",
+        "EU433",
+        "AU915",
+        "CN470",
+        "AS923",
+        "AS923_2",
+        "AS923_3",
+        "AS923_4",
+        "KR920",
+        "IN865",
+        "RU864",
+        "ISM2400"
+      ],
+      "title": "Region",
+      "type": "string"
+    },
+    "supportsClassB": {
+      "description": "Supports Class-B.",
+      "type": "boolean"
+    },
+    "supportsClassC": {
+      "description": "Supports Class-C.",
+      "type": "boolean"
+    },
+    "supportsOtaa": {
+      "description": "Supports OTAA.",
+      "type": "boolean"
+    },
+    "updatedAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Last update timestamp."
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "region",
+    "macVersion",
+    "regParamsRevision",
+    "supportsOtaa",
+    "supportsClassB",
+    "supportsClassC"
+  ],
+  "title": "Device Profile List Item",
+  "type": "object"
+}

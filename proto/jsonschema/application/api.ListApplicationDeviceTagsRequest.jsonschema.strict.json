@@ -1,0 +1,16 @@
+{
+  "$id": "api.ListApplicationDeviceTagsRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "applicationId": {
+      "description": "Application ID (UUID).",
+      "type": "string"
+    }
+  },
+  "required": [
+    "applicationId"
+  ],
+  "title": "List Application Device Tags Request",
+  "type": "object"
+}

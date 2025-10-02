@@ -1,0 +1,21 @@
+{
+  "$id": "api.RelayListItem.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "devEui": {
+      "description": "DevEUI (EUI64).",
+      "type": "string"
+    },
+    "name": {
+      "description": "Name.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "devEui",
+    "name"
+  ],
+  "title": "Relay List Item",
+  "type": "object"
+}

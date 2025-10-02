@@ -1,0 +1,59 @@
+{
+  "$id": "api.RelayGatewayListItem.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "createdAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Created at timestamp."
+    },
+    "description": {
+      "description": "Description.",
+      "type": "string"
+    },
+    "lastSeenAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Last seen at timestamp."
+    },
+    "name": {
+      "description": "Name.",
+      "type": "string"
+    },
+    "regionConfigId": {
+      "description": "Region configuration ID.",
+      "type": "string"
+    },
+    "relayId": {
+      "description": "Relay ID (4 byte HEX).",
+      "type": "string"
+    },
+    "state": {
+      "description": "Gateway state.\n Please note that the state of the relay is driven by the last\n received stats packet sent by the relay-gateway.",
+      "enum": [
+        "NEVER_SEEN",
+        "ONLINE",
+        "OFFLINE"
+      ],
+      "title": "Gateway State",
+      "type": "string"
+    },
+    "tenantId": {
+      "description": "Tenant ID.",
+      "type": "string"
+    },
+    "updatedAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Last update timestamp."
+    }
+  },
+  "required": [
+    "tenantId",
+    "relayId",
+    "name",
+    "description",
+    "state",
+    "regionConfigId"
+  ],
+  "title": "Relay Gateway List Item",
+  "type": "object"
+}

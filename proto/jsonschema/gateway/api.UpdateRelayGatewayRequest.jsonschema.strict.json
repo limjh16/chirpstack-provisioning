@@ -1,0 +1,13 @@
+{
+  "$id": "api.UpdateRelayGatewayRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "relayGateway": {
+      "$ref": "api.RelayGateway.jsonschema.strict.json",
+      "description": "Relay Gateway object."
+    }
+  },
+  "title": "Update Relay Gateway Request",
+  "type": "object"
+}

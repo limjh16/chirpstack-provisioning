@@ -1,0 +1,41 @@
+{
+  "$id": "api.GcpPubSubIntegration.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "applicationId": {
+      "description": "Application ID (UUID).",
+      "type": "string"
+    },
+    "credentialsFile": {
+      "description": "Credentials file.\n This IAM service-account credentials file (JSON) must have the following\n Pub/Sub roles:\n * Pub/Sub Publisher",
+      "type": "string"
+    },
+    "encoding": {
+      "description": "Encoding.",
+      "enum": [
+        "JSON",
+        "PROTOBUF"
+      ],
+      "title": "Encoding",
+      "type": "string"
+    },
+    "projectId": {
+      "description": "Project ID.",
+      "type": "string"
+    },
+    "topicName": {
+      "description": "Topic name.\n This is the name of the Pub/Sub topic.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "applicationId",
+    "encoding",
+    "credentialsFile",
+    "projectId",
+    "topicName"
+  ],
+  "title": "Gcp Pub Sub Integration",
+  "type": "object"
+}

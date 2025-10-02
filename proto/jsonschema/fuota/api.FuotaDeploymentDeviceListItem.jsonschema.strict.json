@@ -1,0 +1,50 @@
+{
+  "$id": "api.FuotaDeploymentDeviceListItem.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "completedAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Completed at timestamp."
+    },
+    "createdAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Created at timestamp."
+    },
+    "devEui": {
+      "description": "DevEUI.",
+      "type": "string"
+    },
+    "errorMsg": {
+      "description": "Error message.",
+      "type": "string"
+    },
+    "fragSessionSetupCompletedAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "FragSessionSetup completed at timestamp."
+    },
+    "fragStatusCompletedAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "FragStatus completed at timestamp."
+    },
+    "fuotaDeploymentId": {
+      "description": "ID.",
+      "type": "string"
+    },
+    "mcGroupSetupCompletedAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "McGroupSetup completed at timestamp."
+    },
+    "mcSessionCompletedAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "McSession completed at timestamp."
+    }
+  },
+  "required": [
+    "fuotaDeploymentId",
+    "devEui",
+    "errorMsg"
+  ],
+  "title": "Fuota Deployment Device List Item",
+  "type": "object"
+}

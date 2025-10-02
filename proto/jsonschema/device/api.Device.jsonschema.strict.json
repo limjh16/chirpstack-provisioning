@@ -1,0 +1,71 @@
+{
+  "$id": "api.Device.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "applicationId": {
+      "description": "Application ID (UUID).",
+      "type": "string"
+    },
+    "description": {
+      "description": "Description.",
+      "type": "string"
+    },
+    "devEui": {
+      "description": "DevEUI (EUI64).",
+      "type": "string"
+    },
+    "deviceProfileId": {
+      "description": "Device-profile ID (UUID).",
+      "type": "string"
+    },
+    "isDisabled": {
+      "description": "Device is disabled.",
+      "type": "boolean"
+    },
+    "joinEui": {
+      "description": "JoinEUI (optional, EUI64).\n This field will be automatically set / updated on OTAA. However, in some\n cases it must be pre-configured. For example to allow OTAA using a Relay.\n In this case the Relay needs to know the JoinEUI + DevEUI combinations\n of the devices for which it needs to forward uplinks.",
+      "type": "string"
+    },
+    "name": {
+      "description": "Name.",
+      "type": "string"
+    },
+    "skipFcntCheck": {
+      "description": "Skip frame-counter checks (this is insecure, but could be helpful for\n debugging).",
+      "type": "boolean"
+    },
+    "tags": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Tags (user defined).\n These tags can be used to add additional information to the device.\n These tags are exposed in all the integration events.",
+      "propertyNames": {
+        "type": "string"
+      },
+      "type": "object"
+    },
+    "variables": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Variables (user defined).\n These variables can be used together with integrations to store tokens /\n secrets that must be configured per device. These variables are not\n exposed in the event payloads.",
+      "propertyNames": {
+        "type": "string"
+      },
+      "type": "object"
+    }
+  },
+  "required": [
+    "devEui",
+    "name",
+    "description",
+    "applicationId",
+    "deviceProfileId",
+    "skipFcntCheck",
+    "isDisabled",
+    "joinEui"
+  ],
+  "title": "Device",
+  "type": "object"
+}

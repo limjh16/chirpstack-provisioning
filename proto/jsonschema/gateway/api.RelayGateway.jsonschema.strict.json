@@ -1,0 +1,43 @@
+{
+  "$id": "api.RelayGateway.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "description": {
+      "description": "Description.",
+      "type": "string"
+    },
+    "name": {
+      "description": "Name.",
+      "type": "string"
+    },
+    "regionConfigId": {
+      "description": "Region configuration ID.",
+      "type": "string"
+    },
+    "relayId": {
+      "description": "Relay ID (4 byte HEX).",
+      "type": "string"
+    },
+    "statsInterval": {
+      "description": "Stats interval (seconds).\n This defines the expected interval in which the gateway sends its\n statistics.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "tenantId": {
+      "description": "Tenant ID.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenantId",
+    "relayId",
+    "name",
+    "description",
+    "statsInterval",
+    "regionConfigId"
+  ],
+  "title": "Relay Gateway",
+  "type": "object"
+}

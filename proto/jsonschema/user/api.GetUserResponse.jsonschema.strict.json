@@ -1,0 +1,21 @@
+{
+  "$id": "api.GetUserResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "createdAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Created at timestamp."
+    },
+    "updatedAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Last update timestamp."
+    },
+    "user": {
+      "$ref": "api.User.jsonschema.strict.json",
+      "description": "User object."
+    }
+  },
+  "title": "Get User Response",
+  "type": "object"
+}

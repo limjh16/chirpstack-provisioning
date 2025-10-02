@@ -1,0 +1,16 @@
+{
+  "$id": "api.DeactivateDeviceRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "devEui": {
+      "description": "DevEUI (EUI64).",
+      "type": "string"
+    }
+  },
+  "required": [
+    "devEui"
+  ],
+  "title": "Deactivate Device Request",
+  "type": "object"
+}

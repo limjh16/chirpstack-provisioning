@@ -1,0 +1,16 @@
+{
+  "$id": "api.StreamGatewayFramesRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "gatewayId": {
+      "description": "Gateway ID (EUI64).",
+      "type": "string"
+    }
+  },
+  "required": [
+    "gatewayId"
+  ],
+  "title": "Stream Gateway Frames Request",
+  "type": "object"
+}

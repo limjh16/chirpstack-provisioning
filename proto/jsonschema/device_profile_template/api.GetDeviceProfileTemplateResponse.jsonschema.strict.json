@@ -1,0 +1,21 @@
+{
+  "$id": "api.GetDeviceProfileTemplateResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "createdAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Created at timestamp."
+    },
+    "deviceProfileTemplate": {
+      "$ref": "api.DeviceProfileTemplate.jsonschema.strict.json",
+      "description": "Device-profile template object."
+    },
+    "updatedAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Last update timestamp."
+    }
+  },
+  "title": "Get Device Profile Template Response",
+  "type": "object"
+}

@@ -1,0 +1,16 @@
+{
+  "$id": "api.GenerateMqttIntegrationClientCertificateRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "applicationId": {
+      "description": "Application ID (UUID).",
+      "type": "string"
+    }
+  },
+  "required": [
+    "applicationId"
+  ],
+  "title": "Generate Mqtt Integration Client Certificate Request",
+  "type": "object"
+}

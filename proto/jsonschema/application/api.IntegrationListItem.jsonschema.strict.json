@@ -1,0 +1,30 @@
+{
+  "$id": "api.IntegrationListItem.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "kind": {
+      "description": "Integration kind.",
+      "enum": [
+        "HTTP",
+        "INFLUX_DB",
+        "THINGS_BOARD",
+        "MY_DEVICES",
+        "GCP_PUB_SUB",
+        "AWS_SNS",
+        "AZURE_SERVICE_BUS",
+        "PILOT_THINGS",
+        "MQTT_GLOBAL",
+        "IFTTT",
+        "BLYNK"
+      ],
+      "title": "Integration Kind",
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind"
+  ],
+  "title": "Integration List Item",
+  "type": "object"
+}

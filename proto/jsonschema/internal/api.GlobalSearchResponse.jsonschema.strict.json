@@ -1,0 +1,15 @@
+{
+  "$id": "api.GlobalSearchResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "result": {
+      "items": {
+        "$ref": "api.GlobalSearchResult.jsonschema.strict.json"
+      },
+      "type": "array"
+    }
+  },
+  "title": "Global Search Response",
+  "type": "object"
+}

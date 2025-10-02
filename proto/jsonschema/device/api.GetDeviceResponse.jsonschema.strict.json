@@ -1,0 +1,42 @@
+{
+  "$id": "api.GetDeviceResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "classEnabled": {
+      "description": "Enabled device class.",
+      "enum": [
+        "CLASS_A",
+        "CLASS_B",
+        "CLASS_C"
+      ],
+      "title": "Device Class",
+      "type": "string"
+    },
+    "createdAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Created at timestamp."
+    },
+    "device": {
+      "$ref": "api.Device.jsonschema.strict.json",
+      "description": "Device object."
+    },
+    "deviceStatus": {
+      "$ref": "api.DeviceStatus.jsonschema.strict.json",
+      "description": "Device status."
+    },
+    "lastSeenAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Last seen at timestamp."
+    },
+    "updatedAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Last update timestamp."
+    }
+  },
+  "required": [
+    "classEnabled"
+  ],
+  "title": "Get Device Response",
+  "type": "object"
+}

@@ -1,0 +1,34 @@
+{
+  "$id": "api.ApplicationListItem.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "createdAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Created at timestamp."
+    },
+    "description": {
+      "description": "Application description.",
+      "type": "string"
+    },
+    "id": {
+      "description": "Application ID (UUID).",
+      "type": "string"
+    },
+    "name": {
+      "description": "Application name.",
+      "type": "string"
+    },
+    "updatedAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Last update timestamp."
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "description"
+  ],
+  "title": "Application List Item",
+  "type": "object"
+}

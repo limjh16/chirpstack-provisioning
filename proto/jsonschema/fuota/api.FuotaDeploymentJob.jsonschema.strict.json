@@ -1,0 +1,52 @@
+{
+  "$id": "api.FuotaDeploymentJob.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "attemptCount": {
+      "description": "Attempt count.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "completedAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Completed at."
+    },
+    "createdAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Created at."
+    },
+    "errorMsg": {
+      "description": "Error message.",
+      "type": "string"
+    },
+    "job": {
+      "description": "Job identifier.",
+      "type": "string"
+    },
+    "maxRetryCount": {
+      "description": "Max. retry count.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "schedulerRunAfter": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Scheduler run after."
+    },
+    "warningMsg": {
+      "description": "Warning message.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "job",
+    "maxRetryCount",
+    "attemptCount",
+    "warningMsg",
+    "errorMsg"
+  ],
+  "title": "Fuota Deployment Job",
+  "type": "object"
+}

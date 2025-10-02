@@ -1,0 +1,32 @@
+{
+  "$id": "api.GetGatewaysSummaryResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "neverSeenCount": {
+      "description": "Never seen count.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "offlineCount": {
+      "description": "Offline count.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "onlineCount": {
+      "description": "Online count.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "onlineCount",
+    "offlineCount",
+    "neverSeenCount"
+  ],
+  "title": "Get Gateways Summary Response",
+  "type": "object"
+}

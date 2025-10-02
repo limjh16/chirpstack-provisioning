@@ -1,0 +1,13 @@
+{
+  "$id": "api.CreateDeviceProfileRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "deviceProfile": {
+      "$ref": "api.DeviceProfile.jsonschema.strict.json",
+      "description": "Object to create."
+    }
+  },
+  "title": "Create Device Profile Request",
+  "type": "object"
+}

@@ -1,0 +1,39 @@
+{
+  "$id": "api.IftttIntegration.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "applicationId": {
+      "description": "Application ID (UUID).",
+      "type": "string"
+    },
+    "arbitraryJson": {
+      "description": "Arbitrary JSON.\n If set to true, ChirpStack events will be sent as-is as arbitrary JSON\n payload. If set to false (default), the 3 JSON values format will be used.",
+      "type": "boolean"
+    },
+    "eventPrefix": {
+      "description": "Event prefix.\n If set, the event name will be PREFIX_EVENT. For example if event_prefix\n is set to weatherstation, and uplink event will be sent as\n weatherstation_up to the IFTTT webhook.\n Note: Only characters in the A-Z, a-z and 0-9 range are allowed.",
+      "type": "string"
+    },
+    "key": {
+      "description": "Key.\n This key can be obtained from the IFTTT Webhooks documentation page.",
+      "type": "string"
+    },
+    "uplinkValues": {
+      "description": "Notes: The first value is always used for the DevEUI.\n Ignored if arbitrary_json is set to true.",
+      "items": {
+        "type": "string"
+      },
+      "title": "Values.\n Up to 2 values can be forwarded to IFTTT. These values must map to the\n decoded payload keys. For example:\n {\n   \"batteryLevel\": 75.3,\n   \"buttons\": [{\"pressed\": false}, {\"pressed\": true}]\n }\n You would specify the following fields:\n uplink_values = [\"batteryLevel\", \"buttons_0_pressed\"]",
+      "type": "array"
+    }
+  },
+  "required": [
+    "applicationId",
+    "key",
+    "arbitraryJson",
+    "eventPrefix"
+  ],
+  "title": "Ifttt Integration",
+  "type": "object"
+}

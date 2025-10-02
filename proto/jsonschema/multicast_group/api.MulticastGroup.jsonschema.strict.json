@@ -1,0 +1,112 @@
+{
+  "$id": "api.MulticastGroup.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "applicationId": {
+      "description": "Application ID.\n After creation, this can not be updated.",
+      "type": "string"
+    },
+    "classBPingSlotPeriodicity": {
+      "description": "Number of ping-slots per beacon-period:\n pingNb = 2^(7-periodicity)\n\n Periodicity: 0 = 128 ping-slots per beacon period = ~ every 1 sec\n Periodicity: 7 = 1 ping-slot per beacon period = ~ every 128 sec",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "title": "Class-B ping-slot periodicity (only for Class-B).\n Valid options are: 0 - 7.",
+      "type": "integer"
+    },
+    "classCSchedulingType": {
+      "description": "Scheduling type (only for Class-C).",
+      "enum": [
+        "DELAY",
+        "GPS_TIME"
+      ],
+      "title": "Multicast Group Scheduling Type",
+      "type": "string"
+    },
+    "dr": {
+      "description": "Data-rate.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "fCnt": {
+      "description": "Frame-counter.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "frequency": {
+      "description": "Frequency (Hz).",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "groupType": {
+      "description": "Multicast group type.",
+      "enum": [
+        "CLASS_C",
+        "CLASS_B"
+      ],
+      "title": "Multicast Group Type",
+      "type": "string"
+    },
+    "id": {
+      "description": "ID (UUID).\n This will be generated automatically on create.",
+      "type": "string"
+    },
+    "mcAddr": {
+      "description": "Multicast address (HEX encoded DevAddr).",
+      "type": "string"
+    },
+    "mcAppSKey": {
+      "description": "Multicast application session key (HEX encoded AES128 key).",
+      "type": "string"
+    },
+    "mcNwkSKey": {
+      "description": "Multicast network session key (HEX encoded AES128 key).",
+      "type": "string"
+    },
+    "name": {
+      "description": "Name.",
+      "type": "string"
+    },
+    "region": {
+      "description": "Region.",
+      "enum": [
+        "EU868",
+        "US915",
+        "CN779",
+        "EU433",
+        "AU915",
+        "CN470",
+        "AS923",
+        "AS923_2",
+        "AS923_3",
+        "AS923_4",
+        "KR920",
+        "IN865",
+        "RU864",
+        "ISM2400"
+      ],
+      "title": "Region",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "applicationId",
+    "region",
+    "mcAddr",
+    "mcNwkSKey",
+    "mcAppSKey",
+    "fCnt",
+    "groupType",
+    "dr",
+    "frequency",
+    "classBPingSlotPeriodicity",
+    "classCSchedulingType"
+  ],
+  "title": "Multicast Group",
+  "type": "object"
+}

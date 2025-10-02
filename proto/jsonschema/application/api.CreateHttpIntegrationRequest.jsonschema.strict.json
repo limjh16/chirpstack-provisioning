@@ -1,0 +1,13 @@
+{
+  "$id": "api.CreateHttpIntegrationRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "integration": {
+      "$ref": "api.HttpIntegration.jsonschema.strict.json",
+      "description": "Integration object to create."
+    }
+  },
+  "title": "Create Http Integration Request",
+  "type": "object"
+}

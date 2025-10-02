@@ -1,0 +1,13 @@
+{
+  "$id": "api.UpdateUserRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "user": {
+      "$ref": "api.User.jsonschema.strict.json",
+      "description": "User object."
+    }
+  },
+  "title": "Update User Request",
+  "type": "object"
+}

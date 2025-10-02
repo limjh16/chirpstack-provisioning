@@ -1,0 +1,18 @@
+{
+  "$id": "api.EnqueueMulticastGroupQueueItemResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "fCnt": {
+      "description": "Frame-counter of the enqueued payload.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "fCnt"
+  ],
+  "title": "Enqueue Multicast Group Queue Item Response",
+  "type": "object"
+}

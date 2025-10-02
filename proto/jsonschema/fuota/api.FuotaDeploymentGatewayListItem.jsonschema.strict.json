@@ -1,0 +1,25 @@
+{
+  "$id": "api.FuotaDeploymentGatewayListItem.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "createdAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Created at timestamp."
+    },
+    "fuotaDeploymentId": {
+      "description": "ID.",
+      "type": "string"
+    },
+    "gatewayId": {
+      "description": "Gateway ID.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "fuotaDeploymentId",
+    "gatewayId"
+  ],
+  "title": "Fuota Deployment Gateway List Item",
+  "type": "object"
+}

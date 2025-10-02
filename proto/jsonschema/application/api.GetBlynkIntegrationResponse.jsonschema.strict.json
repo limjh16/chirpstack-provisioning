@@ -1,0 +1,13 @@
+{
+  "$id": "api.GetBlynkIntegrationResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "integration": {
+      "$ref": "api.BlynkIntegration.jsonschema.strict.json",
+      "description": "Integration object."
+    }
+  },
+  "title": "Get Blynk Integration Response",
+  "type": "object"
+}

@@ -1,0 +1,25 @@
+{
+  "$id": "api.RelayDeviceListItem.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "createdAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Created at timestamp."
+    },
+    "devEui": {
+      "description": "DevEUI (EUI64).",
+      "type": "string"
+    },
+    "name": {
+      "description": "Device name.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "devEui",
+    "name"
+  ],
+  "title": "Relay Device List Item",
+  "type": "object"
+}

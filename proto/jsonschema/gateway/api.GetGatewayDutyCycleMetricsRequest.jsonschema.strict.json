@@ -1,0 +1,24 @@
+{
+  "$id": "api.GetGatewayDutyCycleMetricsRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "end": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Interval end timestamp."
+    },
+    "gatewayId": {
+      "description": "Gateway ID (EUI64).",
+      "type": "string"
+    },
+    "start": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Interval start timestamp."
+    }
+  },
+  "required": [
+    "gatewayId"
+  ],
+  "title": "Get Gateway Duty Cycle Metrics Request",
+  "type": "object"
+}

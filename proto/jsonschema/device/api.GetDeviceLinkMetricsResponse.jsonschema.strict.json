@@ -1,0 +1,33 @@
+{
+  "$id": "api.GetDeviceLinkMetricsResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "errors": {
+      "$ref": "common.Metric.jsonschema.strict.json",
+      "description": "Errors."
+    },
+    "gwRssi": {
+      "$ref": "common.Metric.jsonschema.strict.json",
+      "description": "RSSI (as reported by the gateway(s))."
+    },
+    "gwSnr": {
+      "$ref": "common.Metric.jsonschema.strict.json",
+      "description": "SNR (as reported by the gateway(s))."
+    },
+    "rxPackets": {
+      "$ref": "common.Metric.jsonschema.strict.json",
+      "description": "Packets received from the device."
+    },
+    "rxPacketsPerDr": {
+      "$ref": "common.Metric.jsonschema.strict.json",
+      "description": "Packets received by DR."
+    },
+    "rxPacketsPerFreq": {
+      "$ref": "common.Metric.jsonschema.strict.json",
+      "description": "Packets received by frequency."
+    }
+  },
+  "title": "Get Device Link Metrics Response",
+  "type": "object"
+}

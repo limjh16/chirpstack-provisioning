@@ -1,0 +1,31 @@
+{
+  "$id": "api.ApiKey.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "description": "API key ID.\n This value will be automatically generated on create.",
+      "type": "string"
+    },
+    "isAdmin": {
+      "description": "Is global admin key.",
+      "type": "boolean"
+    },
+    "name": {
+      "description": "Name.",
+      "type": "string"
+    },
+    "tenantId": {
+      "description": "Tenant ID.\n In case the API key is intended to manage resources under a single tenant.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "isAdmin",
+    "tenantId"
+  ],
+  "title": "Api Key",
+  "type": "object"
+}

@@ -1,0 +1,23 @@
+{
+  "$id": "api.AddDevicesToFuotaDeploymentRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "devEuis": {
+      "description": "DevEUIs.\n Note that the DevEUIs must share the same device-profile as assigned to\n the FUOTA Deployment.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "fuotaDeploymentId": {
+      "description": "FUOTA Deployment ID.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "fuotaDeploymentId"
+  ],
+  "title": "Add Devices To Fuota Deployment Request",
+  "type": "object"
+}

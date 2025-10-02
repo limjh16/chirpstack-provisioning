@@ -1,0 +1,13 @@
+{
+  "$id": "api.UpdateHttpIntegrationRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "integration": {
+      "$ref": "api.HttpIntegration.jsonschema.strict.json",
+      "description": "Integration object to update."
+    }
+  },
+  "title": "Update Http Integration Request",
+  "type": "object"
+}

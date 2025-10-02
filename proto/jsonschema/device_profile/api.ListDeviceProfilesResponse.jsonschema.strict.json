@@ -1,0 +1,25 @@
+{
+  "$id": "api.ListDeviceProfilesResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "result": {
+      "description": "Result-set.",
+      "items": {
+        "$ref": "api.DeviceProfileListItem.jsonschema.strict.json"
+      },
+      "type": "array"
+    },
+    "totalCount": {
+      "description": "Total number of device-profiles.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "totalCount"
+  ],
+  "title": "List Device Profiles Response",
+  "type": "object"
+}

@@ -1,0 +1,16 @@
+{
+  "$id": "api.LoginResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "jwt": {
+      "description": "The JWT tag to be used to access chirpstack-application-server interfaces.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "jwt"
+  ],
+  "title": "Login Response",
+  "type": "object"
+}

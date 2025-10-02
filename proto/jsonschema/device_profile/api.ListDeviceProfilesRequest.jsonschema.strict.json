@@ -1,0 +1,35 @@
+{
+  "$id": "api.ListDeviceProfilesRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "limit": {
+      "description": "Max number of device-profiles to return in the result-set.\n If not set, it will be treated as 0, and the response will only return the total_count.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "offset": {
+      "description": "Offset in the result-set (for pagination).",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "search": {
+      "description": "If set, the given string will be used to search on name.",
+      "type": "string"
+    },
+    "tenantId": {
+      "description": "Tenant ID to list the device-profiles for.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "limit",
+    "offset",
+    "search",
+    "tenantId"
+  ],
+  "title": "List Device Profiles Request",
+  "type": "object"
+}

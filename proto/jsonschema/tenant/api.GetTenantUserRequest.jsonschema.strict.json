@@ -1,0 +1,21 @@
+{
+  "$id": "api.GetTenantUserRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "tenantId": {
+      "description": "Tenant ID (UUID).",
+      "type": "string"
+    },
+    "userId": {
+      "description": "User ID (UUID).",
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenantId",
+    "userId"
+  ],
+  "title": "Get Tenant User Request",
+  "type": "object"
+}

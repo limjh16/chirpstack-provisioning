@@ -1,0 +1,16 @@
+{
+  "$id": "api.ListApplicationDeviceProfilesResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "result": {
+      "description": "Device-profiles.",
+      "items": {
+        "$ref": "api.ApplicationDeviceProfileListItem.jsonschema.strict.json"
+      },
+      "type": "array"
+    }
+  },
+  "title": "List Application Device Profiles Response",
+  "type": "object"
+}

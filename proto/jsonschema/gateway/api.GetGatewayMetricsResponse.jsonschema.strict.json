@@ -1,0 +1,37 @@
+{
+  "$id": "api.GetGatewayMetricsResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "rxPackets": {
+      "$ref": "common.Metric.jsonschema.strict.json",
+      "description": "RX packets."
+    },
+    "rxPacketsPerDr": {
+      "$ref": "common.Metric.jsonschema.strict.json",
+      "description": "RX packets / DR."
+    },
+    "rxPacketsPerFreq": {
+      "$ref": "common.Metric.jsonschema.strict.json",
+      "description": "RX packets / frequency."
+    },
+    "txPackets": {
+      "$ref": "common.Metric.jsonschema.strict.json",
+      "description": "TX packets."
+    },
+    "txPacketsPerDr": {
+      "$ref": "common.Metric.jsonschema.strict.json",
+      "description": "TX packets / DR."
+    },
+    "txPacketsPerFreq": {
+      "$ref": "common.Metric.jsonschema.strict.json",
+      "description": "TX packets / frequency."
+    },
+    "txPacketsPerStatus": {
+      "$ref": "common.Metric.jsonschema.strict.json",
+      "description": "TX packets per status."
+    }
+  },
+  "title": "Get Gateway Metrics Response",
+  "type": "object"
+}

@@ -1,0 +1,25 @@
+{
+  "$id": "api.ListIntegrationsResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "result": {
+      "description": "Integrations within result-set.",
+      "items": {
+        "$ref": "api.IntegrationListItem.jsonschema.strict.json"
+      },
+      "type": "array"
+    },
+    "totalCount": {
+      "description": "Total number of integrations available within the result-set.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "totalCount"
+  ],
+  "title": "List Integrations Response",
+  "type": "object"
+}

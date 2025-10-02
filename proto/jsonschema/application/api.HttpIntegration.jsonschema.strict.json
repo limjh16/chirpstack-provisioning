@@ -1,0 +1,41 @@
+{
+  "$id": "api.HttpIntegration.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "applicationId": {
+      "description": "Application ID (UUID).",
+      "type": "string"
+    },
+    "encoding": {
+      "description": "Payload encoding.",
+      "enum": [
+        "JSON",
+        "PROTOBUF"
+      ],
+      "title": "Encoding",
+      "type": "string"
+    },
+    "eventEndpointUrl": {
+      "description": "Event endpoint URL.\n The HTTP integration will POST all events to this enpoint. The request\n will contain a query parameters \"event\" containing the type of the\n event.",
+      "type": "string"
+    },
+    "headers": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "HTTP headers to set when making requests.",
+      "propertyNames": {
+        "type": "string"
+      },
+      "type": "object"
+    }
+  },
+  "required": [
+    "applicationId",
+    "encoding",
+    "eventEndpointUrl"
+  ],
+  "title": "Http Integration",
+  "type": "object"
+}

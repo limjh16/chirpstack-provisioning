@@ -1,0 +1,13 @@
+{
+  "$id": "api.CreateApiKeyRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "apiKey": {
+      "$ref": "api.ApiKey.jsonschema.strict.json",
+      "description": "The API key to create."
+    }
+  },
+  "title": "Create Api Key Request",
+  "type": "object"
+}

@@ -1,0 +1,21 @@
+{
+  "$id": "api.GetDeviceKeysResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "createdAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Created at timestamp."
+    },
+    "deviceKeys": {
+      "$ref": "api.DeviceKeys.jsonschema.strict.json",
+      "description": "Device-keys object."
+    },
+    "updatedAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Last update timestamp."
+    }
+  },
+  "title": "Get Device Keys Response",
+  "type": "object"
+}

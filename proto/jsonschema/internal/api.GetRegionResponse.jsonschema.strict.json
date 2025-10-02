@@ -1,0 +1,97 @@
+{
+  "$id": "api.GetRegionResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "classBPingSlotDr": {
+      "description": "Class-B ping-slot DR.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "classBPingSlotFrequency": {
+      "description": "Class-B ping-slot frequency.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "description": {
+      "description": "Region description.",
+      "type": "string"
+    },
+    "id": {
+      "description": "ID.",
+      "type": "string"
+    },
+    "region": {
+      "description": "Region.",
+      "enum": [
+        "EU868",
+        "US915",
+        "CN779",
+        "EU433",
+        "AU915",
+        "CN470",
+        "AS923",
+        "AS923_2",
+        "AS923_3",
+        "AS923_4",
+        "KR920",
+        "IN865",
+        "RU864",
+        "ISM2400"
+      ],
+      "title": "Region",
+      "type": "string"
+    },
+    "rx1Delay": {
+      "description": "RX1 delay.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "rx1DrOffset": {
+      "description": "RX1 data-rate offset.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "rx2Dr": {
+      "description": "RX2 DR.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "rx2Frequency": {
+      "description": "RX2 frequency.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "uplinkChannels": {
+      "description": "Uplink channels.",
+      "items": {
+        "$ref": "api.RegionChannel.jsonschema.strict.json"
+      },
+      "type": "array"
+    },
+    "userInfo": {
+      "description": "User information.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "region",
+    "userInfo",
+    "rx1Delay",
+    "rx1DrOffset",
+    "rx2Dr",
+    "rx2Frequency",
+    "classBPingSlotDr",
+    "classBPingSlotFrequency",
+    "description"
+  ],
+  "title": "Get Region Response",
+  "type": "object"
+}

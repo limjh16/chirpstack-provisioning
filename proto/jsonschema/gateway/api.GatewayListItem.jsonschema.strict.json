@@ -1,0 +1,68 @@
+{
+  "$id": "api.GatewayListItem.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "createdAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Created at timestamp."
+    },
+    "description": {
+      "description": "Description.",
+      "type": "string"
+    },
+    "gatewayId": {
+      "description": "Gateway ID (EUI64).",
+      "type": "string"
+    },
+    "lastSeenAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Last seen at timestamp."
+    },
+    "location": {
+      "$ref": "common.Location.jsonschema.strict.json",
+      "description": "Location."
+    },
+    "name": {
+      "description": "Name.",
+      "type": "string"
+    },
+    "properties": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Gateway properties.",
+      "propertyNames": {
+        "type": "string"
+      },
+      "type": "object"
+    },
+    "state": {
+      "description": "Gateway state.\n Please note that the state of the gateway is driven by the stats\n packages that are sent by the gateway.",
+      "enum": [
+        "NEVER_SEEN",
+        "ONLINE",
+        "OFFLINE"
+      ],
+      "title": "Gateway State",
+      "type": "string"
+    },
+    "tenantId": {
+      "description": "Tenant ID.",
+      "type": "string"
+    },
+    "updatedAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Last update timestamp."
+    }
+  },
+  "required": [
+    "tenantId",
+    "gatewayId",
+    "name",
+    "description",
+    "state"
+  ],
+  "title": "Gateway List Item",
+  "type": "object"
+}

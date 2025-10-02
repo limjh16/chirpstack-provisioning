@@ -1,0 +1,16 @@
+{
+  "$id": "api.ListFuotaDeploymentJobsResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "jobs": {
+      "description": "Jobs.",
+      "items": {
+        "$ref": "api.FuotaDeploymentJob.jsonschema.strict.json"
+      },
+      "type": "array"
+    }
+  },
+  "title": "List Fuota Deployment Jobs Response",
+  "type": "object"
+}

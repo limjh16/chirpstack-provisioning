@@ -1,0 +1,21 @@
+{
+  "$id": "api.GetMulticastGroupResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "createdAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Created at timestamp."
+    },
+    "multicastGroup": {
+      "$ref": "api.MulticastGroup.jsonschema.strict.json",
+      "description": "Multicast group object."
+    },
+    "updatedAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Last update timestamp."
+    }
+  },
+  "title": "Get Multicast Group Response",
+  "type": "object"
+}

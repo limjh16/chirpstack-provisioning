@@ -1,0 +1,27 @@
+{
+  "$id": "api.CreateUserRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "password": {
+      "description": "Password to set for the user.",
+      "type": "string"
+    },
+    "tenants": {
+      "description": "Add the user to the following tenants.",
+      "items": {
+        "$ref": "api.UserTenant.jsonschema.strict.json"
+      },
+      "type": "array"
+    },
+    "user": {
+      "$ref": "api.User.jsonschema.strict.json",
+      "description": "User object to create."
+    }
+  },
+  "required": [
+    "password"
+  ],
+  "title": "Create User Request",
+  "type": "object"
+}

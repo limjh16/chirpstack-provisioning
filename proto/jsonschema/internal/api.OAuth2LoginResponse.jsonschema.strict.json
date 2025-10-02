@@ -1,0 +1,16 @@
+{
+  "$id": "api.OAuth2LoginResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "token": {
+      "description": "Token to use for authentication.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "token"
+  ],
+  "title": "O Auth2 Login Response",
+  "type": "object"
+}

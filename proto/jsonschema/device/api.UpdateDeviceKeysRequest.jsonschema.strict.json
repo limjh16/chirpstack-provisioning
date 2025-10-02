@@ -1,0 +1,13 @@
+{
+  "$id": "api.UpdateDeviceKeysRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "deviceKeys": {
+      "$ref": "api.DeviceKeys.jsonschema.strict.json",
+      "description": "Device-keys object."
+    }
+  },
+  "title": "Update Device Keys Request",
+  "type": "object"
+}

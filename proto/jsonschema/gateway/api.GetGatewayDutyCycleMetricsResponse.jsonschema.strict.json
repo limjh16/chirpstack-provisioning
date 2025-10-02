@@ -1,0 +1,17 @@
+{
+  "$id": "api.GetGatewayDutyCycleMetricsResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "maxLoadPercentage": {
+      "$ref": "common.Metric.jsonschema.strict.json",
+      "description": "Percentage relative to max load."
+    },
+    "windowPercentage": {
+      "$ref": "common.Metric.jsonschema.strict.json",
+      "description": "Percentage relative to tracking window."
+    }
+  },
+  "title": "Get Gateway Duty Cycle Metrics Response",
+  "type": "object"
+}

@@ -1,0 +1,21 @@
+{
+  "$id": "api.MyDevicesIntegration.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "applicationId": {
+      "description": "Application ID (UUID).",
+      "type": "string"
+    },
+    "endpoint": {
+      "description": "myDevices API endpoint.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "applicationId",
+    "endpoint"
+  ],
+  "title": "My Devices Integration",
+  "type": "object"
+}

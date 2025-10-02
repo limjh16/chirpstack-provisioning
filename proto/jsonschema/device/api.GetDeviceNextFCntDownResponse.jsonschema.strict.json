@@ -1,0 +1,18 @@
+{
+  "$id": "api.GetDeviceNextFCntDownResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "fCntDown": {
+      "description": "FCntDown.",
+      "maximum": 4294967295,
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "fCntDown"
+  ],
+  "title": "Get Device NextF Cnt Down Response",
+  "type": "object"
+}

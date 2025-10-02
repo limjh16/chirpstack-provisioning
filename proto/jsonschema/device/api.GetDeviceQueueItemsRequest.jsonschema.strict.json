@@ -1,0 +1,21 @@
+{
+  "$id": "api.GetDeviceQueueItemsRequest.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "countOnly": {
+      "description": "Return only the count, not the result-set.",
+      "type": "boolean"
+    },
+    "devEui": {
+      "description": "Device EUI (EUI64).",
+      "type": "string"
+    }
+  },
+  "required": [
+    "devEui",
+    "countOnly"
+  ],
+  "title": "Get Device Queue Items Request",
+  "type": "object"
+}

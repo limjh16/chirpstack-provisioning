@@ -1,0 +1,25 @@
+{
+  "$id": "api.GetGatewayResponse.jsonschema.strict.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "createdAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Created at timestamp."
+    },
+    "gateway": {
+      "$ref": "api.Gateway.jsonschema.strict.json",
+      "description": "Gateway object."
+    },
+    "lastSeenAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Last seen at timestamp."
+    },
+    "updatedAt": {
+      "$ref": "google.protobuf.Timestamp.jsonschema.strict.json",
+      "description": "Last update timestamp."
+    }
+  },
+  "title": "Get Gateway Response",
+  "type": "object"
+}
