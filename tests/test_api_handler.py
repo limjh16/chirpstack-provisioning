@@ -2,36 +2,65 @@
 Tests for ChirpStack gRPC API handler.
 
 Following TDD methodology - these tests are written before implementation.
+Uses grpc_testing for proper gRPC service testing as recommended by gRPC project.
+Reference: https://github.com/grpc/grpc/tree/master/src/python/grpcio_tests/tests/unit
 """
 
 import pytest
 import grpc
+import grpc_testing
 from unittest.mock import Mock, patch
 from chirpstack_api import api
 
 
 @pytest.fixture
-def mock_channel():
-    """Mock gRPC channel."""
-    return Mock()
+def grpc_test_channel():
+    """Create a gRPC testing channel.
+
+    Uses grpc_testing.channel() to create a test channel that intercepts
+    gRPC calls for testing without requiring a running server.
+    Reference: https://github.com/grpc/grpc/tree/master/src/python/grpcio_testing
+    """
+    # Create a test channel that can intercept RPC calls
+    # We pass an empty list of service descriptors as we'll handle responses manually
+    return grpc_testing.channel([], time=grpc_testing.strict_real_time())
 
 
 @pytest.fixture
-def api_handler(mock_channel):
-    """Create API handler with mocked channel."""
-    with patch("grpc.insecure_channel", return_value=mock_channel):
+def api_handler(grpc_test_channel):
+    """Create API handler with test channel.
+
+    Patches grpc.insecure_channel to return our test channel so the
+    handler can be tested without a real gRPC server.
+    """
+    with patch("grpc.insecure_channel", return_value=grpc_test_channel):
         from chirpstack_provisioning.api_handler import ChirpStackAPIHandler
 
         handler = ChirpStackAPIHandler("localhost:8080", "test-token")
+        # Store test channel for test access
+        handler._test_channel = grpc_test_channel
         return handler
+
+
+def _setup_unary_unary_response(
+    channel, response, method_name="/api.TenantService/Create"
+):
+    """Helper to setup a unary-unary RPC response in the test channel.
+
+    This is the pattern used in gRPC's own test suite for testing
+    unary-unary RPC calls.
+    """
+    # This would be implemented when we have actual tests that need it
+    # For now, we'll continue using Mock for simplicity in TDD phase
+    pass
 
 
 class TestChirpStackAPIHandlerInitialization:
     """Test API handler initialization."""
 
-    def test_init_stores_server_and_token(self, mock_channel):
+    def test_init_stores_server_and_token(self, grpc_test_channel):
         """Test that initialization stores server and API token."""
-        with patch("grpc.insecure_channel", return_value=mock_channel):
+        with patch("grpc.insecure_channel", return_value=grpc_test_channel):
             from chirpstack_provisioning.api_handler import ChirpStackAPIHandler
 
             handler = ChirpStackAPIHandler("localhost:8080", "test-token")
@@ -39,15 +68,17 @@ class TestChirpStackAPIHandlerInitialization:
             assert handler.server == "localhost:8080"
             assert handler.api_token == "test-token"
 
-    def test_init_creates_grpc_channel(self, mock_channel):
+    def test_init_creates_grpc_channel(self, grpc_test_channel):
         """Test that initialization creates an insecure gRPC channel."""
-        with patch("grpc.insecure_channel", return_value=mock_channel) as mock_grpc:
+        with patch(
+            "grpc.insecure_channel", return_value=grpc_test_channel
+        ) as mock_grpc:
             from chirpstack_provisioning.api_handler import ChirpStackAPIHandler
 
             handler = ChirpStackAPIHandler("localhost:8080", "test-token")
 
             mock_grpc.assert_called_once_with("localhost:8080")
-            assert handler.channel == mock_channel
+            assert handler.channel == grpc_test_channel
 
     def test_init_creates_service_clients(self, api_handler):
         """Test that all required service clients are created."""
