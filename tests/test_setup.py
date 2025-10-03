@@ -123,8 +123,8 @@ class TestExtractTenants:
         data = load_setup_file(temp_setup_file)
         tenants = extract_tenants(data)
         assert isinstance(tenants, list)
-        assert len(tenants) == 1
-        assert tenants[0]["name"] == "Test Tenant"
+        assert len(tenants) == len(data["tenants"])
+        assert tenants[0]["name"] == data["tenants"][0]["name"]
 
     def test_extract_tenants_without_tenants_key(self):
         """Test extracting tenants when tenants key is missing."""
@@ -149,8 +149,8 @@ class TestExtractGlobalUsers:
         data = load_setup_file(temp_setup_file)
         users = extract_global_users(data)
         assert isinstance(users, list)
-        assert len(users) == 1
-        assert users[0]["email"] == "test@example.com"
+        assert len(users) == len(data["users"])
+        assert users[0]["email"] == data["users"][0]["email"]
 
     def test_extract_users_without_users_key(self):
         """Test extracting users when users key is missing."""
@@ -182,8 +182,8 @@ class TestExtractDeviceProfileTemplates:
         }
         templates = extract_device_profile_templates(data)
         assert isinstance(templates, list)
-        assert len(templates) == 1
-        assert templates[0]["name"] == "Template 1"
+        assert len(templates) == len(data["device_profile_templates"])
+        assert templates[0]["name"] == data["device_profile_templates"][0]["name"]
 
     def test_extract_templates_without_key(self):
         """Test extracting templates when key is missing."""
@@ -301,8 +301,8 @@ class TestIntegrationWorkflow:
         # Should handle missing sections gracefully
         assert templates == []
         assert users == []
-        assert len(tenants) == 1
-        assert tenants[0]["name"] == "Only Tenant"
+        assert len(tenants) == len(partial_setup["tenants"])
+        assert tenants[0]["name"] == partial_setup["tenants"][0]["name"]
 
 
 class TestNestedStructures:
@@ -322,10 +322,13 @@ class TestNestedStructures:
             ]
         }
         tenants = extract_tenants(data)
-        assert len(tenants) == 1
+        assert len(tenants) == len(data["tenants"])
         assert "gateways" in tenants[0]
-        assert len(tenants[0]["gateways"]) == 2
-        assert tenants[0]["gateways"][0]["name"] == "Gateway 1"
+        assert len(tenants[0]["gateways"]) == len(data["tenants"][0]["gateways"])
+        assert (
+            tenants[0]["gateways"][0]["name"]
+            == data["tenants"][0]["gateways"][0]["name"]
+        )
 
     def test_extract_applications_from_tenant(self):
         """Test extracting applications from a tenant."""
@@ -341,10 +344,15 @@ class TestNestedStructures:
             ]
         }
         tenants = extract_tenants(data)
-        assert len(tenants) == 1
+        assert len(tenants) == len(data["tenants"])
         assert "applications" in tenants[0]
-        assert len(tenants[0]["applications"]) == 2
-        assert tenants[0]["applications"][1]["name"] == "App 2"
+        assert len(tenants[0]["applications"]) == len(
+            data["tenants"][0]["applications"]
+        )
+        assert (
+            tenants[0]["applications"][1]["name"]
+            == data["tenants"][0]["applications"][1]["name"]
+        )
 
     def test_extract_device_profiles_from_tenant(self):
         """Test extracting device profiles from a tenant."""
@@ -359,9 +367,11 @@ class TestNestedStructures:
             ]
         }
         tenants = extract_tenants(data)
-        assert len(tenants) == 1
+        assert len(tenants) == len(data["tenants"])
         assert "device_profiles" in tenants[0]
-        assert len(tenants[0]["device_profiles"]) == 1
+        assert len(tenants[0]["device_profiles"]) == len(
+            data["tenants"][0]["device_profiles"]
+        )
 
     def test_extract_integrations_from_application(self):
         """Test extracting integrations from an application."""
@@ -403,7 +413,7 @@ class TestNestedStructures:
             ]
         }
         tenants = extract_tenants(data)
-        assert len(tenants) == 3
-        assert tenants[0]["name"] == "Tenant 1"
-        assert tenants[1]["name"] == "Tenant 2"
-        assert tenants[2]["name"] == "Tenant 3"
+        assert len(tenants) == len(data["tenants"])
+        assert tenants[0]["name"] == data["tenants"][0]["name"]
+        assert tenants[1]["name"] == data["tenants"][1]["name"]
+        assert tenants[2]["name"] == data["tenants"][2]["name"]
