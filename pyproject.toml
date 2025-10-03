@@ -26,4 +26,7 @@ dev = [
     "pytest (>=8.4.2,<9.0.0)",
     "ruff (>=0.13.2,<0.14.0)",
     "grpcio-testing (>=1.75.1,<2.0.0)"
+    "ruff (>=0.13.2,<0.14.0)"
+    "sourcemeta-jsonschema (>=11.8.3,<12.0.0)"
+>>>>>>> Stashed changes
 ]

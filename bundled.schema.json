@@ -1,0 +1,1568 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "setup.schema.json",
+  "title": "ChirpStack Setup Configuration",
+  "description": "Schema for ChirpStack provisioning setup data that defines tenants, applications, gateways, device profiles, and users in a hierarchical structure",
+  "type": "object",
+  "properties": {
+    "device_profile_templates": {
+      "description": "Device profile templates that can be referenced by device profiles",
+      "type": "array",
+      "items": {
+        "$ref": "api.DeviceProfileTemplate.jsonschema.strict.json"
+      }
+    },
+    "tenants": {
+      "description": "Tenants with their associated applications, gateways, device profiles, and users",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/TenantWithChildren"
+      }
+    },
+    "users": {
+      "description": "Global users that can be assigned to tenants",
+      "type": "array",
+      "items": {
+        "$ref": "api.User.jsonschema.strict.json"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "ApplicationWithIntegrations": {
+      "description": "Application object with nested integrations and multicast_groups. Note: Properties are referenced individually because the base Application schema has additionalProperties:false, which cannot be overridden in allOf.",
+      "type": "object",
+      "required": [ "id", "name", "description", "tenantId" ],
+      "properties": {
+        "id": {
+          "$ref": "api.Application.jsonschema.strict.json#/properties/id"
+        },
+        "description": {
+          "$ref": "api.Application.jsonschema.strict.json#/properties/description"
+        },
+        "integrations": {
+          "description": "Integrations associated with this application. Keys are integration types.",
+          "type": "object",
+          "properties": {
+            "AwsSnsIntegration": {
+              "$ref": "api.AwsSnsIntegration.jsonschema.strict.json"
+            },
+            "AzureServiceBusIntegration": {
+              "$ref": "api.AzureServiceBusIntegration.jsonschema.strict.json"
+            },
+            "BlynkIntegration": {
+              "$ref": "api.BlynkIntegration.jsonschema.strict.json"
+            },
+            "GcpPubSubIntegration": {
+              "$ref": "api.GcpPubSubIntegration.jsonschema.strict.json"
+            },
+            "HttpIntegration": {
+              "$ref": "api.HttpIntegration.jsonschema.strict.json"
+            },
+            "IftttIntegration": {
+              "$ref": "api.IftttIntegration.jsonschema.strict.json"
+            },
+            "InfluxDbIntegration": {
+              "$ref": "api.InfluxDbIntegration.jsonschema.strict.json"
+            },
+            "MyDevicesIntegration": {
+              "$ref": "api.MyDevicesIntegration.jsonschema.strict.json"
+            },
+            "PilotThingsIntegration": {
+              "$ref": "api.PilotThingsIntegration.jsonschema.strict.json"
+            },
+            "ThingsBoardIntegration": {
+              "$ref": "api.ThingsBoardIntegration.jsonschema.strict.json"
+            }
+          },
+          "additionalProperties": false
+        },
+        "multicast_groups": {
+          "description": "Multicast groups associated with this application",
+          "type": "array",
+          "items": {
+            "$ref": "api.MulticastGroup.jsonschema.strict.json"
+          }
+        },
+        "name": {
+          "$ref": "api.Application.jsonschema.strict.json#/properties/name"
+        },
+        "tags": {
+          "$ref": "api.Application.jsonschema.strict.json#/properties/tags"
+        },
+        "tenantId": {
+          "$ref": "api.Application.jsonschema.strict.json#/properties/tenantId"
+        }
+      },
+      "additionalProperties": false
+    },
+    "TenantWithChildren": {
+      "description": "Tenant object with nested children (gateways, applications, device_profiles, users). Note: Properties are referenced individually because the base Tenant schema has additionalProperties:false, which cannot be overridden in allOf.",
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "description",
+        "canHaveGateways",
+        "maxGatewayCount",
+        "maxDeviceCount",
+        "privateGatewaysUp",
+        "privateGatewaysDown"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "api.Tenant.jsonschema.strict.json#/properties/id"
+        },
+        "description": {
+          "$ref": "api.Tenant.jsonschema.strict.json#/properties/description"
+        },
+        "applications": {
+          "description": "Applications associated with this tenant",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ApplicationWithIntegrations"
+          }
+        },
+        "canHaveGateways": {
+          "$ref": "api.Tenant.jsonschema.strict.json#/properties/canHaveGateways"
+        },
+        "device_profiles": {
+          "description": "Device profiles associated with this tenant",
+          "type": "array",
+          "items": {
+            "$ref": "api.DeviceProfile.jsonschema.strict.json"
+          }
+        },
+        "gateways": {
+          "description": "Gateways associated with this tenant",
+          "type": "array",
+          "items": {
+            "$ref": "api.Gateway.jsonschema.strict.json"
+          }
+        },
+        "maxDeviceCount": {
+          "$ref": "api.Tenant.jsonschema.strict.json#/properties/maxDeviceCount"
+        },
+        "maxGatewayCount": {
+          "$ref": "api.Tenant.jsonschema.strict.json#/properties/maxGatewayCount"
+        },
+        "name": {
+          "$ref": "api.Tenant.jsonschema.strict.json#/properties/name"
+        },
+        "privateGatewaysDown": {
+          "$ref": "api.Tenant.jsonschema.strict.json#/properties/privateGatewaysDown"
+        },
+        "privateGatewaysUp": {
+          "$ref": "api.Tenant.jsonschema.strict.json#/properties/privateGatewaysUp"
+        },
+        "tags": {
+          "$ref": "api.Tenant.jsonschema.strict.json#/properties/tags"
+        },
+        "users": {
+          "description": "Users associated with this tenant",
+          "type": "array",
+          "items": {
+            "$ref": "api.User.jsonschema.strict.json"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "api.AppLayerParams.jsonschema.strict.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "api.AppLayerParams.jsonschema.strict.json",
+      "title": "App Layer Params",
+      "type": "object",
+      "required": [
+        "ts003Version",
+        "ts003FPort",
+        "ts004Version",
+        "ts004FPort",
+        "ts005Version",
+        "ts005FPort"
+      ],
+      "properties": {
+        "ts003FPort": {
+          "description": "TS003 fPort.",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "ts003Version": {
+          "title": "Ts003 Version",
+          "description": "TS003 version (Application Layer Clock Sync).",
+          "type": "string",
+          "enum": [ "TS003_NOT_IMPLEMENTED", "TS003_V100", "TS003_v200" ]
+        },
+        "ts004FPort": {
+          "description": "TS004 fPort.",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "ts004Version": {
+          "title": "Ts004 Version",
+          "description": "TS004 version (Fragmented Data Block Transport).",
+          "type": "string",
+          "enum": [ "TS004_NOT_IMPLEMENTED", "TS004_V100", "TS004_V200" ]
+        },
+        "ts005FPort": {
+          "description": "TS005 fPort.",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "ts005Version": {
+          "title": "Ts005 Version",
+          "description": "TS005 version (Remote Multicast Setup).",
+          "type": "string",
+          "enum": [ "TS005_NOT_IMPLEMENTED", "TS005_V100", "TS005_V200" ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "api.Application.jsonschema.strict.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "api.Application.jsonschema.strict.json",
+      "title": "Application",
+      "type": "object",
+      "required": [ "id", "name", "description", "tenantId" ],
+      "properties": {
+        "id": {
+          "description": "Application ID (UUID).\n Note: on create this will be automatically generated.",
+          "type": "string"
+        },
+        "description": {
+          "description": "Application description.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Application name.",
+          "type": "string"
+        },
+        "tags": {
+          "description": "Tags (user defined).\n These tags can be used to add additional information to the application.\n These tags are exposed in all the integration events of devices under\n this application.",
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "tenantId": {
+          "description": "Tenant ID (UUID).",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "api.AwsSnsIntegration.jsonschema.strict.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "api.AwsSnsIntegration.jsonschema.strict.json",
+      "title": "Aws Sns Integration",
+      "type": "object",
+      "required": [
+        "applicationId",
+        "encoding",
+        "region",
+        "accessKeyId",
+        "secretAccessKey",
+        "topicArn"
+      ],
+      "properties": {
+        "accessKeyId": {
+          "description": "AWS Access Key ID.",
+          "type": "string"
+        },
+        "applicationId": {
+          "description": "Application ID (UUID).",
+          "type": "string"
+        },
+        "encoding": {
+          "title": "Encoding",
+          "description": "Encoding.",
+          "type": "string",
+          "enum": [ "JSON", "PROTOBUF" ]
+        },
+        "region": {
+          "description": "AWS region.",
+          "type": "string"
+        },
+        "secretAccessKey": {
+          "description": "AWS Secret Access Key.",
+          "type": "string"
+        },
+        "topicArn": {
+          "description": "Topic ARN.",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "api.AzureServiceBusIntegration.jsonschema.strict.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "api.AzureServiceBusIntegration.jsonschema.strict.json",
+      "title": "Azure Service Bus Integration",
+      "type": "object",
+      "required": [ "applicationId", "encoding", "connectionString", "publishName" ],
+      "properties": {
+        "applicationId": {
+          "description": "Application ID (UUID).",
+          "type": "string"
+        },
+        "connectionString": {
+          "description": "Connection string.",
+          "type": "string"
+        },
+        "encoding": {
+          "title": "Encoding",
+          "description": "Encoding.",
+          "type": "string",
+          "enum": [ "JSON", "PROTOBUF" ]
+        },
+        "publishName": {
+          "description": "Publish name.\n This is the name of the topic or queue.",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "api.BlynkIntegration.jsonschema.strict.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "api.BlynkIntegration.jsonschema.strict.json",
+      "title": "Blynk Integration",
+      "type": "object",
+      "required": [ "applicationId", "token" ],
+      "properties": {
+        "applicationId": {
+          "description": "Application ID (UUID).",
+          "type": "string"
+        },
+        "token": {
+          "description": "Blynk integration token.",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "api.DeviceProfile.jsonschema.strict.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "api.DeviceProfile.jsonschema.strict.json",
+      "title": "Device Profile",
+      "type": "object",
+      "required": [
+        "id",
+        "tenantId",
+        "name",
+        "description",
+        "region",
+        "macVersion",
+        "regParamsRevision",
+        "adrAlgorithmId",
+        "payloadCodecRuntime",
+        "payloadCodecScript",
+        "flushQueueOnActivate",
+        "uplinkInterval",
+        "deviceStatusReqInterval",
+        "supportsOtaa",
+        "supportsClassB",
+        "supportsClassC",
+        "classBTimeout",
+        "classBPingSlotPeriodicity",
+        "classBPingSlotDr",
+        "classBPingSlotFreq",
+        "classCTimeout",
+        "abpRx1Delay",
+        "abpRx1DrOffset",
+        "abpRx2Dr",
+        "abpRx2Freq",
+        "autoDetectMeasurements",
+        "regionConfigId",
+        "isRelay",
+        "isRelayEd",
+        "relayEdRelayOnly",
+        "relayEnabled",
+        "relayCadPeriodicity",
+        "relayDefaultChannelIndex",
+        "relaySecondChannelFreq",
+        "relaySecondChannelDr",
+        "relaySecondChannelAckOffset",
+        "relayEdActivationMode",
+        "relayEdSmartEnableLevel",
+        "relayEdBackOff",
+        "relayEdUplinkLimitBucketSize",
+        "relayEdUplinkLimitReloadRate",
+        "relayJoinReqLimitReloadRate",
+        "relayNotifyLimitReloadRate",
+        "relayGlobalUplinkLimitReloadRate",
+        "relayOverallLimitReloadRate",
+        "relayJoinReqLimitBucketSize",
+        "relayNotifyLimitBucketSize",
+        "relayGlobalUplinkLimitBucketSize",
+        "relayOverallLimitBucketSize",
+        "allowRoaming",
+        "rx1Delay"
+      ],
+      "properties": {
+        "id": {
+          "description": "Device-profile ID (UUID).\n Note: on create this will be automatically generated.",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description.",
+          "type": "string"
+        },
+        "abpRx1Delay": {
+          "description": "RX1 delay (for ABP).",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "abpRx1DrOffset": {
+          "description": "RX1 DR offset (for ABP).",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "abpRx2Dr": {
+          "description": "RX2 DR (for ABP).",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "abpRx2Freq": {
+          "description": "RX2 frequency (for ABP, Hz).",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "adrAlgorithmId": {
+          "description": "ADR algorithm ID.",
+          "type": "string"
+        },
+        "allowRoaming": {
+          "title": "Allow roaming.",
+          "description": "If set to true, it means that the device is allowed to use roaming.",
+          "type": "boolean"
+        },
+        "appLayerParams": {
+          "description": "Application Layer parameters.",
+          "$ref": "api.AppLayerParams.jsonschema.strict.json"
+        },
+        "autoDetectMeasurements": {
+          "description": "Auto-detect measurements.\n If set to true, measurements will be automatically added based on the\n keys of the decoded payload. In cases where the decoded payload contains\n random keys in the data, you want to set this to false.",
+          "type": "boolean"
+        },
+        "classBPingSlotDr": {
+          "description": "Class-B ping-slot DR.",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "classBPingSlotFreq": {
+          "description": "Class-B ping-slot freq (Hz).",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "classBPingSlotPeriodicity": {
+          "title": "Class-B ping-slot periodicity.\n Valid options are: 0 - 7.",
+          "description": "Number of ping-slots per beacon-period:\n pingNb = 2^(7-periodicity)\n\n Periodicity: 0 = 128 ping-slots per beacon period = ~ every 1 sec\n Periodicity: 7 = 1 ping-slot per beacon period = ~ every 128 sec",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "classBTimeout": {
+          "description": "Class-B timeout (seconds).\n This is the maximum time ChirpStack will wait to receive an acknowledgement\n from the device (if requested).",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "classCTimeout": {
+          "description": "Class-C timeout (seconds).\n This is the maximum time ChirpStack will wait to receive an acknowledgement\n from the device (if requested).",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "deviceStatusReqInterval": {
+          "description": "Device-status request interval (times / day).\n This defines the times per day that ChirpStack will request the\n device-status from the device.",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "flushQueueOnActivate": {
+          "description": "Flush queue on device activation.",
+          "type": "boolean"
+        },
+        "isRelay": {
+          "description": "Device is a Relay device.\n Enable this in case the device is a Relay. A Relay device implements TS011\n and is able to relay data from relay capable devices.\n See for more information the TS011 specification.",
+          "type": "boolean"
+        },
+        "isRelayEd": {
+          "description": "Device is a Relay end-device.\n Enable this in case the device is an end-device that can operate under a\n Relay. Please refer to the TS011 specification for more information.",
+          "type": "boolean"
+        },
+        "macVersion": {
+          "title": "Mac Version",
+          "description": "LoRaWAN mac-version.",
+          "type": "string",
+          "enum": [
+            "LORAWAN_1_0_0",
+            "LORAWAN_1_0_1",
+            "LORAWAN_1_0_2",
+            "LORAWAN_1_0_3",
+            "LORAWAN_1_0_4",
+            "LORAWAN_1_1_0"
+          ]
+        },
+        "measurements": {
+          "description": "Measurements.\n If defined, ChirpStack will visualize these metrics in the web-interface.",
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "$ref": "api.Measurement.jsonschema.strict.json"
+          }
+        },
+        "name": {
+          "description": "Name.",
+          "type": "string"
+        },
+        "payloadCodecRuntime": {
+          "title": "Codec Runtime",
+          "description": "Payload codec runtime.",
+          "type": "string",
+          "enum": [ "NONE", "CAYENNE_LPP", "JS" ]
+        },
+        "payloadCodecScript": {
+          "description": "Payload codec script.",
+          "type": "string"
+        },
+        "regParamsRevision": {
+          "title": "Reg Params Revision",
+          "description": "Regional parameters revision.",
+          "type": "string",
+          "enum": [
+            "A",
+            "B",
+            "RP002_1_0_0",
+            "RP002_1_0_1",
+            "RP002_1_0_2",
+            "RP002_1_0_3",
+            "RP002_1_0_4"
+          ]
+        },
+        "region": {
+          "title": "Region",
+          "description": "Region.",
+          "type": "string",
+          "enum": [
+            "EU868",
+            "US915",
+            "CN779",
+            "EU433",
+            "AU915",
+            "CN470",
+            "AS923",
+            "AS923_2",
+            "AS923_3",
+            "AS923_4",
+            "KR920",
+            "IN865",
+            "RU864",
+            "ISM2400"
+          ]
+        },
+        "regionConfigId": {
+          "description": "Region configuration ID.\n If set, devices will only use the associated region. If let blank, then\n devices will use all regions matching the selected common-name. Note\n that multiple region configurations can exist for the same common-name,\n e.g. to provide an 8 channel and 16 channel configuration for the US915\n band.",
+          "type": "string"
+        },
+        "relayCadPeriodicity": {
+          "title": "Cad Periodicity",
+          "description": "Relay CAD periodicity.",
+          "type": "string",
+          "enum": [ "SEC_1", "MS_500", "MS_250", "MS_100", "MS_50", "MS_20" ]
+        },
+        "relayDefaultChannelIndex": {
+          "description": "Relay default channel index.\n Valid values are 0 and 1, please refer to the RP002 specification for\n the meaning of these values.",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "relayEdActivationMode": {
+          "title": "Relay Mode Activation",
+          "description": "Relay end-device activation mode.",
+          "type": "string",
+          "enum": [
+            "DISABLE_RELAY_MODE",
+            "ENABLE_RELAY_MODE",
+            "DYNAMIC",
+            "END_DEVICE_CONTROLLED"
+          ]
+        },
+        "relayEdBackOff": {
+          "description": "Relay end-device back-off (in case it does not receive WOR ACK frame).\n 0 = Always send a LoRaWAN uplink\n 1..63 = Send a LoRaWAN uplink after X WOR frames without a WOR ACK",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "relayEdRelayOnly": {
+          "description": "End-device only accept data through relay.\n Only accept data for this device through a relay. This setting is useful\n for testing as in case of a test-setup, the end-device is usually within\n range of the gateway.",
+          "type": "boolean"
+        },
+        "relayEdSmartEnableLevel": {
+          "description": "Relay end-device smart-enable level.",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "relayEdUplinkLimitBucketSize": {
+          "title": "Relay end-device uplink limit bucket size.",
+          "description": "This field indicates the multiplier to determine the bucket size\n according to the following formula:\n BucketSize TOKEN = _reload_rate x _bucket_size\n\n Valid values (0 - 3):\n   0 = 1\n   1 = 2\n   2 = 4\n   3 = 12",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "relayEdUplinkLimitReloadRate": {
+          "title": "Relay end-device uplink limit reload rate.",
+          "description": "Valid values:\n   * 0 - 62 = X tokens every hour\n   * 63     = no limitation",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "relayEnabled": {
+          "description": "Relay must be enabled.",
+          "type": "boolean"
+        },
+        "relayGlobalUplinkLimitBucketSize": {
+          "title": "Relay globak uplink limit bucket size.",
+          "description": "This field indicates the multiplier to determine the bucket size\n according to the following formula:\n BucketSize TOKEN = _reload_rate x _bucket_size\n\n Valid values (0 - 3):\n   0 = 1\n   1 = 2\n   2 = 4\n   3 = 12",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "relayGlobalUplinkLimitReloadRate": {
+          "title": "Relay global uplink limit reload rate.",
+          "description": "Valid values:\n   * 0 - 126 = X tokens every hour\n   * 127     = no limitation",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "relayJoinReqLimitBucketSize": {
+          "title": "Relay join-request limit bucket size.",
+          "description": "This field indicates the multiplier to determine the bucket size\n according to the following formula:\n BucketSize TOKEN = _reload_rate x _bucket_size\n\n Valid values (0 - 3):\n   0 = 1\n   1 = 2\n   2 = 4\n   3 = 12",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "relayJoinReqLimitReloadRate": {
+          "title": "Relay join-request limit reload rate.",
+          "description": "Valid values:\n   * 0 - 126 = X tokens every hour\n   * 127     = no limitation",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "relayNotifyLimitBucketSize": {
+          "title": "Relay notify limit bucket size.",
+          "description": "This field indicates the multiplier to determine the bucket size\n according to the following formula:\n BucketSize TOKEN = _reload_rate x _bucket_size\n\n Valid values (0 - 3):\n   0 = 1\n   1 = 2\n   2 = 4\n   3 = 12",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "relayNotifyLimitReloadRate": {
+          "title": "Relay notify limit reload rate.",
+          "description": "Valid values:\n   * 0 - 126 = X tokens every hour\n   * 127     = no limitation",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "relayOverallLimitBucketSize": {
+          "title": "Relay overall limit bucket size.",
+          "description": "This field indicates the multiplier to determine the bucket size\n according to the following formula:\n BucketSize TOKEN = _reload_rate x _bucket_size\n\n Valid values (0 - 3):\n   0 = 1\n   1 = 2\n   2 = 4\n   3 = 12",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "relayOverallLimitReloadRate": {
+          "title": "Relay overall limit reload rate.",
+          "description": "Valid values:\n   * 0 - 126 = X tokens every hour\n   * 127     = no limitation",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "relaySecondChannelAckOffset": {
+          "title": "Second Ch Ack Offset",
+          "description": "Relay second channel ACK offset.",
+          "type": "string",
+          "enum": [ "KHZ_0", "KHZ_200", "KHZ_400", "KHZ_800", "KHZ_1600", "KHZ_3200" ]
+        },
+        "relaySecondChannelDr": {
+          "description": "Relay second channel DR.",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "relaySecondChannelFreq": {
+          "description": "Relay second channel frequency (Hz).",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "rx1Delay": {
+          "title": "RX1 Delay.",
+          "description": "This makes it possible to override the system RX1 Delay. Please note that\n this values only has effect in case it is higher than the system value.\n In other words, it can be used to increase the RX1 Delay but not to decrease\n it.\n Valid options are 1 - 15 (0 = always use system RX1 Delay).",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "supportsClassB": {
+          "description": "Supports Class B.",
+          "type": "boolean"
+        },
+        "supportsClassC": {
+          "description": "Supports Class-C.",
+          "type": "boolean"
+        },
+        "supportsOtaa": {
+          "description": "Supports OTAA.",
+          "type": "boolean"
+        },
+        "tags": {
+          "description": "Tags (user defined).\n These tags can be used to add additional information the the\n device-profile. These tags are exposed in all the integration events of\n devices using this device-profile.",
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "tenantId": {
+          "description": "Tenant ID (UUID).",
+          "type": "string"
+        },
+        "uplinkInterval": {
+          "description": "Uplink interval (seconds).\n This defines the expected uplink interval which the device uses for\n communication. If the uplink interval has expired and no uplink has\n been received, the device is considered inactive.",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "api.DeviceProfileTemplate.jsonschema.strict.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "api.DeviceProfileTemplate.jsonschema.strict.json",
+      "title": "Device Profile Template",
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "description",
+        "vendor",
+        "firmware",
+        "region",
+        "macVersion",
+        "regParamsRevision",
+        "adrAlgorithmId",
+        "payloadCodecRuntime",
+        "payloadCodecScript",
+        "flushQueueOnActivate",
+        "uplinkInterval",
+        "deviceStatusReqInterval",
+        "supportsOtaa",
+        "supportsClassB",
+        "supportsClassC",
+        "classBTimeout",
+        "classBPingSlotPeriodicity",
+        "classBPingSlotDr",
+        "classBPingSlotFreq",
+        "classCTimeout",
+        "abpRx1Delay",
+        "abpRx1DrOffset",
+        "abpRx2Dr",
+        "abpRx2Freq",
+        "autoDetectMeasurements"
+      ],
+      "properties": {
+        "id": {
+          "description": "Device-profile template ID.",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description.",
+          "type": "string"
+        },
+        "abpRx1Delay": {
+          "description": "RX1 delay (for ABP).",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "abpRx1DrOffset": {
+          "description": "RX1 DR offset (for ABP).",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "abpRx2Dr": {
+          "description": "RX2 DR (for ABP).",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "abpRx2Freq": {
+          "description": "RX2 frequency (for ABP, Hz).",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "adrAlgorithmId": {
+          "description": "ADR algorithm ID.",
+          "type": "string"
+        },
+        "autoDetectMeasurements": {
+          "description": "Auto-detect measurements.\n If set to true, measurements will be automatically added based on the\n keys of the decoded payload. In cases where the decoded payload contains\n random keys in the data, you want to set this to false.",
+          "type": "boolean"
+        },
+        "classBPingSlotDr": {
+          "description": "Class-B ping-slot DR.",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "classBPingSlotFreq": {
+          "description": "Class-B ping-slot freq (Hz).",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "classBPingSlotPeriodicity": {
+          "title": "Class-B ping-slot periodicity (only for Class-B).\n Valid options are: 0 - 7.",
+          "description": "Number of ping-slots per beacon-period:\n pingNb = 2^(7-periodicity)\n\n Periodicity: 0 = 128 ping-slots per beacon period = ~ every 1 sec\n Periodicity: 7 = 1 ping-slot per beacon period = ~ every 128 sec",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "classBTimeout": {
+          "description": "Class-B timeout (seconds).\n This is the maximum time ChirpStack will wait to receive an acknowledgement from the device (if requested).",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "classCTimeout": {
+          "description": "Class-C timeout (seconds).\n This is the maximum time ChirpStack will wait to receive an acknowledgement from the device (if requested).",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "deviceStatusReqInterval": {
+          "description": "Device-status request interval (times / day).\n This defines the times per day that ChirpStack will request the device-status\n from the device.",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "firmware": {
+          "description": "Firmware.",
+          "type": "string"
+        },
+        "flushQueueOnActivate": {
+          "description": "Flush queue on device activation.",
+          "type": "boolean"
+        },
+        "macVersion": {
+          "title": "Mac Version",
+          "description": "LoRaWAN mac-version.",
+          "type": "string",
+          "enum": [
+            "LORAWAN_1_0_0",
+            "LORAWAN_1_0_1",
+            "LORAWAN_1_0_2",
+            "LORAWAN_1_0_3",
+            "LORAWAN_1_0_4",
+            "LORAWAN_1_1_0"
+          ]
+        },
+        "measurements": {
+          "description": "Measurements.\n If defined, ChirpStack will visualize these metrics in the web-interface.",
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "$ref": "api.Measurement.jsonschema.strict.json"
+          }
+        },
+        "name": {
+          "description": "Name.",
+          "type": "string"
+        },
+        "payloadCodecRuntime": {
+          "title": "Codec Runtime",
+          "description": "Payload codec runtime.",
+          "type": "string",
+          "enum": [ "NONE", "CAYENNE_LPP", "JS" ]
+        },
+        "payloadCodecScript": {
+          "description": "Payload codec script.",
+          "type": "string"
+        },
+        "regParamsRevision": {
+          "title": "Reg Params Revision",
+          "description": "Regional parameters revision.",
+          "type": "string",
+          "enum": [
+            "A",
+            "B",
+            "RP002_1_0_0",
+            "RP002_1_0_1",
+            "RP002_1_0_2",
+            "RP002_1_0_3",
+            "RP002_1_0_4"
+          ]
+        },
+        "region": {
+          "title": "Region",
+          "description": "Region.",
+          "type": "string",
+          "enum": [
+            "EU868",
+            "US915",
+            "CN779",
+            "EU433",
+            "AU915",
+            "CN470",
+            "AS923",
+            "AS923_2",
+            "AS923_3",
+            "AS923_4",
+            "KR920",
+            "IN865",
+            "RU864",
+            "ISM2400"
+          ]
+        },
+        "supportsClassB": {
+          "description": "Supports Class B.",
+          "type": "boolean"
+        },
+        "supportsClassC": {
+          "description": "Supports Class-C.",
+          "type": "boolean"
+        },
+        "supportsOtaa": {
+          "description": "Supports OTAA.",
+          "type": "boolean"
+        },
+        "tags": {
+          "description": "User defined tags.",
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "uplinkInterval": {
+          "description": "Uplink interval (seconds).\n This defines the expected uplink interval which the device uses for\n communication. When the uplink interval has expired and no uplink has\n been received, the device is considered inactive.",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "vendor": {
+          "description": "Vendor.",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "api.Gateway.jsonschema.strict.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "api.Gateway.jsonschema.strict.json",
+      "title": "Gateway",
+      "type": "object",
+      "required": [ "gatewayId", "name", "description", "tenantId", "statsInterval" ],
+      "properties": {
+        "description": {
+          "description": "Description.",
+          "type": "string"
+        },
+        "gatewayId": {
+          "description": "Gateway ID (EUI64).",
+          "type": "string"
+        },
+        "location": {
+          "description": "Gateway location.",
+          "$ref": "common.Location.jsonschema.strict.json"
+        },
+        "metadata": {
+          "description": "Metadata (provided by the gateway).",
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "name": {
+          "description": "Name.",
+          "type": "string"
+        },
+        "statsInterval": {
+          "description": "Stats interval (seconds).\n This defines the expected interval in which the gateway sends its\n statistics.",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "tags": {
+          "description": "Tags.",
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "tenantId": {
+          "description": "Tenant ID (UUID).",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "api.GcpPubSubIntegration.jsonschema.strict.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "api.GcpPubSubIntegration.jsonschema.strict.json",
+      "title": "Gcp Pub Sub Integration",
+      "type": "object",
+      "required": [
+        "applicationId",
+        "encoding",
+        "credentialsFile",
+        "projectId",
+        "topicName"
+      ],
+      "properties": {
+        "applicationId": {
+          "description": "Application ID (UUID).",
+          "type": "string"
+        },
+        "credentialsFile": {
+          "description": "Credentials file.\n This IAM service-account credentials file (JSON) must have the following\n Pub/Sub roles:\n * Pub/Sub Publisher",
+          "type": "string"
+        },
+        "encoding": {
+          "title": "Encoding",
+          "description": "Encoding.",
+          "type": "string",
+          "enum": [ "JSON", "PROTOBUF" ]
+        },
+        "projectId": {
+          "description": "Project ID.",
+          "type": "string"
+        },
+        "topicName": {
+          "description": "Topic name.\n This is the name of the Pub/Sub topic.",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "api.HttpIntegration.jsonschema.strict.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "api.HttpIntegration.jsonschema.strict.json",
+      "title": "Http Integration",
+      "type": "object",
+      "required": [ "applicationId", "encoding", "eventEndpointUrl" ],
+      "properties": {
+        "applicationId": {
+          "description": "Application ID (UUID).",
+          "type": "string"
+        },
+        "encoding": {
+          "title": "Encoding",
+          "description": "Payload encoding.",
+          "type": "string",
+          "enum": [ "JSON", "PROTOBUF" ]
+        },
+        "eventEndpointUrl": {
+          "description": "Event endpoint URL.\n The HTTP integration will POST all events to this enpoint. The request\n will contain a query parameters \"event\" containing the type of the\n event.",
+          "type": "string"
+        },
+        "headers": {
+          "description": "HTTP headers to set when making requests.",
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "api.IftttIntegration.jsonschema.strict.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "api.IftttIntegration.jsonschema.strict.json",
+      "title": "Ifttt Integration",
+      "type": "object",
+      "required": [ "applicationId", "key", "arbitraryJson", "eventPrefix" ],
+      "properties": {
+        "applicationId": {
+          "description": "Application ID (UUID).",
+          "type": "string"
+        },
+        "arbitraryJson": {
+          "description": "Arbitrary JSON.\n If set to true, ChirpStack events will be sent as-is as arbitrary JSON\n payload. If set to false (default), the 3 JSON values format will be used.",
+          "type": "boolean"
+        },
+        "eventPrefix": {
+          "description": "Event prefix.\n If set, the event name will be PREFIX_EVENT. For example if event_prefix\n is set to weatherstation, and uplink event will be sent as\n weatherstation_up to the IFTTT webhook.\n Note: Only characters in the A-Z, a-z and 0-9 range are allowed.",
+          "type": "string"
+        },
+        "key": {
+          "description": "Key.\n This key can be obtained from the IFTTT Webhooks documentation page.",
+          "type": "string"
+        },
+        "uplinkValues": {
+          "title": "Values.\n Up to 2 values can be forwarded to IFTTT. These values must map to the\n decoded payload keys. For example:\n {\n   \"batteryLevel\": 75.3,\n   \"buttons\": [{\"pressed\": false}, {\"pressed\": true}]\n }\n You would specify the following fields:\n uplink_values = [\"batteryLevel\", \"buttons_0_pressed\"]",
+          "description": "Notes: The first value is always used for the DevEUI.\n Ignored if arbitrary_json is set to true.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "api.InfluxDbIntegration.jsonschema.strict.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "api.InfluxDbIntegration.jsonschema.strict.json",
+      "title": "Influx Db Integration",
+      "type": "object",
+      "required": [
+        "applicationId",
+        "endpoint",
+        "db",
+        "username",
+        "password",
+        "retentionPolicyName",
+        "precision",
+        "version",
+        "token",
+        "organization",
+        "bucket"
+      ],
+      "properties": {
+        "applicationId": {
+          "description": "Application ID (UUID).",
+          "type": "string"
+        },
+        "bucket": {
+          "description": "Bucket. (InfluxDb v2)",
+          "type": "string"
+        },
+        "db": {
+          "description": "InfluxDb database name. (InfluxDb v1)",
+          "type": "string"
+        },
+        "endpoint": {
+          "description": "InfluxDb API write endpoint (e.g. http://localhost:8086/write).",
+          "type": "string"
+        },
+        "organization": {
+          "description": "Organization. (InfluxDb v2)",
+          "type": "string"
+        },
+        "password": {
+          "description": "InfluxDb password. (InfluxDb v1)",
+          "type": "string"
+        },
+        "precision": {
+          "title": "Influx Db Precision",
+          "description": "InfluxDb timestamp precision (InfluxDb v1).",
+          "type": "string",
+          "enum": [ "NS", "U", "MS", "S", "M", "H" ]
+        },
+        "retentionPolicyName": {
+          "description": "InfluxDb retention policy name. (InfluxDb v1)",
+          "type": "string"
+        },
+        "token": {
+          "description": "Token. (InfluxDb v2)",
+          "type": "string"
+        },
+        "username": {
+          "description": "InfluxDb username. (InfluxDb v1)",
+          "type": "string"
+        },
+        "version": {
+          "title": "Influx Db Version",
+          "description": "InfluxDb version.",
+          "type": "string",
+          "enum": [ "INFLUXDB_1", "INFLUXDB_2" ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "api.Measurement.jsonschema.strict.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "api.Measurement.jsonschema.strict.json",
+      "title": "Measurement",
+      "type": "object",
+      "required": [ "name", "kind" ],
+      "properties": {
+        "kind": {
+          "title": "Measurement Kind",
+          "description": "Kind.",
+          "type": "string",
+          "enum": [ "UNKNOWN", "COUNTER", "ABSOLUTE", "GAUGE", "STRING" ]
+        },
+        "name": {
+          "description": "Name (user defined).",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "api.MulticastGroup.jsonschema.strict.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "api.MulticastGroup.jsonschema.strict.json",
+      "title": "Multicast Group",
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "applicationId",
+        "region",
+        "mcAddr",
+        "mcNwkSKey",
+        "mcAppSKey",
+        "fCnt",
+        "groupType",
+        "dr",
+        "frequency",
+        "classBPingSlotPeriodicity",
+        "classCSchedulingType"
+      ],
+      "properties": {
+        "id": {
+          "description": "ID (UUID).\n This will be generated automatically on create.",
+          "type": "string"
+        },
+        "applicationId": {
+          "description": "Application ID.\n After creation, this can not be updated.",
+          "type": "string"
+        },
+        "classBPingSlotPeriodicity": {
+          "title": "Class-B ping-slot periodicity (only for Class-B).\n Valid options are: 0 - 7.",
+          "description": "Number of ping-slots per beacon-period:\n pingNb = 2^(7-periodicity)\n\n Periodicity: 0 = 128 ping-slots per beacon period = ~ every 1 sec\n Periodicity: 7 = 1 ping-slot per beacon period = ~ every 128 sec",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "classCSchedulingType": {
+          "title": "Multicast Group Scheduling Type",
+          "description": "Scheduling type (only for Class-C).",
+          "type": "string",
+          "enum": [ "DELAY", "GPS_TIME" ]
+        },
+        "dr": {
+          "description": "Data-rate.",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "fCnt": {
+          "description": "Frame-counter.",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "frequency": {
+          "description": "Frequency (Hz).",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "groupType": {
+          "title": "Multicast Group Type",
+          "description": "Multicast group type.",
+          "type": "string",
+          "enum": [ "CLASS_C", "CLASS_B" ]
+        },
+        "mcAddr": {
+          "description": "Multicast address (HEX encoded DevAddr).",
+          "type": "string"
+        },
+        "mcAppSKey": {
+          "description": "Multicast application session key (HEX encoded AES128 key).",
+          "type": "string"
+        },
+        "mcNwkSKey": {
+          "description": "Multicast network session key (HEX encoded AES128 key).",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name.",
+          "type": "string"
+        },
+        "region": {
+          "title": "Region",
+          "description": "Region.",
+          "type": "string",
+          "enum": [
+            "EU868",
+            "US915",
+            "CN779",
+            "EU433",
+            "AU915",
+            "CN470",
+            "AS923",
+            "AS923_2",
+            "AS923_3",
+            "AS923_4",
+            "KR920",
+            "IN865",
+            "RU864",
+            "ISM2400"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "api.MyDevicesIntegration.jsonschema.strict.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "api.MyDevicesIntegration.jsonschema.strict.json",
+      "title": "My Devices Integration",
+      "type": "object",
+      "required": [ "applicationId", "endpoint" ],
+      "properties": {
+        "applicationId": {
+          "description": "Application ID (UUID).",
+          "type": "string"
+        },
+        "endpoint": {
+          "description": "myDevices API endpoint.",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "api.PilotThingsIntegration.jsonschema.strict.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "api.PilotThingsIntegration.jsonschema.strict.json",
+      "title": "Pilot Things Integration",
+      "type": "object",
+      "required": [ "applicationId", "server", "token" ],
+      "properties": {
+        "applicationId": {
+          "description": "Application ID (UUID).",
+          "type": "string"
+        },
+        "server": {
+          "description": "Server URL.",
+          "type": "string"
+        },
+        "token": {
+          "description": "Authentication token.",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "api.Tenant.jsonschema.strict.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "api.Tenant.jsonschema.strict.json",
+      "title": "Tenant",
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "description",
+        "canHaveGateways",
+        "maxGatewayCount",
+        "maxDeviceCount",
+        "privateGatewaysUp",
+        "privateGatewaysDown"
+      ],
+      "properties": {
+        "id": {
+          "description": "Tenant ID (UUID).\n Note: this value will be automatically generated on create.",
+          "type": "string"
+        },
+        "description": {
+          "description": "Tenant description.",
+          "type": "string"
+        },
+        "canHaveGateways": {
+          "description": "Can the tenant create and \"own\" Gateways?",
+          "type": "boolean"
+        },
+        "maxDeviceCount": {
+          "description": "Max. device count for tenant.\n When set to 0, the tenant can have unlimited devices.",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "maxGatewayCount": {
+          "description": "Max. gateway count for tenant.\n When set to 0, the tenant can have unlimited gateways.",
+          "type": "integer",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "name": {
+          "description": "Tenant name,",
+          "type": "string"
+        },
+        "privateGatewaysDown": {
+          "description": "Private gateways (downlink).\n If enabled, then other tenants will not be able to schedule downlink\n messages through the gateways of this tenant. For example, in case you\n do want to share uplinks with other tenants (private_gateways_up=false),\n but you want to prevent other tenants from using gateway airtime.",
+          "type": "boolean"
+        },
+        "privateGatewaysUp": {
+          "description": "Private gateways (uplink).\n If enabled, then uplink messages will not be shared with other tenants.",
+          "type": "boolean"
+        },
+        "tags": {
+          "description": "Tags (user defined).\n These tags can be used to add additional information to the tenant. These\n tags are NOT exposed in the integration events.",
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "api.ThingsBoardIntegration.jsonschema.strict.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "api.ThingsBoardIntegration.jsonschema.strict.json",
+      "title": "Things Board Integration",
+      "type": "object",
+      "required": [ "applicationId", "server" ],
+      "properties": {
+        "applicationId": {
+          "description": "Application ID (UUID).",
+          "type": "string"
+        },
+        "server": {
+          "description": "ThingsBoard server endpoint, e.g. https://example.com",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "api.User.jsonschema.strict.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "api.User.jsonschema.strict.json",
+      "title": "User",
+      "type": "object",
+      "required": [ "id", "isAdmin", "isActive", "email", "note" ],
+      "properties": {
+        "id": {
+          "description": "User ID (UUID).\n Will be set automatically on create.",
+          "type": "string"
+        },
+        "email": {
+          "description": "E-mail of the user.",
+          "type": "string"
+        },
+        "isActive": {
+          "description": "Set to false to disable the user.",
+          "type": "boolean"
+        },
+        "isAdmin": {
+          "description": "Set to true to make the user a global administrator.",
+          "type": "boolean"
+        },
+        "note": {
+          "description": "Optional note to store with the user.",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "common.Location.jsonschema.strict.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "common.Location.jsonschema.strict.json",
+      "title": "Location",
+      "type": "object",
+      "required": [ "latitude", "longitude", "altitude", "source", "accuracy" ],
+      "properties": {
+        "accuracy": {
+          "description": "Accuracy.",
+          "anyOf": [
+            {
+              "type": "number",
+              "maximum": 340282346638528859811704183484516925440.0,
+              "minimum": -340282346638528859811704183484516925440.0
+            },
+            {
+              "type": "string",
+              "enum": [ "Infinity", "-Infinity", "NaN" ]
+            }
+          ]
+        },
+        "altitude": {
+          "description": "Altitude.",
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string",
+              "enum": [ "Infinity", "-Infinity", "NaN" ]
+            }
+          ]
+        },
+        "latitude": {
+          "description": "Latitude.",
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string",
+              "enum": [ "Infinity", "-Infinity", "NaN" ]
+            }
+          ]
+        },
+        "longitude": {
+          "description": "Longitude.",
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string",
+              "enum": [ "Infinity", "-Infinity", "NaN" ]
+            }
+          ]
+        },
+        "source": {
+          "title": "Location Source",
+          "description": "Location source.",
+          "type": "string",
+          "enum": [
+            "UNKNOWN",
+            "GPS",
+            "CONFIG",
+            "GEO_RESOLVER_TDOA",
+            "GEO_RESOLVER_RSSI",
+            "GEO_RESOLVER_GNSS",
+            "GEO_RESOLVER_WIFI"
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
