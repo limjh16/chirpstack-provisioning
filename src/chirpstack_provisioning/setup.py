@@ -6,7 +6,6 @@ the hierarchical structure of tenants, applications, gateways, device profiles, 
 
 import json
 from pathlib import Path
-from typing import Any
 
 import jsonschema
 
@@ -134,24 +133,6 @@ def decompose_tenants(
     return clean_tenants, gateways, applications, device_profiles
 
 
-def load_setup_file(file_path: str | Path) -> dict[str, Any]:
-    """Load a setup file from disk.
-
-    Args:
-        file_path: Path to the setup JSON file
-
-    Returns:
-        Dictionary containing the setup data
-
-    Raises:
-        FileNotFoundError: If the file does not exist
-        json.JSONDecodeError: If the file is not valid JSON
-    """
-    file_path = Path(file_path)
-    with open(file_path, "r", encoding="utf-8") as f:
-        return json.load(f)
-
-
 def ingest_setup_file(
     file_path: str | Path, schema_path: str | Path
 ) -> dict[str, list[dict]]:
@@ -181,7 +162,9 @@ def ingest_setup_file(
         json.JSONDecodeError: If the file is not valid JSON
         jsonschema.ValidationError: If the data doesn't match the schema
     """
-    setup_data = load_setup_file(file_path)
+    file_path = Path(file_path)
+    with open(file_path, "r", encoding="utf-8") as f:
+        setup_data = json.load(f)
     validate_setup_data(setup_data, schema_path)
 
     tenants = extract_tenants(setup_data)

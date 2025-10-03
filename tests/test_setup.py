@@ -11,7 +11,6 @@ from chirpstack_provisioning.setup import (
     extract_global_users,
     extract_tenants,
     ingest_setup_file,
-    load_setup_file,
 )
 
 
@@ -442,9 +441,9 @@ class TestDecomposeTenants:
 
         # Verify counts
         assert len(clean_tenants) == len(tenants)
-        assert len(gateways) == 1
-        assert len(apps) == 1
-        assert len(profiles) == 1
+        assert len(gateways) == len(tenants[0]["gateways"])
+        assert len(apps) == len(tenants[1]["applications"])
+        assert len(profiles) == len(tenants[2]["device_profiles"])
 
         # Verify tenant associations
         assert gateways[0]["tenant_id"] == tenants[0]["id"]
@@ -479,7 +478,8 @@ class TestLoadSetupFile:
 
     def test_load_valid_setup_file(self, temp_setup_file):
         """Test loading a valid setup file."""
-        data = load_setup_file(temp_setup_file)
+        with open(temp_setup_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
         assert isinstance(data, dict)
         assert "tenants" in data
         assert "users" in data
@@ -487,7 +487,8 @@ class TestLoadSetupFile:
     def test_load_nonexistent_file(self, tmp_path):
         """Test loading a file that doesn't exist."""
         with pytest.raises(FileNotFoundError):
-            load_setup_file(tmp_path / "nonexistent.json")
+            with open(tmp_path / "nonexistent.json", "r", encoding="utf-8") as f:
+                json.load(f)
 
     def test_load_invalid_json(self, tmp_path):
         """Test loading a file with invalid JSON."""
@@ -495,7 +496,8 @@ class TestLoadSetupFile:
         with open(invalid_file, "w", encoding="utf-8") as f:
             f.write("{ invalid json")
         with pytest.raises(json.JSONDecodeError):
-            load_setup_file(invalid_file)
+            with open(invalid_file, "r", encoding="utf-8") as f:
+                json.load(f)
 
 
 class TestIngestSetupFile:
@@ -542,7 +544,8 @@ class TestIngestSetupFile:
             json.dump(complete_setup, f)
 
         # Load and extract without full validation
-        setup_data = load_setup_file(file_path)
+        with open(file_path, "r", encoding="utf-8") as f:
+            setup_data = json.load(f)
         tenants = extract_tenants(setup_data)
         users = extract_global_users(setup_data)
         templates = extract_device_profile_templates(setup_data)
@@ -648,7 +651,8 @@ class TestIngestSetupFile:
             json.dump(setup, f)
 
         # Load and extract without validation
-        setup_data = load_setup_file(file_path)
+        with open(file_path, "r", encoding="utf-8") as f:
+            setup_data = json.load(f)
         tenants = extract_tenants(setup_data)
         clean_tenants, gateways, applications, device_profiles = decompose_tenants(
             tenants
