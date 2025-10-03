@@ -49,42 +49,9 @@ def temp_setup_file(tmp_path):
 
 
 @pytest.fixture
-def invalid_json_file(tmp_path):
-    """Create a file with invalid JSON."""
-    file_path = tmp_path / "invalid.json"
-    with open(file_path, "w", encoding="utf-8") as f:
-        f.write("{ invalid json }")
-    return file_path
-
-
-@pytest.fixture
 def setup_schema_path():
     """Get the path to the setup schema."""
     return Path(__file__).parent.parent / "setup.schema.json"
-
-
-class TestLoadSetupFile:
-    """Tests for loading setup files."""
-
-    def test_load_valid_setup_file(self, temp_setup_file):
-        """Test loading a valid setup file."""
-        with open(temp_setup_file, "r", encoding="utf-8") as f:
-            data = json.load(f)
-        assert isinstance(data, dict)
-        assert "tenants" in data
-        assert "users" in data
-
-    def test_load_nonexistent_file(self):
-        """Test loading a file that doesn't exist."""
-        with pytest.raises(FileNotFoundError):
-            with open("/nonexistent/path/setup.json", "r", encoding="utf-8") as f:
-                json.load(f)
-
-    def test_load_invalid_json(self, invalid_json_file):
-        """Test loading a file with invalid JSON."""
-        with pytest.raises(json.JSONDecodeError):
-            with open(invalid_json_file, "r", encoding="utf-8") as f:
-                json.load(f)
 
 
 class TestValidateSetupData:
