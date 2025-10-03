@@ -88,14 +88,31 @@ class TestLoadSetupFile:
 class TestValidateSetupData:
     """Tests for validate_setup_data function."""
 
-    def test_validate_schema_function_exists(self, setup_schema_path):
-        """Test that validate_setup_data function exists and can be called."""
-        # This is a basic test to verify the function exists
-        # Full schema validation with $ref resolution will be tested separately
-        # when the schema infrastructure is fully set up
+    def test_validate_empty_setup_data(self, setup_schema_path):
+        """Test validating empty setup data (no required fields at top level)."""
         empty_data = {}
-        # Should not raise an exception for empty data
+        # Empty data is valid since setup.schema.json has no required properties
         validate_setup_data(empty_data, setup_schema_path)
+
+    def test_validate_minimal_tenant_data(self, setup_schema_path):
+        """Test validating minimal tenant data with required fields."""
+        # Create minimal valid data with a tenant that has all required fields
+        minimal_data = {
+            "tenants": [
+                {
+                    "id": "00000000-0000-0000-0000-000000000001",
+                    "name": "Test Tenant",
+                    "description": "A test tenant",
+                    "canHaveGateways": True,
+                    "maxGatewayCount": 10,
+                    "maxDeviceCount": 100,
+                    "privateGatewaysUp": False,
+                    "privateGatewaysDown": False,
+                }
+            ]
+        }
+        # Should validate successfully with all required fields
+        validate_setup_data(minimal_data, setup_schema_path)
 
 
 class TestExtractTenants:
