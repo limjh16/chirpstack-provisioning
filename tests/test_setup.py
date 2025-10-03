@@ -6,6 +6,7 @@ from pathlib import Path
 import pytest
 
 from chirpstack_provisioning.setup import (
+    SetupFileIngestion,
     decompose_tenants,
     extract_device_profile_templates,
     extract_global_users,
@@ -668,3 +669,76 @@ class TestIngestSetupFile:
         assert gateways[0]["tenant_id"] == setup["tenants"][0]["id"]
         assert applications[0]["tenant_id"] == setup["tenants"][1]["id"]
         assert device_profiles[0]["tenant_id"] == setup["tenants"][1]["id"]
+
+
+class TestSetupFileIngestionClass:
+    """Tests for the SetupFileIngestion class."""
+
+    def test_class_to_dict_method(self, tmp_path, setup_schema_path):
+        """Test the to_dict method returns correct structure."""
+        setup = {
+            "tenants": [
+                {
+                    "id": "00000000-0000-0000-0000-000000000001",
+                    "name": "Tenant 1",
+                    "description": "Test tenant",
+                    "canHaveGateways": True,
+                    "maxGatewayCount": 10,
+                    "maxDeviceCount": 100,
+                    "privateGatewaysUp": False,
+                    "privateGatewaysDown": False,
+                }
+            ]
+        }
+
+        file_path = tmp_path / "test_setup.json"
+        with open(file_path, "w", encoding="utf-8") as f:
+            json.dump(setup, f)
+
+        ingestion = SetupFileIngestion(file_path, setup_schema_path)
+        result = ingestion.to_dict()
+
+        # Verify structure
+        assert "tenants" in result
+        assert "users" in result
+        assert "device_profile_templates" in result
+        assert "gateways" in result
+        assert "applications" in result
+        assert "device_profiles" in result
+
+        # Verify data
+        assert len(result["tenants"]) == len(setup["tenants"])
+        assert len(result["users"]) == 0
+        assert len(result["gateways"]) == 0
+
+    def test_class_property_setters(self, tmp_path, setup_schema_path):
+        """Test that property setters work correctly."""
+        setup = {
+            "tenants": [
+                {
+                    "id": "00000000-0000-0000-0000-000000000001",
+                    "name": "Tenant 1",
+                    "description": "Test tenant",
+                    "canHaveGateways": True,
+                    "maxGatewayCount": 10,
+                    "maxDeviceCount": 100,
+                    "privateGatewaysUp": False,
+                    "privateGatewaysDown": False,
+                }
+            ]
+        }
+
+        file_path = tmp_path / "test_setup.json"
+        with open(file_path, "w", encoding="utf-8") as f:
+            json.dump(setup, f)
+
+        ingestion = SetupFileIngestion(file_path, setup_schema_path)
+
+        # Test setters
+        new_users = [{"id": "new-user", "email": "new@example.com"}]
+        ingestion.users = new_users
+        assert ingestion.users == new_users
+
+        new_gateways = [{"gatewayId": "1234", "tenant_id": "tenant-1"}]
+        ingestion.gateways = new_gateways
+        assert ingestion.gateways == new_gateways
