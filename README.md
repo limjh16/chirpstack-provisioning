@@ -13,8 +13,17 @@ A Python tool for bulk provisioning and managing ChirpStack v4 LoRa Network Serv
 
 ## Installation
 
+This project uses [Poetry](https://python-poetry.org/) for dependency management.
+
 ```bash
-pip install -e .
+# Install Poetry if you haven't already
+curl -sSL https://install.python-poetry.org | python3 -
+
+# Install dependencies
+poetry install
+
+# Or install with development dependencies
+poetry install --with dev
 ```
 
 ## Quick Start
@@ -22,21 +31,21 @@ pip install -e .
 ### Validate Data Files
 
 ```bash
-python validate.py devices.csv devices.schema.json
-python validate.py setup.json setup.schema.json
+poetry run python validate.py devices.csv devices.schema.json
+poetry run python validate.py setup.json setup.schema.json
 ```
 
 ### Provision a ChirpStack Server
 
 ```bash
 # Dry run (preview changes)
-chirpstack-provision --dry-run setup.json devices.csv
+poetry run chirpstack-provision --dry-run setup.json devices.csv
 
 # Apply changes with duplicate handling
-chirpstack-provision -y --duplicate=skip setup.json devices.csv
+poetry run chirpstack-provision -y --duplicate=skip setup.json devices.csv
 
 # Interactive mode (prompt for duplicates)
-chirpstack-provision setup.json devices.csv
+poetry run chirpstack-provision setup.json devices.csv
 ```
 
 ## Usage
@@ -53,7 +62,7 @@ See [data.md](data.md) for detailed format documentation and examples.
 ### Command-Line Interface
 
 ```bash
-chirpstack-provision [OPTIONS] <setup-file> <devices-file>
+poetry run chirpstack-provision [OPTIONS] <setup-file> <devices-file>
 ```
 
 **Options:**
@@ -106,27 +115,30 @@ provision(
 ### Setup
 
 ```bash
-# Install dependencies
-pip install -e .
+# Install Poetry if not already installed
+curl -sSL https://install.python-poetry.org | python3 -
 
-# Install development tools
-pip install pytest ruff
+# Install all dependencies including dev dependencies
+poetry install --with dev
+
+# Activate the virtual environment (optional)
+poetry shell
 ```
 
 ### Testing
 
 ```bash
-pytest
+poetry run pytest
 ```
 
 ### Linting & Formatting
 
 ```bash
 # Check code
-ruff check .
+poetry run ruff check .
 
 # Format code
-ruff format .
+poetry run ruff format .
 ```
 
 ### Code Style

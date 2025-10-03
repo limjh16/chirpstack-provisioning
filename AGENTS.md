@@ -21,7 +21,10 @@ The `dstencil/chirpstack-deployment-assistant` project has similar objectives. Y
 ### Project Structure
 
 - **Package**: `src/chirpstack_provisioning/` - Main source code
-- **Dependencies**: Managed with Poetry (`pyproject.toml`)
+- **Dependencies**: Managed with [Poetry](https://python-poetry.org/) (`pyproject.toml`)
+  - Install: `poetry install --with dev`
+  - Run commands: `poetry run <command>`
+  - Shell: `poetry shell` (activates virtual environment)
 - **CLI Libraries**: `typer` and `rich`
 - **Validation**: JSON schemas in `proto/jsonschema/` generated from protobuf definitions
 
@@ -54,8 +57,8 @@ See [`README.md`](README.md) for project structure and [`data.md`](data.md) for 
 ### Quality Standards
 
 - **Linting**: Use `ruff` for both linting and formatting
-  - Run `ruff format` before committing
-  - All code must pass `ruff check` with no violations
+  - Run `poetry run ruff format .` before committing
+  - All code must pass `poetry run ruff check .` with no violations
   - Configure in `pyproject.toml` under `[tool.ruff]`
   - Set up pre-commit hooks for automatic formatting
   

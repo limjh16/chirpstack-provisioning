@@ -38,56 +38,22 @@ The devices file defines all devices that should be connected to the LoRa Networ
 - **Format Support**: JSON, JSONL, and CSV
 - **Structure**: Flat format where each JSON object or CSV line corresponds to one device
 - **Primary Identifier**: `dev_eui` (Device EUI)
+- Data fields will be determined by the final `devices.schema.json` schema
 
-### JSON Format
+### Format Descriptions
 
-Single device:
-```json
-{
-  "dev_eui": "0102030405060708",
-  "name": "sensor-001",
-  "description": "Temperature sensor",
-  "application_id": "app-warehouse-01",
-  "device_profile_id": "profile-temp-sensor"
-}
-```
+**JSON Format**:
+- Single device: A JSON object representing one device
+- Multiple devices: A JSON array of device objects
 
-Multiple devices (array):
-```json
-[
-  {
-    "dev_eui": "0102030405060708",
-    "name": "sensor-001",
-    "description": "Temperature sensor",
-    "application_id": "app-warehouse-01",
-    "device_profile_id": "profile-temp-sensor"
-  },
-  {
-    "dev_eui": "0102030405060709",
-    "name": "sensor-002",
-    "description": "Humidity sensor",
-    "application_id": "app-warehouse-01",
-    "device_profile_id": "profile-humidity-sensor"
-  }
-]
-```
+**JSONL Format**:
+- One JSON object per line
+- Each line is a complete, valid JSON object representing a device
 
-### JSONL Format
-
-One JSON object per line:
-```jsonl
-{"dev_eui": "0102030405060708", "name": "sensor-001", "description": "Temperature sensor", "application_id": "app-warehouse-01", "device_profile_id": "profile-temp-sensor"}
-{"dev_eui": "0102030405060709", "name": "sensor-002", "description": "Humidity sensor", "application_id": "app-warehouse-01", "device_profile_id": "profile-humidity-sensor"}
-```
-
-### CSV Format
-
-Header row followed by data rows:
-```csv
-dev_eui,name,description,application_id,device_profile_id
-0102030405060708,sensor-001,Temperature sensor,app-warehouse-01,profile-temp-sensor
-0102030405060709,sensor-002,Humidity sensor,app-warehouse-01,profile-humidity-sensor
-```
+**CSV Format**:
+- Header row containing field names
+- Subsequent rows containing device data
+- Type coercion applied from strings to appropriate JSON types during validation
 
 ## Setup File Format
 
@@ -98,8 +64,11 @@ The setup file defines everything else needed to provision a ChirpStack server: 
 - **Format Support**: JSON (TOML and YAML may be supported in the future)
 - **Structure**: Hierarchical/nested format
 - **Identification**: Tenants, applications, and device profiles are identified by **name** instead of EUI for simplified provisioning
+- Data fields will be determined by the final `setup.schema.json` schema
 
 ### Hierarchical Structure
+
+The setup file follows this nested structure:
 
 ```text
 .
@@ -113,63 +82,16 @@ The setup file defines everything else needed to provision a ChirpStack server: 
     └── gateways
 ```
 
-### JSON Format
-
-```json
-{
-  "device_profile_templates": {
-    "template-1": {
-      "name": "LoRaWAN 1.0.3 Class A",
-      "region": "US915",
-      "mac_version": "1.0.3",
-      "reg_params_revision": "A",
-      "supports_otaa": true
-    }
-  },
-  "users": {
-    "admin-user": {
-      "email": "admin@example.com",
-      "is_admin": true
-    }
-  },
-  "tenants": {
-    "tenant1": {
-      "name": "Main Tenant",
-      "description": "Primary tenant for production",
-      "applications": {
-        "app1": {
-          "name": "Warehouse Monitoring",
-          "description": "Temperature and humidity sensors",
-          "integrations": {
-            "http-integration": {
-              "endpoint": "https://example.com/webhook"
-            }
-          },
-          "multicast_groups": {}
-        }
-      },
-      "device_profiles": {
-        "profile-temp-sensor": {
-          "name": "Temperature Sensor Profile",
-          "template": "template-1"
-        }
-      },
-      "gateways": {
-        "gateway-001": {
-          "gateway_id": "0001020304050607",
-          "name": "Gateway 001",
-          "description": "Main warehouse gateway"
-        }
-      },
-      "users": {
-        "tenant-user": {
-          "email": "user@example.com"
-        }
-      }
-    }
-  }
-}
-```
+Each level in the hierarchy:
+- **device_profile_templates**: Reusable templates for device profiles
+- **users**: Global users (e.g., administrators)
+- **tenants**: Top-level organizational units
+  - **applications**: Application definitions within each tenant
+    - **integrations**: Third-party integrations for each application
+    - **multicast_groups**: Multicast group configurations
+  - **device_profiles**: Device profile definitions specific to the tenant
+  - **gateways**: Gateway configurations within the tenant
+  - **users**: Users specific to the tenant
 
 ## Reference Handling
 
@@ -201,18 +123,18 @@ This ensures the tool can handle very large datasets without excessive memory co
 
 ## Validation Usage
 
-To validate data files against schemas:
+To validate data files against schemas using Poetry:
 
 ```bash
-python validate.py <data-file> <schema-file>
+poetry run python validate.py <data-file> <schema-file>
 ```
 
 Examples:
 ```bash
-python validate.py devices.json devices.schema.json
-python validate.py devices.jsonl devices.schema.json
-python validate.py devices.csv devices.schema.json
-python validate.py setup.json setup.schema.json
+poetry run python validate.py devices.json devices.schema.json
+poetry run python validate.py devices.jsonl devices.schema.json
+poetry run python validate.py devices.csv devices.schema.json
+poetry run python validate.py setup.json setup.schema.json
 ```
 
 The validator supports:
