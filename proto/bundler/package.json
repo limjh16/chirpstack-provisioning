@@ -1,0 +1,23 @@
+{
+  "name": "chirpstack-schema-bundler",
+  "version": "1.0.0",
+  "description": "Bundle setup.schema.json and dependencies into bundled.schema.json",
+  "type": "module",
+  "main": "dist/bundle-schema.js",
+  "scripts": {
+    "build": "tsc",
+    "bundle": "tsx src/bundle-schema.ts",
+    "bundle:compiled": "node dist/bundle-schema.js"
+  },
+  "keywords": ["json-schema", "bundler", "chirpstack"],
+  "author": "limjh16",
+  "license": "ISC",
+  "dependencies": {
+    "@hyperjump/json-schema": "^1.16.2"
+  },
+  "devDependencies": {
+    "@types/node": "^24.6.2",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
+  }
+}
