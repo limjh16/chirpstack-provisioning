@@ -68,3 +68,72 @@ def extract_device_profile_templates(setup_data: dict) -> list[dict]:
         List of device profile template objects
     """
     return setup_data.get("device_profile_templates", [])
+
+
+def decompose_gateways(tenants: list[dict]) -> list[dict]:
+    """Decompose gateways from tenants into individual gateway objects.
+
+    Each gateway is extracted from its parent tenant and the tenant_id
+    is added to the gateway object for reference.
+
+    Args:
+        tenants: List of tenant objects
+
+    Returns:
+        List of gateway objects with tenant_id added
+    """
+    gateways = []
+    for tenant in tenants:
+        tenant_id = tenant.get("id")
+        tenant_gateways = tenant.get("gateways", [])
+        for gateway in tenant_gateways:
+            gateway_copy = gateway.copy()
+            gateway_copy["tenant_id"] = tenant_id
+            gateways.append(gateway_copy)
+    return gateways
+
+
+def decompose_applications(tenants: list[dict]) -> list[dict]:
+    """Decompose applications from tenants into individual application objects.
+
+    Each application is extracted from its parent tenant and the tenant_id
+    is added to the application object for reference.
+
+    Args:
+        tenants: List of tenant objects
+
+    Returns:
+        List of application objects with tenant_id added
+    """
+    applications = []
+    for tenant in tenants:
+        tenant_id = tenant.get("id")
+        tenant_apps = tenant.get("applications", [])
+        for app in tenant_apps:
+            app_copy = app.copy()
+            app_copy["tenant_id"] = tenant_id
+            applications.append(app_copy)
+    return applications
+
+
+def decompose_device_profiles(tenants: list[dict]) -> list[dict]:
+    """Decompose device profiles from tenants into individual profile objects.
+
+    Each device profile is extracted from its parent tenant and the tenant_id
+    is added to the profile object for reference.
+
+    Args:
+        tenants: List of tenant objects
+
+    Returns:
+        List of device profile objects with tenant_id added
+    """
+    profiles = []
+    for tenant in tenants:
+        tenant_id = tenant.get("id")
+        tenant_profiles = tenant.get("device_profiles", [])
+        for profile in tenant_profiles:
+            profile_copy = profile.copy()
+            profile_copy["tenant_id"] = tenant_id
+            profiles.append(profile_copy)
+    return profiles
