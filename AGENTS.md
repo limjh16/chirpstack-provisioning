@@ -1,142 +1,85 @@
 # ChirpStack Provisioning – AI Agent Guide
 
-## Goals
+This document contains important context and guidelines for AI coding agents working on this repository.
 
-- The goal is to create a new project that communicates with an existing ChirpStack v4 LoRa Network Server via its gRPC API interface. This project aims to easily provision the server with all the data that is normally stored in its database instead of being defined in the `chirpstack.toml` or `region...toml` configuration files.
-    - The gRPC API interface has a python library at `chirpstack-api`.
-- This project should be able to bulk provision many devices and gateways at once. This allows for easy creations of new ChirpStack Servers.
-- Similarly, in order to back up older ChirpStack servers, this project should be able to export all the device and gateway data for importing into another server.
-- This project should include a dry run feature. This feature is important.
-- This project should include conflict and duplicate management to facilitate easy updating of existing devices and gateways in existing servers.
-- This project should have an interface for humans (CLI) as well as other programs or scripts (as a python package).
+## Project Context
 
-### Other projects
+This project provisions ChirpStack v4 LoRa Network Servers via the gRPC API (`chirpstack-api` Python library). It enables bulk provisioning of devices and gateways, backup/restore of server configurations, and includes dry-run and duplicate management features.
 
-- There exists a project, `dstencil/chirpstack-deployment-assistant`, with similar objectives. The code is fully working, so we can refer to the project for working example codes while developing this current project. However, the coding styles MUST BE IGNORED because it is historical and coded by different people.
-    - You can reference this project for implementation details and examples regarding the `chirpstack-api` package.
-    - Feature equivalence is not important.
-        - A web server is NOT IMPORTANT.
-    - Following the same `.csv` format and schema is not important but good to have.
+### Internal Use
 
-### Use Cases
+- Used in an internal, safe environment - basic safeguards needed but not enterprise-grade security
+- Internal ChirpStack servers - no API rate limits or performance optimization needed
+- Maintained by multiple people over time - **code clarity is paramount**
 
-- This project will be used to easily spin up quick test environments of ChirpStack network servers, with pre-provisioned gateways and devices.
-    - From an empty and new ChirpStack server, this project should be able to provision everything required for bare minimum operation.
-    - This should include (non-exhaustive):
-        - Tenants
-        - Device Profiles
-        - Applications
-        - Devices
-        - Gateways
-- This project will be used to back up existing production ChirpStack servers.
-- This project will be used by CD pipelines to update existing ChirpStack network servers with new versions of device codecs.
-- This project will be used when bulk-importing devices onto existing ChirpStack network servers, so that the details can be centralised in one CSV or JSON file rather than keyed in manually and individually on ChirpStack's web interface.
+### Reference Projects
 
-### Users
+The `dstencil/chirpstack-deployment-assistant` project has similar objectives. You may reference it for `chirpstack-api` implementation details and examples, but **DO NOT** follow its coding style. Feature equivalence is not required.
 
-- This project will be used in an internal environment that is considered safe. As such, network security is not the most important factor, but the basic safeguards should still be implemented.
-- Since the project is used internally, factors such as input validation is not of the utmost importance.
-- Since the ChirpStack servers are also internal, we don't need to worry about API rate limits or parallel processing. Performance is not required.
-- Since this project will be continuously maintained by different people, the code should be easy to understand so that it can be handed over easily.
+## Development Environment
 
-## Specific implementation details
+### Project Structure
 
-- **IMPORTANT**: Each feature and change implemented should be a separate, atomic git commit.
-- CLI should be implemented with `typer` and `rich` libraries.
-    - Necessary CLI flags:
-        - `-y` or `--yes` for automatically committing changes
-        - `--duplicate=` for defining the default action to apply to duplicates
-            - skip, override, or error
-        - `--dry-run` for only viewing the potential changes but not committing anything
-- Python package should follow the `src` directory structure so that it can be easily exported.
-- There should be two data files that this project accepts, one setup and one devices file.
-    - Definition and validation of data formats should be done through two `jsonschema` files (`setup.schema.json` and `devices.schema.json`).
-    - For the devices file, it defines all the devices that should be connected to the LoRa Network Server.
-        - Data format should accept `json`, `jsonl`, and `csv`.
-        - The data should be in a flat format. Each `json` object or each line in the `csv` should correspond to one device
-        - The main identifier is the EUI of the device (dev_eui for devices).
-    - For the setup file, it defines everything else, such as tenant, device profiles, gateways, etc.
-        - Data format should only accept `json`. We can potentially accept `toml` or `yaml` as well.
-        - Each `json` should be defined with the following hierarchical structure:
+- **Package**: `src/chirpstack_provisioning/` - Main source code
+- **Dependencies**: Managed with [Poetry](https://python-poetry.org/) (`pyproject.toml`)
+  - Install: `poetry install --with dev`
+  - Run commands: `poetry run <command>`
+  - Shell: `poetry shell` (activates virtual environment)
+- **CLI Libraries**: `typer` and `rich`
+- **Validation**: Main JSON schema in `setup.schema.json` and `devices.schema.json`, those reference other JSON schemas in `proto/jsonschema/` generated from protobuf definitions.
+  - The JSON schemas in `proto/jsonschema/` **should not be edited**.
 
-        ```text
-        .
-        ├── device_profile_templates
-        ├── users
-        └── tenants
-            ├── applications
-            │   ├── integrations
-            │   └── multicast_groups
-            ├── device_profiles
-            └── gateways
-        ```
+See [`README.md`](README.md) for project structure and [`data.md`](data.md) for data format details.
 
-        (or in `json` format:)
+### Key Implementation Requirements
 
-        ```json
-        // prettier-ignore
-        {
-            "device_profile_templates": {},
-            "users": {},
-            "tenants": { "tenant1": {
-                "applications": { "app1": {
-                    "integrations": {},
-                    "multicast_groups": {}
-                }},
-                "device_profiles": {},
-                "gateways": {},
-                "users": {},
-            }}
-        }
-        ```
+- **Atomic Commits**: Each feature/change must be a separate, atomic git commit
+- **JSON Schemas**: Single source of truth for data validation (`setup.schema.json` and `devices.schema.json`)
+- **Security**: Code that pushes changes to ChirpStack server (Create/Update/Delete) must live in a separate file and require user confirmation or `-y` flag
+- **Dry Run**: Must NOT call server modification code when `--dry-run` is specified
 
-    - For simplified provisioning, we should identify tenants, applications, and device_profiles by name instead of EUI.
-        - If the tenant, device profile, or application referenced in the data does not exist, this should be flagged out for the user to address.
+## Coding Guidelines
 
-- Required connection details are the server address and API token.
-    - Debug messages such as server not reachable, port not reachable, or API invalid, should be given.
-    - These connection details should either be provided as a CLI flag or environment variable.
-- All duplicates should be listed out, and the corresponding action should be specified by the user before the script continues to run.
-    - 3 actions should be defined:
-        - skip: Skip existing entities
-        - override: Update existing entities with new data
-        - error: Stop the script from running
-    - If the `-y` or `--yes` flag is specified, a `--duplicate=` flag should also be required, which should specify the intended action upon meeting duplicates.
-- Manage dependencies with Poetry (`pyproject.toml`); source lives under `src/chirpstack_provisioning`.
-- The JSON schemas should be the single source of truth for data validation.
-- Documentation for data formats should be provided in `data.md` with examples of JSON, JSONL, and CSV formats.
+### Methodology & Style
 
-### Coding Guidelines
+- **Test-Driven Development** - Write tests first
+- **Atomic Commits** - One feature per commit for useful git blame
+- **Simplicity First** - Short, simple, readable code is the priority
+- **Reference**: See `validate.py` for the coding style to follow
 
-- This project should follow a Test Driven Development methodology.
-- **IMPORTANT!** Each change and git commit should be atomic, limited to one feature, so that git blame will be useful.
-- **Code Formatting & Linting**: Use `ruff` for both linting and formatting to ensure consistent code style.
-    - All code should be formatted with `ruff format` before committing.
-    - All code should pass `ruff check` with no violations.
-    - Ruff configuration should be defined in `pyproject.toml` under `[tool.ruff]` section.
-    - Pre-commit hooks should be configured to run ruff formatting automatically.
-- This project should be able to handle large files of over 50000 lines and devices.
-    - For memory management, the data should be lazily loaded, and not loaded all at once.
-- The priority should be code that is short and simple to understand.
-    - If there are chunks of code and logic that cannot be shortened (e.g., input validation that has multiple factors to check against), it should be factored out in a separate function.
-    - All code which is repeatable should be factored out into reusable functions.
-    - OOP can and should be used wherever it is able to shorten code or make the code more intuitive to understand.
-        - However, if there is no need for objects, do not unnecessarily lengthen the code by grouping functions into objects.
-        - Instead, functions with similar objectives can be grouped in a separate subfolder.
-- Reference `validate.py` for the coding style.
-- Wherever possible, this project should be cleverly organised in separate files and folders so that the hierachy is easily understood.
-- All code that actually push changes to the ChirpStack network server (e.g., Create Update and Delete requests) should live in a separate file. IMPORTANT! This file should NOT be called if dry run is specified. User confirmation or a `-y` / `--yes` flag must be present for any of these requests to be run.
-    - Since the ChirpStack server does not have granular API permissions and controls, it is important that we manage the permissions within this project. Changes to the server cannot be made without the user's confirmation.
-- **IMPORTANT!** As a reminder, each git commit must be atomic, limited to one small feature
+### Code Organization
 
-### Development Tools
+- **Clear Hierarchy** - Organize code in files/folders with intuitive structure
+- **Function Extraction** - Factor out repeatable code into reusable functions
+- **Complex Logic** - Extract into separate functions with clear names
+- **OOP Usage** - Use objects when they shorten/clarify code; avoid unnecessary object wrappers
+- **Related Functions** - Group in subfolders, not unnecessary classes
 
-- Always use context7 when I need code generation, setup or configuration steps, or library/API documentation. This means you should automatically use the Context7 MCP tools to resolve library id and get library docs without me having to explicitly ask.
+### Quality Standards
 
-## Stretch goals
+- **Linting**: Use `ruff` for both linting and formatting
+  - Run `poetry run ruff format .` before committing
+  - All code must pass `poetry run ruff check .` with no violations
+  - Configure in `pyproject.toml` under `[tool.ruff]`
+  
+- **Large File Handling**: Support 50,000+ lines/devices
+  - Use lazy loading, not loading all data at once
+  - Stream device JSONL and CSV files line-by-line
+  - Setup JSON file can be assumed to be relatively small enough, whole file can be injested at once
+  
+- **Security**: Separate dangerous operations
+  - All server modification code (Create/Update/Delete) in separate file
+  - Never call without user confirmation (`-y` flag) or dry-run check
+  - ChirpStack lacks granular API permissions - we manage this in code
 
-- For large files and poor connections, we might want to implement state management and resume capabilities or progress reporting in case of interrupted or slow operations.
-- Tests should be ran against an actual ChirpStack server process, which are ran for the duration of the pytest session and shut down at the end of it.
-    - These servers can be defined as a pytest fixture.
-    - The server can make use of the ChirpStack docker containers.
-- A simple web interface can be developed. However, priority should be given to clean and simple code over this functionality.
+## Development Tools
+
+- **Context7**: Always use Context7 MCP tools for code generation, setup, configuration, or library/API documentation. Automatically use these tools without explicit requests.
+
+## Future Enhancements (Stretch Goals)
+
+These are lower-priority features for future implementation:
+
+- **State Management**: Resume capabilities and progress reporting for large files and poor connections
+- **Integration Testing**: Run tests against actual ChirpStack server processes using Docker containers as pytest fixtures
+- **Web Interface**: Simple UI (but code simplicity takes priority)
