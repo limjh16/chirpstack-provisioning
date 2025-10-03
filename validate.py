@@ -199,9 +199,7 @@ def main(
     file_path: Path = typer.Argument(
         ..., help="Path to the file to validate (JSON, JSONL, or CSV)"
     ),
-    schema_path: Path = typer.Argument(
-        ..., help="Path to schema.json file"
-    )
+    schema_path: Path = typer.Argument(..., help="Path to schema.json file"),
 ):
     """Validate ChirpStack provisioning data files against the schema."""
     if not file_path.exists():
