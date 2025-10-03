@@ -71,6 +71,25 @@ def extract_device_profile_templates(setup_data: dict) -> list[dict]:
     return setup_data.get("device_profile_templates", [])
 
 
+def _extract_child_entities(tenant: dict, child_key: str, tenant_id: str) -> list[dict]:
+    """Extract child entities from a tenant and add tenant_id reference.
+
+    Args:
+        tenant: The tenant object
+        child_key: Key of the child entities list (e.g., 'gateways', 'applications')
+        tenant_id: The tenant ID to add to each child entity
+
+    Returns:
+        List of child entities with tenant_id added
+    """
+    entities = []
+    for entity in tenant.get(child_key, []):
+        entity_copy = entity.copy()
+        entity_copy["tenant_id"] = tenant_id
+        entities.append(entity_copy)
+    return entities
+
+
 def decompose_tenants(
     tenants: list[dict],
 ) -> tuple[list[dict], list[dict], list[dict], list[dict]]:
@@ -98,23 +117,12 @@ def decompose_tenants(
     for tenant in tenants:
         tenant_id = tenant.get("id")
 
-        # Extract and decompose gateways
-        for gateway in tenant.get("gateways", []):
-            gateway_copy = gateway.copy()
-            gateway_copy["tenant_id"] = tenant_id
-            gateways.append(gateway_copy)
-
-        # Extract and decompose applications
-        for app in tenant.get("applications", []):
-            app_copy = app.copy()
-            app_copy["tenant_id"] = tenant_id
-            applications.append(app_copy)
-
-        # Extract and decompose device profiles
-        for profile in tenant.get("device_profiles", []):
-            profile_copy = profile.copy()
-            profile_copy["tenant_id"] = tenant_id
-            device_profiles.append(profile_copy)
+        # Extract and decompose child entities using reusable function
+        gateways.extend(_extract_child_entities(tenant, "gateways", tenant_id))
+        applications.extend(_extract_child_entities(tenant, "applications", tenant_id))
+        device_profiles.extend(
+            _extract_child_entities(tenant, "device_profiles", tenant_id)
+        )
 
         # Create clean tenant without nested children
         tenant_copy = tenant.copy()
