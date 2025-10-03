@@ -251,17 +251,24 @@ class TestIntegrationWorkflow:
         users = extract_global_users(data)
         tenants = extract_tenants(data)
 
-        # Verify all components
-        assert len(templates) == 1
-        assert templates[0]["name"] == "Template A"
+        # Verify all components match the complete_setup data
+        assert len(templates) == len(complete_setup["device_profile_templates"])
+        assert (
+            templates[0]["name"]
+            == complete_setup["device_profile_templates"][0]["name"]
+        )
 
-        assert len(users) == 1
-        assert users[0]["email"] == "admin@example.com"
+        assert len(users) == len(complete_setup["users"])
+        assert users[0]["email"] == complete_setup["users"][0]["email"]
 
-        assert len(tenants) == 1
-        assert tenants[0]["name"] == "Tenant A"
-        assert len(tenants[0]["gateways"]) == 1
-        assert len(tenants[0]["applications"]) == 1
+        assert len(tenants) == len(complete_setup["tenants"])
+        assert tenants[0]["name"] == complete_setup["tenants"][0]["name"]
+        assert len(tenants[0]["gateways"]) == len(
+            complete_setup["tenants"][0]["gateways"]
+        )
+        assert len(tenants[0]["applications"]) == len(
+            complete_setup["tenants"][0]["applications"]
+        )
 
     def test_empty_setup_file(self, tmp_path):
         """Test handling of empty setup file."""
