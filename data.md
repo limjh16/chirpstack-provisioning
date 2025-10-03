@@ -55,6 +55,17 @@ The devices file defines all devices that should be connected to the LoRa Networ
 - Subsequent rows containing device data
 - Type coercion applied from strings to appropriate JSON types during validation
 
+### Memory Management for Large Device Files
+
+The devices file is designed to handle large files with over 50,000 lines and devices.
+
+**Lazy Loading Strategy**:
+- **JSONL files**: Process one line at a time for memory efficiency
+- **CSV files**: Stream rows using CSV reader to avoid loading entire file
+- **JSON files**: Loaded entirely into memory (assumed to be reasonably sized)
+
+This approach ensures the tool can handle very large device datasets without excessive memory consumption, particularly for JSONL and CSV formats which are designed for streaming.
+
 ## Setup File Format
 
 The setup file defines everything else needed to provision a ChirpStack server: tenants, device profiles, gateways, applications, users, etc.
@@ -106,20 +117,6 @@ For simplified provisioning, entities are referenced by name rather than ID:
 ### Missing References
 
 If a tenant, device profile, or application referenced in the data does not exist, the tool will flag this for the user to address before provisioning.
-
-## Memory Management for Large Files
-
-The project is designed to handle large files with over 50,000 lines and devices.
-
-### Lazy Loading
-
-Data is **lazily loaded** rather than loaded all at once to manage memory efficiently:
-
-- For JSONL files: Process one line at a time
-- For CSV files: Stream rows using CSV reader
-- For JSON files: Use streaming parsers when possible
-
-This ensures the tool can handle very large datasets without excessive memory consumption.
 
 ## Validation Usage
 
