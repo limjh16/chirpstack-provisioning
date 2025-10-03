@@ -183,6 +183,104 @@ class TestExtractDeviceProfileTemplates:
         assert len(templates) == 0
 
 
+class TestIntegrationWorkflow:
+    """Integration tests for complete setup file workflow."""
+
+    def test_load_and_extract_complete_setup(self, tmp_path):
+        """Test loading and extracting from a complete setup file."""
+        complete_setup = {
+            "device_profile_templates": [{"name": "Template A"}],
+            "users": [
+                {
+                    "id": "user-1",
+                    "email": "admin@example.com",
+                    "isAdmin": True,
+                    "isActive": True,
+                    "note": "Admin user",
+                }
+            ],
+            "tenants": [
+                {
+                    "id": "tenant-1",
+                    "name": "Tenant A",
+                    "description": "First tenant",
+                    "canHaveGateways": True,
+                    "maxGatewayCount": 5,
+                    "maxDeviceCount": 100,
+                    "privateGatewaysUp": False,
+                    "privateGatewaysDown": False,
+                    "gateways": [{"gatewayId": "0102030405060708", "name": "GW1"}],
+                    "applications": [
+                        {
+                            "id": "app-1",
+                            "name": "App A",
+                            "description": "First app",
+                            "tenantId": "tenant-1",
+                        }
+                    ],
+                    "device_profiles": [],
+                }
+            ],
+        }
+
+        # Write to file
+        file_path = tmp_path / "complete_setup.json"
+        with open(file_path, "w", encoding="utf-8") as f:
+            json.dump(complete_setup, f)
+
+        # Load and extract
+        data = load_setup_file(file_path)
+        templates = extract_device_profile_templates(data)
+        users = extract_global_users(data)
+        tenants = extract_tenants(data)
+
+        # Verify all components
+        assert len(templates) == 1
+        assert templates[0]["name"] == "Template A"
+
+        assert len(users) == 1
+        assert users[0]["email"] == "admin@example.com"
+
+        assert len(tenants) == 1
+        assert tenants[0]["name"] == "Tenant A"
+        assert len(tenants[0]["gateways"]) == 1
+        assert len(tenants[0]["applications"]) == 1
+
+    def test_empty_setup_file(self, tmp_path):
+        """Test handling of empty setup file."""
+        file_path = tmp_path / "empty_setup.json"
+        with open(file_path, "w", encoding="utf-8") as f:
+            json.dump({}, f)
+
+        data = load_setup_file(file_path)
+        templates = extract_device_profile_templates(data)
+        users = extract_global_users(data)
+        tenants = extract_tenants(data)
+
+        assert templates == []
+        assert users == []
+        assert tenants == []
+
+    def test_partial_setup_file(self, tmp_path):
+        """Test handling of setup file with only some sections."""
+        partial_setup = {"tenants": [{"name": "Only Tenant", "gateways": []}]}
+
+        file_path = tmp_path / "partial_setup.json"
+        with open(file_path, "w", encoding="utf-8") as f:
+            json.dump(partial_setup, f)
+
+        data = load_setup_file(file_path)
+        templates = extract_device_profile_templates(data)
+        users = extract_global_users(data)
+        tenants = extract_tenants(data)
+
+        # Should handle missing sections gracefully
+        assert templates == []
+        assert users == []
+        assert len(tenants) == 1
+        assert tenants[0]["name"] == "Only Tenant"
+
+
 class TestNestedStructures:
     """Tests for extracting nested structures from tenants."""
 
