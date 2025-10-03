@@ -9,8 +9,6 @@ from pathlib import Path
 
 import jsonschema
 
-from .schema import load_schema
-
 
 def load_setup_file(file_path: str | Path) -> dict:
     """Load and parse a setup file.
@@ -40,7 +38,8 @@ def validate_setup_data(setup_data: dict, schema_path: str | Path) -> None:
         jsonschema.ValidationError: If the data doesn't match the schema
     """
     schema_path = Path(schema_path).resolve()
-    schema = load_schema(schema_path)
+    with open(schema_path, "r", encoding="utf-8") as f:
+        schema = json.load(f)
 
     # Create a resolver to handle $ref references relative to the schema file
     resolver = jsonschema.RefResolver(

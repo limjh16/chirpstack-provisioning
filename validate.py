@@ -5,15 +5,13 @@ Simple validation script for ChirpStack provisioning data.
 Validates JSON, JSONL, and CSV files against the schema.json schema.
 """
 
-import csv
 import json
+import csv
 from pathlib import Path
 
 import jsonschema
 import typer
 from rich import print
-
-from src.chirpstack_provisioning.schema import load_schema
 
 
 class ChirpStackValidator:
@@ -55,7 +53,8 @@ class ChirpStackValidator:
     @staticmethod
     def _load_schema(schema_path: str | Path) -> object:
         """Load the JSON schema."""
-        return load_schema(schema_path)
+        with open(schema_path, "r", encoding="utf-8") as f:
+            return json.load(f)
 
     def _get_property_type(self, key: str) -> str:
         """Get the expected type for a property from the schema.
