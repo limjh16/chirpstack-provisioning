@@ -6,12 +6,14 @@ from pathlib import Path
 import pytest
 
 from chirpstack_provisioning.setup import (
-    decompose_gateways,
     decompose_applications,
     decompose_device_profiles,
+    decompose_gateways,
     extract_device_profile_templates,
     extract_global_users,
     extract_tenants,
+    ingest_setup_file,
+    load_setup_file,
 )
 
 
@@ -516,3 +518,181 @@ class TestDecomposeDeviceProfiles:
         tenants = [{"id": "tenant-1", "name": "Tenant 1"}]
         profiles = decompose_device_profiles(tenants)
         assert len(profiles) == 0
+
+
+class TestLoadSetupFile:
+    """Tests for loading setup files."""
+
+    def test_load_valid_setup_file(self, temp_setup_file):
+        """Test loading a valid setup file."""
+        data = load_setup_file(temp_setup_file)
+        assert isinstance(data, dict)
+        assert "tenants" in data
+        assert "users" in data
+
+    def test_load_nonexistent_file(self, tmp_path):
+        """Test loading a file that doesn't exist."""
+        with pytest.raises(FileNotFoundError):
+            load_setup_file(tmp_path / "nonexistent.json")
+
+    def test_load_invalid_json(self, tmp_path):
+        """Test loading a file with invalid JSON."""
+        invalid_file = tmp_path / "invalid.json"
+        with open(invalid_file, "w", encoding="utf-8") as f:
+            f.write("{ invalid json")
+        with pytest.raises(json.JSONDecodeError):
+            load_setup_file(invalid_file)
+
+
+class TestIngestSetupFile:
+    """Tests for complete setup file ingestion."""
+
+    def test_ingest_complete_setup_file_without_validation(self, tmp_path):
+        """Test ingesting a complete setup file without schema validation."""
+        complete_setup = {
+            "device_profile_templates": [{"name": "Template A"}],
+            "users": [
+                {
+                    "id": "00000000-0000-0000-0000-000000000001",
+                    "email": "admin@example.com",
+                }
+            ],
+            "tenants": [
+                {
+                    "id": "00000000-0000-0000-0000-000000000002",
+                    "name": "Tenant A",
+                    "gateways": [
+                        {
+                            "gatewayId": "0102030405060708",
+                            "name": "Gateway 1",
+                        }
+                    ],
+                    "applications": [
+                        {
+                            "id": "00000000-0000-0000-0000-000000000003",
+                            "name": "App A",
+                        }
+                    ],
+                    "device_profiles": [
+                        {
+                            "id": "00000000-0000-0000-0000-000000000004",
+                            "name": "Profile 1",
+                        }
+                    ],
+                }
+            ],
+        }
+
+        file_path = tmp_path / "complete_setup.json"
+        with open(file_path, "w", encoding="utf-8") as f:
+            json.dump(complete_setup, f)
+
+        # Load and extract without full validation
+        setup_data = load_setup_file(file_path)
+        tenants = extract_tenants(setup_data)
+        users = extract_global_users(setup_data)
+        templates = extract_device_profile_templates(setup_data)
+
+        gateways = decompose_gateways(tenants)
+        applications = decompose_applications(tenants)
+        device_profiles = decompose_device_profiles(tenants)
+
+        # Verify decomposed entities
+        assert len(gateways) == 1
+        assert gateways[0]["tenant_id"] == "00000000-0000-0000-0000-000000000002"
+
+        assert len(applications) == 1
+        assert applications[0]["tenant_id"] == "00000000-0000-0000-0000-000000000002"
+
+        assert len(device_profiles) == 1
+        assert device_profiles[0]["tenant_id"] == "00000000-0000-0000-0000-000000000002"
+
+        # Verify top-level entities
+        assert len(users) == 1
+        assert len(templates) == 1
+
+    def test_ingest_minimal_setup_file(self, tmp_path, setup_schema_path):
+        """Test ingesting a minimal setup file."""
+        minimal_setup = {
+            "tenants": [
+                {
+                    "id": "00000000-0000-0000-0000-000000000001",
+                    "name": "Minimal Tenant",
+                    "description": "A minimal tenant",
+                    "canHaveGateways": True,
+                    "maxGatewayCount": 0,
+                    "maxDeviceCount": 0,
+                    "privateGatewaysUp": False,
+                    "privateGatewaysDown": False,
+                }
+            ]
+        }
+
+        file_path = tmp_path / "minimal_setup.json"
+        with open(file_path, "w", encoding="utf-8") as f:
+            json.dump(minimal_setup, f)
+
+        result = ingest_setup_file(file_path, setup_schema_path)
+
+        # Verify empty lists for missing sections
+        assert len(result["tenants"]) == 1
+        assert len(result["users"]) == 0
+        assert len(result["device_profile_templates"]) == 0
+        assert len(result["gateways"]) == 0
+        assert len(result["applications"]) == 0
+        assert len(result["device_profiles"]) == 0
+
+    def test_ingest_multiple_tenants_with_children_without_validation(self, tmp_path):
+        """Test ingesting multiple tenants with various nested children."""
+        setup = {
+            "tenants": [
+                {
+                    "id": "00000000-0000-0000-0000-000000000001",
+                    "name": "Tenant 1",
+                    "gateways": [
+                        {
+                            "gatewayId": "0102030405060708",
+                            "name": "GW1",
+                        },
+                    ],
+                },
+                {
+                    "id": "00000000-0000-0000-0000-000000000002",
+                    "name": "Tenant 2",
+                    "applications": [
+                        {
+                            "id": "00000000-0000-0000-0000-000000000003",
+                            "name": "App 1",
+                        }
+                    ],
+                    "device_profiles": [
+                        {
+                            "id": "00000000-0000-0000-0000-000000000004",
+                            "name": "Profile 1",
+                        }
+                    ],
+                },
+            ]
+        }
+
+        file_path = tmp_path / "multi_tenant_setup.json"
+        with open(file_path, "w", encoding="utf-8") as f:
+            json.dump(setup, f)
+
+        # Load and extract without validation
+        setup_data = load_setup_file(file_path)
+        tenants = extract_tenants(setup_data)
+        gateways = decompose_gateways(tenants)
+        applications = decompose_applications(tenants)
+        device_profiles = decompose_device_profiles(tenants)
+
+        # Verify correct decomposition
+        assert len(tenants) == 2
+        assert len(gateways) == 1
+        assert len(applications) == 1
+        assert len(device_profiles) == 1
+
+        # Verify tenant associations
+        assert gateways[0]["tenant_id"] == "00000000-0000-0000-0000-000000000001"
+        assert applications[0]["tenant_id"] == "00000000-0000-0000-0000-000000000002"
+        assert device_profiles[0]["tenant_id"] == "00000000-0000-0000-0000-000000000002"

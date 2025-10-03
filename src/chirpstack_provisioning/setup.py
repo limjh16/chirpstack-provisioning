@@ -6,6 +6,7 @@ the hierarchical structure of tenants, applications, gateways, device profiles, 
 
 import json
 from pathlib import Path
+from typing import Any
 
 import jsonschema
 
@@ -137,3 +138,80 @@ def decompose_device_profiles(tenants: list[dict]) -> list[dict]:
             profile_copy["tenant_id"] = tenant_id
             profiles.append(profile_copy)
     return profiles
+
+
+def load_setup_file(file_path: str | Path) -> dict[str, Any]:
+    """Load a setup file from disk.
+
+    Args:
+        file_path: Path to the setup JSON file
+
+    Returns:
+        Dictionary containing the setup data
+
+    Raises:
+        FileNotFoundError: If the file does not exist
+        json.JSONDecodeError: If the file is not valid JSON
+    """
+    file_path = Path(file_path)
+    with open(file_path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def ingest_setup_file(
+    file_path: str | Path, schema_path: str | Path
+) -> dict[str, list[dict]]:
+    """Ingest a setup file and decompose it into individual messages.
+
+    This function:
+    1. Loads the setup file
+    2. Validates it against the schema
+    3. Extracts top-level entities (tenants, users, templates)
+    4. Decomposes nested entities (gateways, applications, device_profiles)
+
+    Args:
+        file_path: Path to the setup JSON file
+        schema_path: Path to the setup.schema.json file
+
+    Returns:
+        Dictionary containing decomposed entities:
+        - 'tenants': List of tenant objects (without nested children)
+        - 'users': List of global user objects
+        - 'device_profile_templates': List of device profile template objects
+        - 'gateways': List of gateway objects with tenant_id
+        - 'applications': List of application objects with tenant_id
+        - 'device_profiles': List of device profile objects with tenant_id
+
+    Raises:
+        FileNotFoundError: If the file does not exist
+        json.JSONDecodeError: If the file is not valid JSON
+        jsonschema.ValidationError: If the data doesn't match the schema
+    """
+    setup_data = load_setup_file(file_path)
+    validate_setup_data(setup_data, schema_path)
+
+    tenants = extract_tenants(setup_data)
+    users = extract_global_users(setup_data)
+    templates = extract_device_profile_templates(setup_data)
+
+    gateways = decompose_gateways(tenants)
+    applications = decompose_applications(tenants)
+    device_profiles = decompose_device_profiles(tenants)
+
+    # Create clean tenant objects without nested children
+    clean_tenants = []
+    for tenant in tenants:
+        tenant_copy = tenant.copy()
+        tenant_copy.pop("gateways", None)
+        tenant_copy.pop("applications", None)
+        tenant_copy.pop("device_profiles", None)
+        clean_tenants.append(tenant_copy)
+
+    return {
+        "tenants": clean_tenants,
+        "users": users,
+        "device_profile_templates": templates,
+        "gateways": gateways,
+        "applications": applications,
+        "device_profiles": device_profiles,
+    }
