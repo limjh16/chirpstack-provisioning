@@ -6,12 +6,10 @@ The backup procedure should retrieve setup information from a ChirpStack server
 and convert it to the setup.json format for restore operations.
 """
 
-import pytest
-from unittest.mock import Mock, patch
 import grpc
 import grpc_testing
-
-from chirpstack_api import api
+import pytest
+from unittest.mock import Mock, patch
 
 
 @pytest.fixture
