@@ -9,7 +9,6 @@ from chirpstack_provisioning.setup import (
     extract_device_profile_templates,
     extract_global_users,
     extract_tenants,
-    load_setup_file,
     validate_setup_data,
 )
 
@@ -65,11 +64,12 @@ def setup_schema_path():
 
 
 class TestLoadSetupFile:
-    """Tests for load_setup_file function."""
+    """Tests for loading setup files."""
 
     def test_load_valid_setup_file(self, temp_setup_file):
         """Test loading a valid setup file."""
-        data = load_setup_file(temp_setup_file)
+        with open(temp_setup_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
         assert isinstance(data, dict)
         assert "tenants" in data
         assert "users" in data
@@ -77,12 +77,14 @@ class TestLoadSetupFile:
     def test_load_nonexistent_file(self):
         """Test loading a file that doesn't exist."""
         with pytest.raises(FileNotFoundError):
-            load_setup_file("/nonexistent/path/setup.json")
+            with open("/nonexistent/path/setup.json", "r", encoding="utf-8") as f:
+                json.load(f)
 
     def test_load_invalid_json(self, invalid_json_file):
         """Test loading a file with invalid JSON."""
         with pytest.raises(json.JSONDecodeError):
-            load_setup_file(invalid_json_file)
+            with open(invalid_json_file, "r", encoding="utf-8") as f:
+                json.load(f)
 
 
 class TestValidateSetupData:
@@ -120,7 +122,8 @@ class TestExtractTenants:
 
     def test_extract_tenants_with_data(self, temp_setup_file):
         """Test extracting tenants from setup data."""
-        data = load_setup_file(temp_setup_file)
+        with open(temp_setup_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
         tenants = extract_tenants(data)
         assert isinstance(tenants, list)
         assert len(tenants) == len(data["tenants"])
@@ -146,7 +149,8 @@ class TestExtractGlobalUsers:
 
     def test_extract_users_with_data(self, temp_setup_file):
         """Test extracting global users from setup data."""
-        data = load_setup_file(temp_setup_file)
+        with open(temp_setup_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
         users = extract_global_users(data)
         assert isinstance(users, list)
         assert len(users) == len(data["users"])
@@ -246,7 +250,8 @@ class TestIntegrationWorkflow:
             json.dump(complete_setup, f)
 
         # Load and extract
-        data = load_setup_file(file_path)
+        with open(file_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
         templates = extract_device_profile_templates(data)
         users = extract_global_users(data)
         tenants = extract_tenants(data)
@@ -276,7 +281,8 @@ class TestIntegrationWorkflow:
         with open(file_path, "w", encoding="utf-8") as f:
             json.dump({}, f)
 
-        data = load_setup_file(file_path)
+        with open(file_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
         templates = extract_device_profile_templates(data)
         users = extract_global_users(data)
         tenants = extract_tenants(data)
@@ -293,7 +299,8 @@ class TestIntegrationWorkflow:
         with open(file_path, "w", encoding="utf-8") as f:
             json.dump(partial_setup, f)
 
-        data = load_setup_file(file_path)
+        with open(file_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
         templates = extract_device_profile_templates(data)
         users = extract_global_users(data)
         tenants = extract_tenants(data)

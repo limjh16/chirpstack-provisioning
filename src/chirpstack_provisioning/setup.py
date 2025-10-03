@@ -1,6 +1,6 @@
 """Setup file ingestion for ChirpStack provisioning.
 
-This module handles reading and parsing the setup.json file that defines
+This module handles parsing and extracting data from setup files that define
 the hierarchical structure of tenants, applications, gateways, device profiles, etc.
 """
 
@@ -8,23 +8,6 @@ import json
 from pathlib import Path
 
 import jsonschema
-
-
-def load_setup_file(file_path: str | Path) -> dict:
-    """Load and parse a setup file.
-
-    Args:
-        file_path: Path to the setup.json file
-
-    Returns:
-        Parsed setup data as a dictionary
-
-    Raises:
-        FileNotFoundError: If the file doesn't exist
-        json.JSONDecodeError: If the file is not valid JSON
-    """
-    with open(file_path, "r", encoding="utf-8") as f:
-        return json.load(f)
 
 
 def validate_setup_data(setup_data: dict, schema_path: str | Path) -> None:
