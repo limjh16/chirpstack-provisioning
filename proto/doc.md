@@ -42,5 +42,21 @@ for f in api/*.proto; do
 done
 ```
 
+## Schema Bundling
+
+The `bundler/` directory contains a TypeScript utility that bundles `setup.schema.json` and all its dependencies from `jsonschema/` into a single `bundled.schema.json` file using [`@hyperjump/json-schema`](https://github.com/hyperjump-io/json-schema).
+
+To run the bundler:
+
+```bash
+cd proto/bundler
+npm install  # First time only
+npm run bundle
+```
+
+This creates a self-contained `bundled.schema.json` in the repository root with all external schema references embedded in the `$defs` section.
+
+See [bundler/README.md](bundler/README.md) for more details.
+
 ## Other things tried
 - The [`pubg/protoc-gen-jsonschema`](https://github.com/pubg/protoc-gen-jsonschema) behaved kinda weirdly, honestly forgot what specific problem I had but it didn't fit the needs
