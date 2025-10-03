@@ -26,7 +26,8 @@ The `dstencil/chirpstack-deployment-assistant` project has similar objectives. Y
   - Run commands: `poetry run <command>`
   - Shell: `poetry shell` (activates virtual environment)
 - **CLI Libraries**: `typer` and `rich`
-- **Validation**: JSON schemas in `proto/jsonschema/` generated from protobuf definitions
+- **Validation**: Main JSON schema in `setup.schema.json` and `devices.schema.json`, those reference other JSON schemas in `proto/jsonschema/` generated from protobuf definitions.
+  - The JSON schemas in `proto/jsonschema/` **should not be edited**.
 
 See [`README.md`](README.md) for project structure and [`data.md`](data.md) for data format details.
 
@@ -60,11 +61,11 @@ See [`README.md`](README.md) for project structure and [`data.md`](data.md) for 
   - Run `poetry run ruff format .` before committing
   - All code must pass `poetry run ruff check .` with no violations
   - Configure in `pyproject.toml` under `[tool.ruff]`
-  - Set up pre-commit hooks for automatic formatting
   
 - **Large File Handling**: Support 50,000+ lines/devices
   - Use lazy loading, not loading all data at once
-  - Stream JSONL and CSV files line-by-line
+  - Stream device JSONL and CSV files line-by-line
+  - Setup JSON file can be assumed to be relatively small enough, whole file can be injested at once
   
 - **Security**: Separate dangerous operations
   - All server modification code (Create/Update/Delete) in separate file
