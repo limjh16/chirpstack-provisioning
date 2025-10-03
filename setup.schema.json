@@ -31,7 +31,7 @@
   "$defs": {
     "TenantWithChildren": {
       "type": "object",
-      "description": "Tenant object with nested children (gateways, applications, device_profiles, users)",
+      "description": "Tenant object with nested children (gateways, applications, device_profiles, users). Note: Properties are referenced individually because the base Tenant schema has additionalProperties:false, which cannot be overridden in allOf.",
       "properties": {
         "id": {
           "$ref": "proto/jsonschema/tenant/api.Tenant.jsonschema.strict.json#/properties/id"
@@ -103,7 +103,7 @@
     },
     "ApplicationWithIntegrations": {
       "type": "object",
-      "description": "Application object with nested integrations and multicast_groups",
+      "description": "Application object with nested integrations and multicast_groups. Note: Properties are referenced individually because the base Application schema has additionalProperties:false, which cannot be overridden in allOf.",
       "properties": {
         "id": {
           "$ref": "proto/jsonschema/application/api.Application.jsonschema.strict.json#/properties/id"
