@@ -6,9 +6,7 @@ from pathlib import Path
 import pytest
 
 from chirpstack_provisioning.setup import (
-    decompose_applications,
-    decompose_device_profiles,
-    decompose_gateways,
+    decompose_tenants,
     extract_device_profile_templates,
     extract_global_users,
     extract_tenants,
@@ -367,11 +365,11 @@ class TestNestedStructures:
         assert tenants[2]["name"] == data["tenants"][2]["name"]
 
 
-class TestDecomposeGateways:
-    """Tests for decomposing gateways from tenants."""
+class TestDecomposeTenants:
+    """Tests for decomposing tenants and extracting child entities."""
 
-    def test_decompose_gateways_single_tenant(self):
-        """Test decomposing gateways from a single tenant."""
+    def test_decompose_single_tenant_with_all_children(self):
+        """Test decomposing a single tenant with all child entities."""
         tenants = [
             {
                 "id": "tenant-1",
@@ -380,19 +378,49 @@ class TestDecomposeGateways:
                     {"gatewayId": "0102030405060708", "name": "Gateway 1"},
                     {"gatewayId": "0807060504030201", "name": "Gateway 2"},
                 ],
+                "applications": [
+                    {"id": "app-1", "name": "App 1", "description": "First app"},
+                    {"id": "app-2", "name": "App 2"},
+                ],
+                "device_profiles": [
+                    {"id": "profile-1", "name": "Profile 1"},
+                    {"id": "profile-2", "name": "Profile 2"},
+                ],
             }
         ]
-        gateways = decompose_gateways(tenants)
-        assert len(gateways) == 2
-        assert gateways[0]["gatewayId"] == "0102030405060708"
-        assert gateways[0]["name"] == "Gateway 1"
-        assert gateways[0]["tenant_id"] == "tenant-1"
-        assert gateways[1]["gatewayId"] == "0807060504030201"
-        assert gateways[1]["name"] == "Gateway 2"
-        assert gateways[1]["tenant_id"] == "tenant-1"
+        clean_tenants, gateways, apps, profiles = decompose_tenants(tenants)
 
-    def test_decompose_gateways_multiple_tenants(self):
-        """Test decomposing gateways from multiple tenants."""
+        # Verify counts match input
+        assert len(clean_tenants) == len(tenants)
+        assert len(gateways) == len(tenants[0]["gateways"])
+        assert len(apps) == len(tenants[0]["applications"])
+        assert len(profiles) == len(tenants[0]["device_profiles"])
+
+        # Verify gateways
+        for i, gateway in enumerate(gateways):
+            assert gateway["gatewayId"] == tenants[0]["gateways"][i]["gatewayId"]
+            assert gateway["name"] == tenants[0]["gateways"][i]["name"]
+            assert gateway["tenant_id"] == tenants[0]["id"]
+
+        # Verify applications
+        for i, app in enumerate(apps):
+            assert app["id"] == tenants[0]["applications"][i]["id"]
+            assert app["name"] == tenants[0]["applications"][i]["name"]
+            assert app["tenant_id"] == tenants[0]["id"]
+
+        # Verify device profiles
+        for i, profile in enumerate(profiles):
+            assert profile["id"] == tenants[0]["device_profiles"][i]["id"]
+            assert profile["name"] == tenants[0]["device_profiles"][i]["name"]
+            assert profile["tenant_id"] == tenants[0]["id"]
+
+        # Verify clean tenants don't have nested children
+        assert "gateways" not in clean_tenants[0]
+        assert "applications" not in clean_tenants[0]
+        assert "device_profiles" not in clean_tenants[0]
+
+    def test_decompose_multiple_tenants(self):
+        """Test decomposing multiple tenants with various children."""
         tenants = [
             {
                 "id": "tenant-1",
@@ -402,121 +430,47 @@ class TestDecomposeGateways:
             {
                 "id": "tenant-2",
                 "name": "Tenant 2",
-                "gateways": [{"gatewayId": "0807060504030201", "name": "Gateway 2"}],
-            },
-        ]
-        gateways = decompose_gateways(tenants)
-        assert len(gateways) == 2
-        assert gateways[0]["tenant_id"] == "tenant-1"
-        assert gateways[1]["tenant_id"] == "tenant-2"
-
-    def test_decompose_gateways_no_gateways(self):
-        """Test decomposing when tenants have no gateways."""
-        tenants = [{"id": "tenant-1", "name": "Tenant 1"}]
-        gateways = decompose_gateways(tenants)
-        assert len(gateways) == 0
-
-    def test_decompose_gateways_empty_list(self):
-        """Test decomposing with empty tenant list."""
-        gateways = decompose_gateways([])
-        assert len(gateways) == 0
-
-
-class TestDecomposeApplications:
-    """Tests for decomposing applications from tenants."""
-
-    def test_decompose_applications_single_tenant(self):
-        """Test decomposing applications from a single tenant."""
-        tenants = [
-            {
-                "id": "tenant-1",
-                "name": "Tenant 1",
-                "applications": [
-                    {"id": "app-1", "name": "App 1", "description": "First app"},
-                    {"id": "app-2", "name": "App 2"},
-                ],
-            }
-        ]
-        apps = decompose_applications(tenants)
-        assert len(apps) == 2
-        assert apps[0]["id"] == "app-1"
-        assert apps[0]["name"] == "App 1"
-        assert apps[0]["tenant_id"] == "tenant-1"
-        assert apps[1]["id"] == "app-2"
-        assert apps[1]["tenant_id"] == "tenant-1"
-
-    def test_decompose_applications_multiple_tenants(self):
-        """Test decomposing applications from multiple tenants."""
-        tenants = [
-            {
-                "id": "tenant-1",
-                "name": "Tenant 1",
                 "applications": [{"id": "app-1", "name": "App 1"}],
             },
             {
-                "id": "tenant-2",
-                "name": "Tenant 2",
-                "applications": [{"id": "app-2", "name": "App 2"}],
-            },
-        ]
-        apps = decompose_applications(tenants)
-        assert len(apps) == 2
-        assert apps[0]["tenant_id"] == "tenant-1"
-        assert apps[1]["tenant_id"] == "tenant-2"
-
-    def test_decompose_applications_no_applications(self):
-        """Test decomposing when tenants have no applications."""
-        tenants = [{"id": "tenant-1", "name": "Tenant 1"}]
-        apps = decompose_applications(tenants)
-        assert len(apps) == 0
-
-
-class TestDecomposeDeviceProfiles:
-    """Tests for decomposing device profiles from tenants."""
-
-    def test_decompose_device_profiles_single_tenant(self):
-        """Test decomposing device profiles from a single tenant."""
-        tenants = [
-            {
-                "id": "tenant-1",
-                "name": "Tenant 1",
-                "device_profiles": [
-                    {"id": "profile-1", "name": "Profile 1"},
-                    {"id": "profile-2", "name": "Profile 2"},
-                ],
-            }
-        ]
-        profiles = decompose_device_profiles(tenants)
-        assert len(profiles) == 2
-        assert profiles[0]["id"] == "profile-1"
-        assert profiles[0]["name"] == "Profile 1"
-        assert profiles[0]["tenant_id"] == "tenant-1"
-        assert profiles[1]["id"] == "profile-2"
-        assert profiles[1]["tenant_id"] == "tenant-1"
-
-    def test_decompose_device_profiles_multiple_tenants(self):
-        """Test decomposing device profiles from multiple tenants."""
-        tenants = [
-            {
-                "id": "tenant-1",
-                "name": "Tenant 1",
+                "id": "tenant-3",
+                "name": "Tenant 3",
                 "device_profiles": [{"id": "profile-1", "name": "Profile 1"}],
             },
-            {
-                "id": "tenant-2",
-                "name": "Tenant 2",
-                "device_profiles": [{"id": "profile-2", "name": "Profile 2"}],
-            },
         ]
-        profiles = decompose_device_profiles(tenants)
-        assert len(profiles) == 2
-        assert profiles[0]["tenant_id"] == "tenant-1"
-        assert profiles[1]["tenant_id"] == "tenant-2"
+        clean_tenants, gateways, apps, profiles = decompose_tenants(tenants)
 
-    def test_decompose_device_profiles_no_profiles(self):
-        """Test decomposing when tenants have no device profiles."""
-        tenants = [{"id": "tenant-1", "name": "Tenant 1"}]
-        profiles = decompose_device_profiles(tenants)
+        # Verify counts
+        assert len(clean_tenants) == len(tenants)
+        assert len(gateways) == 1
+        assert len(apps) == 1
+        assert len(profiles) == 1
+
+        # Verify tenant associations
+        assert gateways[0]["tenant_id"] == tenants[0]["id"]
+        assert apps[0]["tenant_id"] == tenants[1]["id"]
+        assert profiles[0]["tenant_id"] == tenants[2]["id"]
+
+    def test_decompose_tenants_no_children(self):
+        """Test decomposing tenants with no child entities."""
+        tenants = [
+            {"id": "tenant-1", "name": "Tenant 1"},
+            {"id": "tenant-2", "name": "Tenant 2"},
+        ]
+        clean_tenants, gateways, apps, profiles = decompose_tenants(tenants)
+
+        assert len(clean_tenants) == len(tenants)
+        assert len(gateways) == 0
+        assert len(apps) == 0
+        assert len(profiles) == 0
+
+    def test_decompose_empty_tenant_list(self):
+        """Test decomposing with empty tenant list."""
+        clean_tenants, gateways, apps, profiles = decompose_tenants([])
+
+        assert len(clean_tenants) == 0
+        assert len(gateways) == 0
+        assert len(apps) == 0
         assert len(profiles) == 0
 
 
@@ -593,23 +547,37 @@ class TestIngestSetupFile:
         users = extract_global_users(setup_data)
         templates = extract_device_profile_templates(setup_data)
 
-        gateways = decompose_gateways(tenants)
-        applications = decompose_applications(tenants)
-        device_profiles = decompose_device_profiles(tenants)
+        clean_tenants, gateways, applications, device_profiles = decompose_tenants(
+            tenants
+        )
 
-        # Verify decomposed entities
-        assert len(gateways) == 1
-        assert gateways[0]["tenant_id"] == "00000000-0000-0000-0000-000000000002"
+        # Verify decomposed entities match input
+        assert len(gateways) == len(complete_setup["tenants"][0]["gateways"])
+        assert gateways[0]["tenant_id"] == complete_setup["tenants"][0]["id"]
+        assert (
+            gateways[0]["gatewayId"]
+            == complete_setup["tenants"][0]["gateways"][0]["gatewayId"]
+        )
 
-        assert len(applications) == 1
-        assert applications[0]["tenant_id"] == "00000000-0000-0000-0000-000000000002"
+        assert len(applications) == len(complete_setup["tenants"][0]["applications"])
+        assert applications[0]["tenant_id"] == complete_setup["tenants"][0]["id"]
+        assert (
+            applications[0]["id"]
+            == complete_setup["tenants"][0]["applications"][0]["id"]
+        )
 
-        assert len(device_profiles) == 1
-        assert device_profiles[0]["tenant_id"] == "00000000-0000-0000-0000-000000000002"
+        assert len(device_profiles) == len(
+            complete_setup["tenants"][0]["device_profiles"]
+        )
+        assert device_profiles[0]["tenant_id"] == complete_setup["tenants"][0]["id"]
+        assert (
+            device_profiles[0]["id"]
+            == complete_setup["tenants"][0]["device_profiles"][0]["id"]
+        )
 
-        # Verify top-level entities
-        assert len(users) == 1
-        assert len(templates) == 1
+        # Verify top-level entities match input
+        assert len(users) == len(complete_setup["users"])
+        assert len(templates) == len(complete_setup["device_profile_templates"])
 
     def test_ingest_minimal_setup_file(self, tmp_path, setup_schema_path):
         """Test ingesting a minimal setup file."""
@@ -634,8 +602,8 @@ class TestIngestSetupFile:
 
         result = ingest_setup_file(file_path, setup_schema_path)
 
-        # Verify empty lists for missing sections
-        assert len(result["tenants"]) == 1
+        # Verify counts match input
+        assert len(result["tenants"]) == len(minimal_setup["tenants"])
         assert len(result["users"]) == 0
         assert len(result["device_profile_templates"]) == 0
         assert len(result["gateways"]) == 0
@@ -682,17 +650,17 @@ class TestIngestSetupFile:
         # Load and extract without validation
         setup_data = load_setup_file(file_path)
         tenants = extract_tenants(setup_data)
-        gateways = decompose_gateways(tenants)
-        applications = decompose_applications(tenants)
-        device_profiles = decompose_device_profiles(tenants)
+        clean_tenants, gateways, applications, device_profiles = decompose_tenants(
+            tenants
+        )
 
-        # Verify correct decomposition
-        assert len(tenants) == 2
-        assert len(gateways) == 1
-        assert len(applications) == 1
-        assert len(device_profiles) == 1
+        # Verify correct decomposition based on input
+        assert len(tenants) == len(setup["tenants"])
+        assert len(gateways) == len(setup["tenants"][0]["gateways"])
+        assert len(applications) == len(setup["tenants"][1]["applications"])
+        assert len(device_profiles) == len(setup["tenants"][1]["device_profiles"])
 
-        # Verify tenant associations
-        assert gateways[0]["tenant_id"] == "00000000-0000-0000-0000-000000000001"
-        assert applications[0]["tenant_id"] == "00000000-0000-0000-0000-000000000002"
-        assert device_profiles[0]["tenant_id"] == "00000000-0000-0000-0000-000000000002"
+        # Verify tenant associations match input
+        assert gateways[0]["tenant_id"] == setup["tenants"][0]["id"]
+        assert applications[0]["tenant_id"] == setup["tenants"][1]["id"]
+        assert device_profiles[0]["tenant_id"] == setup["tenants"][1]["id"]

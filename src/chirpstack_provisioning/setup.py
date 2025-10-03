@@ -71,73 +71,59 @@ def extract_device_profile_templates(setup_data: dict) -> list[dict]:
     return setup_data.get("device_profile_templates", [])
 
 
-def decompose_gateways(tenants: list[dict]) -> list[dict]:
-    """Decompose gateways from tenants into individual gateway objects.
+def decompose_tenants(
+    tenants: list[dict],
+) -> tuple[list[dict], list[dict], list[dict], list[dict]]:
+    """Decompose tenants into clean tenant objects and child entities.
 
-    Each gateway is extracted from its parent tenant and the tenant_id
-    is added to the gateway object for reference.
+    This function performs a single pass through the tenants list to extract
+    all child entities (gateways, applications, device_profiles) and create
+    clean tenant objects without nested children.
 
     Args:
         tenants: List of tenant objects
 
     Returns:
-        List of gateway objects with tenant_id added
+        Tuple containing:
+        - List of clean tenant objects (without nested children)
+        - List of gateway objects with tenant_id added
+        - List of application objects with tenant_id added
+        - List of device profile objects with tenant_id added
     """
+    clean_tenants = []
     gateways = []
+    applications = []
+    device_profiles = []
+
     for tenant in tenants:
         tenant_id = tenant.get("id")
-        tenant_gateways = tenant.get("gateways", [])
-        for gateway in tenant_gateways:
+
+        # Extract and decompose gateways
+        for gateway in tenant.get("gateways", []):
             gateway_copy = gateway.copy()
             gateway_copy["tenant_id"] = tenant_id
             gateways.append(gateway_copy)
-    return gateways
 
-
-def decompose_applications(tenants: list[dict]) -> list[dict]:
-    """Decompose applications from tenants into individual application objects.
-
-    Each application is extracted from its parent tenant and the tenant_id
-    is added to the application object for reference.
-
-    Args:
-        tenants: List of tenant objects
-
-    Returns:
-        List of application objects with tenant_id added
-    """
-    applications = []
-    for tenant in tenants:
-        tenant_id = tenant.get("id")
-        tenant_apps = tenant.get("applications", [])
-        for app in tenant_apps:
+        # Extract and decompose applications
+        for app in tenant.get("applications", []):
             app_copy = app.copy()
             app_copy["tenant_id"] = tenant_id
             applications.append(app_copy)
-    return applications
 
-
-def decompose_device_profiles(tenants: list[dict]) -> list[dict]:
-    """Decompose device profiles from tenants into individual profile objects.
-
-    Each device profile is extracted from its parent tenant and the tenant_id
-    is added to the profile object for reference.
-
-    Args:
-        tenants: List of tenant objects
-
-    Returns:
-        List of device profile objects with tenant_id added
-    """
-    profiles = []
-    for tenant in tenants:
-        tenant_id = tenant.get("id")
-        tenant_profiles = tenant.get("device_profiles", [])
-        for profile in tenant_profiles:
+        # Extract and decompose device profiles
+        for profile in tenant.get("device_profiles", []):
             profile_copy = profile.copy()
             profile_copy["tenant_id"] = tenant_id
-            profiles.append(profile_copy)
-    return profiles
+            device_profiles.append(profile_copy)
+
+        # Create clean tenant without nested children
+        tenant_copy = tenant.copy()
+        tenant_copy.pop("gateways", None)
+        tenant_copy.pop("applications", None)
+        tenant_copy.pop("device_profiles", None)
+        clean_tenants.append(tenant_copy)
+
+    return clean_tenants, gateways, applications, device_profiles
 
 
 def load_setup_file(file_path: str | Path) -> dict[str, Any]:
@@ -194,18 +180,8 @@ def ingest_setup_file(
     users = extract_global_users(setup_data)
     templates = extract_device_profile_templates(setup_data)
 
-    gateways = decompose_gateways(tenants)
-    applications = decompose_applications(tenants)
-    device_profiles = decompose_device_profiles(tenants)
-
-    # Create clean tenant objects without nested children
-    clean_tenants = []
-    for tenant in tenants:
-        tenant_copy = tenant.copy()
-        tenant_copy.pop("gateways", None)
-        tenant_copy.pop("applications", None)
-        tenant_copy.pop("device_profiles", None)
-        clean_tenants.append(tenant_copy)
+    # Decompose tenants in a single pass for efficiency
+    clean_tenants, gateways, applications, device_profiles = decompose_tenants(tenants)
 
     return {
         "tenants": clean_tenants,
