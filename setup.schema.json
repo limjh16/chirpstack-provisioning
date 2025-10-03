@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "setup.schema.json",
+  "title": "ChirpStack Setup Configuration",
+  "description": "Schema for ChirpStack provisioning setup data that defines tenants, applications, gateways, device profiles, and users in a hierarchical structure",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "device_profile_templates": {
+      "type": "array",
+      "description": "Device profile templates that can be referenced by device profiles",
+      "items": {
+        "$ref": "proto/jsonschema/device_profile_template/api.DeviceProfileTemplate.jsonschema.strict.json"
+      }
+    },
+    "users": {
+      "type": "array",
+      "description": "Global users that can be assigned to tenants",
+      "items": {
+        "$ref": "proto/jsonschema/user/api.User.jsonschema.strict.json"
+      }
+    },
+    "tenants": {
+      "type": "array",
+      "description": "Tenants with their associated applications, gateways, device profiles, and users",
+      "items": {
+        "$ref": "#/$defs/TenantWithChildren"
+      }
+    }
+  },
+  "$defs": {
+    "TenantWithChildren": {
+      "type": "object",
+      "description": "Tenant object with nested children (gateways, applications, device_profiles, users)",
+      "properties": {
+        "id": {
+          "$ref": "proto/jsonschema/tenant/api.Tenant.jsonschema.strict.json#/properties/id"
+        },
+        "name": {
+          "$ref": "proto/jsonschema/tenant/api.Tenant.jsonschema.strict.json#/properties/name"
+        },
+        "description": {
+          "$ref": "proto/jsonschema/tenant/api.Tenant.jsonschema.strict.json#/properties/description"
+        },
+        "canHaveGateways": {
+          "$ref": "proto/jsonschema/tenant/api.Tenant.jsonschema.strict.json#/properties/canHaveGateways"
+        },
+        "maxGatewayCount": {
+          "$ref": "proto/jsonschema/tenant/api.Tenant.jsonschema.strict.json#/properties/maxGatewayCount"
+        },
+        "maxDeviceCount": {
+          "$ref": "proto/jsonschema/tenant/api.Tenant.jsonschema.strict.json#/properties/maxDeviceCount"
+        },
+        "privateGatewaysUp": {
+          "$ref": "proto/jsonschema/tenant/api.Tenant.jsonschema.strict.json#/properties/privateGatewaysUp"
+        },
+        "privateGatewaysDown": {
+          "$ref": "proto/jsonschema/tenant/api.Tenant.jsonschema.strict.json#/properties/privateGatewaysDown"
+        },
+        "tags": {
+          "$ref": "proto/jsonschema/tenant/api.Tenant.jsonschema.strict.json#/properties/tags"
+        },
+        "gateways": {
+          "type": "array",
+          "description": "Gateways associated with this tenant",
+          "items": {
+            "$ref": "proto/jsonschema/gateway/api.Gateway.jsonschema.strict.json"
+          }
+        },
+        "applications": {
+          "type": "array",
+          "description": "Applications associated with this tenant",
+          "items": {
+            "$ref": "#/$defs/ApplicationWithIntegrations"
+          }
+        },
+        "device_profiles": {
+          "type": "array",
+          "description": "Device profiles associated with this tenant",
+          "items": {
+            "$ref": "proto/jsonschema/device_profile/api.DeviceProfile.jsonschema.strict.json"
+          }
+        },
+        "users": {
+          "type": "array",
+          "description": "Users associated with this tenant",
+          "items": {
+            "$ref": "proto/jsonschema/user/api.User.jsonschema.strict.json"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "description",
+        "canHaveGateways",
+        "maxGatewayCount",
+        "maxDeviceCount",
+        "privateGatewaysUp",
+        "privateGatewaysDown"
+      ],
+      "additionalProperties": false
+    },
+    "ApplicationWithIntegrations": {
+      "type": "object",
+      "description": "Application object with nested integrations and multicast_groups",
+      "properties": {
+        "id": {
+          "$ref": "proto/jsonschema/application/api.Application.jsonschema.strict.json#/properties/id"
+        },
+        "name": {
+          "$ref": "proto/jsonschema/application/api.Application.jsonschema.strict.json#/properties/name"
+        },
+        "description": {
+          "$ref": "proto/jsonschema/application/api.Application.jsonschema.strict.json#/properties/description"
+        },
+        "tenantId": {
+          "$ref": "proto/jsonschema/application/api.Application.jsonschema.strict.json#/properties/tenantId"
+        },
+        "tags": {
+          "$ref": "proto/jsonschema/application/api.Application.jsonschema.strict.json#/properties/tags"
+        },
+        "integrations": {
+          "type": "object",
+          "description": "Integrations associated with this application. Keys are integration types.",
+          "additionalProperties": false,
+          "properties": {
+            "InfluxDbIntegration": {
+              "$ref": "proto/jsonschema/application/api.InfluxDbIntegration.jsonschema.strict.json"
+            },
+            "HttpIntegration": {
+              "$ref": "proto/jsonschema/application/api.HttpIntegration.jsonschema.strict.json"
+            },
+            "AwsSnsIntegration": {
+              "$ref": "proto/jsonschema/application/api.AwsSnsIntegration.jsonschema.strict.json"
+            },
+            "AzureServiceBusIntegration": {
+              "$ref": "proto/jsonschema/application/api.AzureServiceBusIntegration.jsonschema.strict.json"
+            },
+            "BlynkIntegration": {
+              "$ref": "proto/jsonschema/application/api.BlynkIntegration.jsonschema.strict.json"
+            },
+            "GcpPubSubIntegration": {
+              "$ref": "proto/jsonschema/application/api.GcpPubSubIntegration.jsonschema.strict.json"
+            },
+            "IftttIntegration": {
+              "$ref": "proto/jsonschema/application/api.IftttIntegration.jsonschema.strict.json"
+            },
+            "MyDevicesIntegration": {
+              "$ref": "proto/jsonschema/application/api.MyDevicesIntegration.jsonschema.strict.json"
+            },
+            "PilotThingsIntegration": {
+              "$ref": "proto/jsonschema/application/api.PilotThingsIntegration.jsonschema.strict.json"
+            },
+            "ThingsBoardIntegration": {
+              "$ref": "proto/jsonschema/application/api.ThingsBoardIntegration.jsonschema.strict.json"
+            }
+          }
+        },
+        "multicast_groups": {
+          "type": "array",
+          "description": "Multicast groups associated with this application",
+          "items": {
+            "$ref": "proto/jsonschema/multicast_group/api.MulticastGroup.jsonschema.strict.json"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "description",
+        "tenantId"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

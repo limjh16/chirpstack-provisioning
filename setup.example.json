@@ -1,0 +1,113 @@
+{
+  "tenants": [
+    {
+      "id": "00000000-0000-0000-0000-000000000001",
+      "name": "Example Tenant",
+      "description": "An example tenant for demonstration purposes",
+      "canHaveGateways": true,
+      "maxGatewayCount": 50,
+      "maxDeviceCount": 1000,
+      "privateGatewaysUp": false,
+      "privateGatewaysDown": false,
+      "tags": {
+        "environment": "development",
+        "location": "us-west"
+      },
+      "gateways": [
+        {
+          "gatewayId": "0102030405060708",
+          "name": "Example Gateway",
+          "description": "An example gateway in the tenant",
+          "tenantId": "00000000-0000-0000-0000-000000000001",
+          "statsInterval": 30,
+          "tags": {
+            "location": "building-a",
+            "floor": "3"
+          }
+        }
+      ],
+      "applications": [
+        {
+          "id": "00000000-0000-0000-0000-000000000010",
+          "name": "Example Application",
+          "description": "An example application within the tenant",
+          "tenantId": "00000000-0000-0000-0000-000000000001",
+          "tags": {
+            "project": "demo",
+            "version": "1.0"
+          },
+          "integrations": {
+            "InfluxDbIntegration": {
+              "applicationId": "00000000-0000-0000-0000-000000000010",
+              "endpoint": "http://influxdb:8086/write",
+              "db": "chirpstack",
+              "username": "chirpstack",
+              "password": "chirpstack",
+              "retentionPolicyName": "DEFAULT",
+              "precision": "NS",
+              "version": "INFLUXDB_1",
+              "token": "",
+              "organization": "",
+              "bucket": ""
+            }
+          }
+        }
+      ],
+      "device_profiles": [
+        {
+          "id": "00000000-0000-0000-0000-000000000020",
+          "tenantId": "00000000-0000-0000-0000-000000000001",
+          "name": "Example Device Profile",
+          "description": "An example device profile for Class A OTAA devices",
+          "region": "US915",
+          "macVersion": "LORAWAN_1_0_3",
+          "regParamsRevision": "RP002_1_0_1",
+          "adrAlgorithmId": "default",
+          "payloadCodecRuntime": "NONE",
+          "payloadCodecScript": "",
+          "flushQueueOnActivate": false,
+          "uplinkInterval": 3600,
+          "deviceStatusReqInterval": 1,
+          "supportsOtaa": true,
+          "supportsClassB": false,
+          "supportsClassC": false,
+          "classBTimeout": 0,
+          "classBPingSlotPeriodicity": 0,
+          "classBPingSlotDr": 0,
+          "classBPingSlotFreq": 0,
+          "classCTimeout": 0,
+          "abpRx1Delay": 0,
+          "abpRx1DrOffset": 0,
+          "abpRx2Dr": 0,
+          "abpRx2Freq": 0,
+          "autoDetectMeasurements": true,
+          "regionConfigId": "",
+          "isRelay": false,
+          "isRelayEd": false,
+          "relayEdRelayOnly": false,
+          "relayEnabled": false,
+          "relayCadPeriodicity": "SEC_1",
+          "relayDefaultChannelIndex": 0,
+          "relaySecondChannelFreq": 0,
+          "relaySecondChannelDr": 0,
+          "relaySecondChannelAckOffset": "KHZ_0",
+          "relayEdActivationMode": "DISABLE_RELAY_MODE",
+          "relayEdSmartEnableLevel": 0,
+          "relayEdBackOff": 0,
+          "relayEdUplinkLimitBucketSize": 0,
+          "relayEdUplinkLimitReloadRate": 0,
+          "relayJoinReqLimitReloadRate": 0,
+          "relayNotifyLimitReloadRate": 0,
+          "relayGlobalUplinkLimitReloadRate": 0,
+          "relayOverallLimitReloadRate": 0,
+          "relayJoinReqLimitBucketSize": 0,
+          "relayNotifyLimitBucketSize": 0,
+          "relayGlobalUplinkLimitBucketSize": 0,
+          "relayOverallLimitBucketSize": 0,
+          "allowRoaming": false,
+          "rx1Delay": 0
+        }
+      ]
+    }
+  ]
+}
