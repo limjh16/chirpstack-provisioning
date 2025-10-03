@@ -16,10 +16,8 @@ A Python tool for bulk provisioning and managing ChirpStack v4 LoRa Network Serv
 This project uses [Poetry](https://python-poetry.org/) for dependency management.
 
 ```bash
-# Install Poetry if you haven't already
-curl -sSL https://install.python-poetry.org | python3 -
-
-# Install dependencies
+# Install Poetry (see https://python-poetry.org/docs/#installation for latest instructions)
+# Then install project dependencies:
 poetry install
 
 # Or install with development dependencies
@@ -115,8 +113,7 @@ provision(
 ### Setup
 
 ```bash
-# Install Poetry if not already installed
-curl -sSL https://install.python-poetry.org | python3 -
+# Install Poetry (see https://python-poetry.org/docs/#installation)
 
 # Install all dependencies including dev dependencies
 poetry install --with dev
