@@ -1,21 +1,16 @@
-"""Tests for setup file ingestion."""
+"""Tests for setup file ingestion using SetupFileIngestion class."""
 
 import json
 from pathlib import Path
 
 import pytest
 
-from chirpstack_provisioning.setup import (
-    extract_device_profile_templates,
-    extract_global_users,
-    extract_tenants,
-    validate_setup_data,
-)
+from chirpstack_provisioning.setup import SetupFileIngestion
 
 
 @pytest.fixture
-def temp_setup_file(tmp_path):
-    """Create a temporary setup file for testing."""
+def minimal_setup_file(tmp_path):
+    """Create a minimal setup file for testing."""
     setup_data = {
         "tenants": [
             {
@@ -54,310 +49,184 @@ def setup_schema_path():
     return Path(__file__).parent.parent / "setup.schema.json"
 
 
-class TestExtractTenants:
-    """Tests for extract_tenants function."""
+class TestSetupFileIngestion:
+    """Tests for the SetupFileIngestion class."""
 
-    def test_extract_tenants_with_data(self, temp_setup_file):
-        """Test extracting tenants from setup data."""
-        with open(temp_setup_file, "r", encoding="utf-8") as f:
-            data = json.load(f)
-        tenants = extract_tenants(data)
-        assert isinstance(tenants, list)
-        assert len(tenants) == len(data["tenants"])
-        assert tenants[0]["name"] == data["tenants"][0]["name"]
-
-    def test_extract_tenants_without_tenants_key(self):
-        """Test extracting tenants when tenants key is missing."""
-        data = {"users": []}
-        tenants = extract_tenants(data)
-        assert isinstance(tenants, list)
-        assert len(tenants) == 0
-
-    def test_extract_tenants_empty_list(self):
-        """Test extracting tenants when tenants list is empty."""
-        data = {"tenants": []}
-        tenants = extract_tenants(data)
-        assert isinstance(tenants, list)
-        assert len(tenants) == 0
-
-
-class TestExtractGlobalUsers:
-    """Tests for extract_global_users function."""
-
-    def test_extract_users_with_data(self, temp_setup_file):
-        """Test extracting global users from setup data."""
-        with open(temp_setup_file, "r", encoding="utf-8") as f:
-            data = json.load(f)
-        users = extract_global_users(data)
-        assert isinstance(users, list)
-        assert len(users) == len(data["users"])
-        assert users[0]["email"] == data["users"][0]["email"]
-
-    def test_extract_users_without_users_key(self):
-        """Test extracting users when users key is missing."""
-        data = {"tenants": []}
-        users = extract_global_users(data)
-        assert isinstance(users, list)
-        assert len(users) == 0
-
-    def test_extract_users_empty_list(self):
-        """Test extracting users when users list is empty."""
-        data = {"users": []}
-        users = extract_global_users(data)
-        assert isinstance(users, list)
-        assert len(users) == 0
-
-
-class TestExtractDeviceProfileTemplates:
-    """Tests for extract_device_profile_templates function."""
-
-    def test_extract_templates_with_data(self):
-        """Test extracting device profile templates from setup data."""
-        data = {
-            "device_profile_templates": [
-                {
-                    "name": "Template 1",
-                    "region": "US915",
-                }
-            ]
-        }
-        templates = extract_device_profile_templates(data)
-        assert isinstance(templates, list)
-        assert len(templates) == len(data["device_profile_templates"])
-        assert templates[0]["name"] == data["device_profile_templates"][0]["name"]
-
-    def test_extract_templates_without_key(self):
-        """Test extracting templates when key is missing."""
-        data = {"tenants": []}
-        templates = extract_device_profile_templates(data)
-        assert isinstance(templates, list)
-        assert len(templates) == 0
-
-    def test_extract_templates_empty_list(self):
-        """Test extracting templates when list is empty."""
-        data = {"device_profile_templates": []}
-        templates = extract_device_profile_templates(data)
-        assert isinstance(templates, list)
-        assert len(templates) == 0
-
-
-class TestIntegrationWorkflow:
-    """Integration tests for complete setup file workflow."""
-
-    def test_load_and_extract_complete_setup(self, tmp_path):
-        """Test loading and extracting from a complete setup file."""
-        complete_setup = {
-            "device_profile_templates": [{"name": "Template A"}],
-            "users": [
-                {
-                    "id": "user-1",
-                    "email": "admin@example.com",
-                    "isAdmin": True,
-                    "isActive": True,
-                    "note": "Admin user",
-                }
-            ],
+    def test_initialization_with_multiple_tenants(self, tmp_path, setup_schema_path):
+        """Test class initialization with multiple tenants."""
+        setup_data = {
             "tenants": [
                 {
-                    "id": "tenant-1",
-                    "name": "Tenant A",
-                    "description": "First tenant",
+                    "id": "00000000-0000-0000-0000-000000000001",
+                    "name": "Tenant 1",
+                    "description": "Test tenant 1",
                     "canHaveGateways": True,
-                    "maxGatewayCount": 5,
+                    "maxGatewayCount": 10,
                     "maxDeviceCount": 100,
                     "privateGatewaysUp": False,
                     "privateGatewaysDown": False,
-                    "gateways": [{"gatewayId": "0102030405060708", "name": "GW1"}],
+                    "gateways": [],
+                    "applications": [],
+                    "device_profiles": [],
+                },
+                {
+                    "id": "00000000-0000-0000-0000-000000000002",
+                    "name": "Tenant 2",
+                    "description": "Test tenant 2",
+                    "canHaveGateways": True,
+                    "maxGatewayCount": 10,
+                    "maxDeviceCount": 100,
+                    "privateGatewaysUp": False,
+                    "privateGatewaysDown": False,
+                    "gateways": [],
+                    "applications": [],
+                    "device_profiles": [],
+                },
+            ]
+        }
+
+        file_path = tmp_path / "multi_setup.json"
+        with open(file_path, "w", encoding="utf-8") as f:
+            json.dump(setup_data, f)
+
+        ingestion = SetupFileIngestion(file_path, setup_schema_path)
+
+        # Verify data was loaded correctly
+        assert len(ingestion.tenants) == len(setup_data["tenants"])
+        assert len(ingestion.users) == 0
+        assert len(ingestion.gateways) == 0
+
+    def test_property_access(self, tmp_path, setup_schema_path):
+        """Test that properties work correctly."""
+        setup_data = {"tenants": []}
+
+        file_path = tmp_path / "empty_setup.json"
+        with open(file_path, "w", encoding="utf-8") as f:
+            json.dump(setup_data, f)
+
+        ingestion = SetupFileIngestion(file_path, setup_schema_path)
+
+        # Test getters
+        assert isinstance(ingestion.tenants, list)
+        assert isinstance(ingestion.users, list)
+
+        # Test setters
+        new_users = [{"id": "new-user", "email": "new@example.com"}]
+        ingestion.users = new_users
+        assert ingestion.users == new_users
+
+    def test_to_dict_method(self, tmp_path, setup_schema_path):
+        """Test the to_dict method returns correct structure."""
+        setup_data = {"tenants": []}
+
+        file_path = tmp_path / "simple_setup.json"
+        with open(file_path, "w", encoding="utf-8") as f:
+            json.dump(setup_data, f)
+
+        ingestion = SetupFileIngestion(file_path, setup_schema_path)
+        result = ingestion.to_dict()
+
+        # Verify structure
+        assert "tenants" in result
+        assert "users" in result
+        assert "device_profile_templates" in result
+        assert "gateways" in result
+        assert "applications" in result
+        assert "device_profiles" in result
+
+    def test_multiple_tenants_with_children(self, tmp_path, setup_schema_path):
+        """Test handling multiple tenants with various child entities."""
+        setup_data = {
+            "tenants": [
+                {
+                    "id": "00000000-0000-0000-0000-000000000001",
+                    "name": "Tenant 1",
+                    "description": "Test tenant 1",
+                    "canHaveGateways": True,
+                    "maxGatewayCount": 10,
+                    "maxDeviceCount": 100,
+                    "privateGatewaysUp": False,
+                    "privateGatewaysDown": False,
+                    "gateways": [
+                        {
+                            "gatewayId": "0102030405060708",
+                            "name": "Gateway 1",
+                            "description": "Test gateway",
+                            "tenantId": "00000000-0000-0000-0000-000000000001",
+                            "statsInterval": 30,
+                        }
+                    ],
+                    "applications": [],
+                    "device_profiles": [],
+                },
+                {
+                    "id": "00000000-0000-0000-0000-000000000002",
+                    "name": "Tenant 2",
+                    "description": "Test tenant 2",
+                    "canHaveGateways": True,
+                    "maxGatewayCount": 10,
+                    "maxDeviceCount": 100,
+                    "privateGatewaysUp": False,
+                    "privateGatewaysDown": False,
+                    "gateways": [],
                     "applications": [
                         {
-                            "id": "app-1",
-                            "name": "App A",
-                            "description": "First app",
-                            "tenantId": "tenant-1",
+                            "id": "00000000-0000-0000-0000-000000000003",
+                            "name": "App 1",
+                            "description": "Test app",
+                            "tenantId": "00000000-0000-0000-0000-000000000002",
                         }
                     ],
                     "device_profiles": [],
-                }
-            ],
+                },
+            ]
         }
 
-        # Write to file
-        file_path = tmp_path / "complete_setup.json"
+        file_path = tmp_path / "multi_tenant_setup.json"
         with open(file_path, "w", encoding="utf-8") as f:
-            json.dump(complete_setup, f)
+            json.dump(setup_data, f)
 
-        # Load and extract
-        with open(file_path, "r", encoding="utf-8") as f:
-            data = json.load(f)
-        templates = extract_device_profile_templates(data)
-        users = extract_global_users(data)
-        tenants = extract_tenants(data)
+        ingestion = SetupFileIngestion(file_path, setup_schema_path)
 
-        # Verify all components match the complete_setup data
-        assert len(templates) == len(complete_setup["device_profile_templates"])
-        assert (
-            templates[0]["name"]
-            == complete_setup["device_profile_templates"][0]["name"]
+        # Verify counts
+        assert len(ingestion.tenants) == len(setup_data["tenants"])
+        assert len(ingestion.gateways) == len(setup_data["tenants"][0]["gateways"])
+        assert len(ingestion.applications) == len(
+            setup_data["tenants"][1]["applications"]
         )
 
-        assert len(users) == len(complete_setup["users"])
-        assert users[0]["email"] == complete_setup["users"][0]["email"]
+        # Verify tenant associations
+        assert ingestion.gateways[0]["tenant_id"] == setup_data["tenants"][0]["id"]
+        assert ingestion.applications[0]["tenant_id"] == setup_data["tenants"][1]["id"]
 
-        assert len(tenants) == len(complete_setup["tenants"])
-        assert tenants[0]["name"] == complete_setup["tenants"][0]["name"]
-        assert len(tenants[0]["gateways"]) == len(
-            complete_setup["tenants"][0]["gateways"]
-        )
-        assert len(tenants[0]["applications"]) == len(
-            complete_setup["tenants"][0]["applications"]
-        )
-
-    def test_empty_setup_file(self, tmp_path):
+    def test_empty_setup_file(self, tmp_path, setup_schema_path):
         """Test handling of empty setup file."""
+        setup_data = {}
+
         file_path = tmp_path / "empty_setup.json"
         with open(file_path, "w", encoding="utf-8") as f:
-            json.dump({}, f)
+            json.dump(setup_data, f)
 
-        with open(file_path, "r", encoding="utf-8") as f:
-            data = json.load(f)
-        templates = extract_device_profile_templates(data)
-        users = extract_global_users(data)
-        tenants = extract_tenants(data)
+        ingestion = SetupFileIngestion(file_path, setup_schema_path)
 
-        assert templates == []
-        assert users == []
-        assert tenants == []
+        # Verify all lists are empty
+        assert len(ingestion.tenants) == 0
+        assert len(ingestion.users) == 0
+        assert len(ingestion.device_profile_templates) == 0
+        assert len(ingestion.gateways) == 0
+        assert len(ingestion.applications) == 0
+        assert len(ingestion.device_profiles) == 0
 
-    def test_partial_setup_file(self, tmp_path):
-        """Test handling of setup file with only some sections."""
-        partial_setup = {"tenants": [{"name": "Only Tenant", "gateways": []}]}
+    def test_file_not_found(self, tmp_path, setup_schema_path):
+        """Test handling of nonexistent file."""
+        with pytest.raises(FileNotFoundError):
+            SetupFileIngestion(tmp_path / "nonexistent.json", setup_schema_path)
 
-        file_path = tmp_path / "partial_setup.json"
-        with open(file_path, "w", encoding="utf-8") as f:
-            json.dump(partial_setup, f)
+    def test_invalid_json(self, tmp_path, setup_schema_path):
+        """Test handling of invalid JSON file."""
+        invalid_file = tmp_path / "invalid.json"
+        with open(invalid_file, "w", encoding="utf-8") as f:
+            f.write("{ invalid json")
 
-        with open(file_path, "r", encoding="utf-8") as f:
-            data = json.load(f)
-        templates = extract_device_profile_templates(data)
-        users = extract_global_users(data)
-        tenants = extract_tenants(data)
-
-        # Should handle missing sections gracefully
-        assert templates == []
-        assert users == []
-        assert len(tenants) == len(partial_setup["tenants"])
-        assert tenants[0]["name"] == partial_setup["tenants"][0]["name"]
-
-
-class TestNestedStructures:
-    """Tests for extracting nested structures from tenants."""
-
-    def test_extract_gateways_from_tenant(self):
-        """Test extracting gateways from a tenant."""
-        data = {
-            "tenants": [
-                {
-                    "name": "Tenant 1",
-                    "gateways": [
-                        {"gatewayId": "0102030405060708", "name": "Gateway 1"},
-                        {"gatewayId": "0807060504030201", "name": "Gateway 2"},
-                    ],
-                }
-            ]
-        }
-        tenants = extract_tenants(data)
-        assert len(tenants) == len(data["tenants"])
-        assert "gateways" in tenants[0]
-        assert len(tenants[0]["gateways"]) == len(data["tenants"][0]["gateways"])
-        assert (
-            tenants[0]["gateways"][0]["name"]
-            == data["tenants"][0]["gateways"][0]["name"]
-        )
-
-    def test_extract_applications_from_tenant(self):
-        """Test extracting applications from a tenant."""
-        data = {
-            "tenants": [
-                {
-                    "name": "Tenant 1",
-                    "applications": [
-                        {"id": "app-1", "name": "App 1"},
-                        {"id": "app-2", "name": "App 2"},
-                    ],
-                }
-            ]
-        }
-        tenants = extract_tenants(data)
-        assert len(tenants) == len(data["tenants"])
-        assert "applications" in tenants[0]
-        assert len(tenants[0]["applications"]) == len(
-            data["tenants"][0]["applications"]
-        )
-        assert (
-            tenants[0]["applications"][1]["name"]
-            == data["tenants"][0]["applications"][1]["name"]
-        )
-
-    def test_extract_device_profiles_from_tenant(self):
-        """Test extracting device profiles from a tenant."""
-        data = {
-            "tenants": [
-                {
-                    "name": "Tenant 1",
-                    "device_profiles": [
-                        {"id": "profile-1", "name": "Profile 1"},
-                    ],
-                }
-            ]
-        }
-        tenants = extract_tenants(data)
-        assert len(tenants) == len(data["tenants"])
-        assert "device_profiles" in tenants[0]
-        assert len(tenants[0]["device_profiles"]) == len(
-            data["tenants"][0]["device_profiles"]
-        )
-
-    def test_extract_integrations_from_application(self):
-        """Test extracting integrations from an application."""
-        data = {
-            "tenants": [
-                {
-                    "name": "Tenant 1",
-                    "applications": [
-                        {
-                            "name": "App 1",
-                            "integrations": {
-                                "InfluxDbIntegration": {
-                                    "endpoint": "http://influxdb:8086"
-                                }
-                            },
-                        }
-                    ],
-                }
-            ]
-        }
-        tenants = extract_tenants(data)
-        app = tenants[0]["applications"][0]
-        assert "integrations" in app
-        assert "InfluxDbIntegration" in app["integrations"]
-
-    def test_multiple_tenants(self):
-        """Test handling multiple tenants with complex structures."""
-        data = {
-            "tenants": [
-                {
-                    "name": "Tenant 1",
-                    "gateways": [{"gatewayId": "0102030405060708"}],
-                },
-                {
-                    "name": "Tenant 2",
-                    "applications": [{"name": "App"}],
-                },
-                {"name": "Tenant 3"},
-            ]
-        }
-        tenants = extract_tenants(data)
-        assert len(tenants) == len(data["tenants"])
-        assert tenants[0]["name"] == data["tenants"][0]["name"]
-        assert tenants[1]["name"] == data["tenants"][1]["name"]
-        assert tenants[2]["name"] == data["tenants"][2]["name"]
+        with pytest.raises(json.JSONDecodeError):
+            SetupFileIngestion(invalid_file, setup_schema_path)
